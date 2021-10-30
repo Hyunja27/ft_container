@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "../iterator/vector_iterator.hpp"
+#include "../tools.hpp"
 
 namespace ft {
 
@@ -82,12 +83,17 @@ namespace ft {
                 push_back(val);
         }
 
-        template <class InputIterator>
-        vector 
         // [range constructer]
+        template <class InputIterator>
+        vector(InputIterator first, InputIterator last, const allocator_type& alloc_type = allocator_type(), typename ft::enable_if<ft::is_integral<InputIterator>::value >::type dum = 0 ) : arr(NULL), capa_num(0), elem_num(0)
+        {
+            (void)alloc_type;
+            dum = 0;
+            for (InputIterator it = first; it != last; it++)
+                push_back(*it);
+        }
 
-
-        // [default constructer]
+        // [copy constructer]
 
 
         //===============================================================================
