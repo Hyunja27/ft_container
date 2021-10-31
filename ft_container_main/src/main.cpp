@@ -6,28 +6,33 @@
 /*   By: sunghyunpark <sunghyunpark@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 18:15:39 by sunghyunpar       #+#    #+#             */
-/*   Updated: 2021/10/24 18:46:19 by sunghyunpar      ###   ########.fr       */
+/*   Updated: 2021/10/31 17:29:50 by sunghyunpar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <iostream>
 #include <vector>
 #include "tools.hpp"
 
 int main(void)
 {
-    int test_arr[] = {0, 1, 2, 3, 4, 5};
-    char test_arr2[] = {'a', 'b', 'c', 'd'};
-    std::vector<std::string> test_arr3;
-
-    print_T(test_arr, 6);
-    print_T(test_arr2, 4);
-
-    test_arr3.push_back("skim");
-    test_arr3.push_back("spark");
-    test_arr3.push_back("jaeskim");
-    test_arr3.push_back("hyunlee");
-    test_arr3.push_back("yjung");
+    std::vector<int> vec_1;
+    // std::vector<int> *vec_ptr;
+    std::vector<int>::iterator iter_1;
+    // std::vector<int> *vec_iter;
     
-    print_T(test_arr3, 20);
+    vec_1.push_back(1);
+    vec_1.push_back(2);
+    vec_1.push_back(3);
+    vec_1.push_back(4);
+    vec_1.push_back(5);
+    vec_1.push_back(6);
 
+    std::cout << *(vec_1.begin()) << std::endl;
+    std::cout << *(vec_1.end()) << std::endl;
+
+    std::cout << *(vec_1.rbegin()) << std::endl;
+    std::cout << *(vec_1.rend()) << std::endl;
+
+    print_T(vec_1, 6);
 }

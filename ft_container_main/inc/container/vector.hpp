@@ -49,6 +49,24 @@ namespace ft {
             allocer.construct(pos, val);
         }
 
+        unsigned int getIndexFromPtr(T* target)
+        {
+            return (target - arr);
+        }
+
+        void vec_pusher(T* pos, unsigned int expend_size)
+        {
+            Alloc allocer;
+            unsigned int idx = getIdxFromPtr(pos);
+
+            if (expand_size + elem_num >= capa_num)
+                expand( (2 * expend_size) + elem_num);
+            
+            for (unsigned int i = 0; i < elem_num - idx; i++;)
+                set_value(expend_size + arr + elem_num - 1 - i,  *(arr + elem_num - 1 - i));
+
+        }
+
 
         public:
             typedef T value_type;
@@ -94,17 +112,77 @@ namespace ft {
         }
 
         // [copy constructer]
+        vector (const vector& target) : arr(NULL), capa_num(0), elem_num(0)
+        {
+            insert(begin(), target.begin(), target.end());
+        }
 
+        vector<T>& operator= (const vector& target)
+        {
+            clear();
+            insert(begin(), target.begin(), target.end());
+            return (*this);
+        }
+
+        ~vector()
+        {
+            Alloc allcer;
+
+            allocer.destroy(arr);
+            allocer.deallocate(arr, capa_num);
+        }
 
         //===============================================================================
         //================================== iterator ===================================
         //===============================================================================
+        iterator begin()
+        {
+            return (iterator(arr));
+        }
 
+        const_iterator begin() const
+        {
+            return (const_iterator(arr));
+        }
 
+        iterator end()
+        {
+            return (iterator(arr + elem_num));
+        }
+
+        const_iterator end() const
+        {
+            return (const_iterator(arr + elem_num));
+        }
+
+        reverse_iterator rbegin()
+        {
+            return (reverse_iterator(arr + elem_num - 1));
+        }
+
+        const_reverse_iterator rbegin() const
+        {
+            return (const_reverse_iterator (arr + elem_num - 1));
+        }
+
+        reverse_iterator rend()
+        {
+            return (reverse_iterator ( arr - 1 ));
+        }
+
+        const_reverse_iterator rend()
+        {
+            return (const_reverse_iterator ( arr - 1 ));
+        }
 
         //===============================================================================
         //================================== capacity ===================================
         //===============================================================================
+
+        size_type size() const
+        {
+            
+        }
 
 
         //===============================================================================
@@ -116,12 +194,38 @@ namespace ft {
         //================================= functions ===================================
         //===============================================================================
 
+        void elem_num_clear()
+        {
+            elem_num = 0;
+        }
         void push_back(const value_type& val)
         {
             if (elem_num == capa_num)
                 expand(capa_num + 1);
             set_value(arr + elem_num, val);
             elem_num++;
+        }
+
+        template <InputIterator>
+        iterator insert(iterator target_pos, InputIterator begin, InputIterator end, typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type dum = 0)
+        {
+            dum = 0;
+            unsigned int i = 0;
+            T* t_pos_ptr = target_pos.getptr();
+
+            for (InputIterator tmp; tmp != end; tmp++)
+                i++;
+            
+            vec_pusher(t_pos_ptr, i);
+
+            // @if_error@ 혹시 삽입에 1정도 길이 차이가 나면 이 부분을 고쳐보쟈 
+            i = -1;
+            for (InputIterator iter; iter != end; iter++)
+            {
+                ++i;
+                set_value(target_pos + i, *iter);
+            }
+            elem_num += i;
         }
     }
 
