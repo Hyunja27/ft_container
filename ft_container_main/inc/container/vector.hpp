@@ -88,13 +88,13 @@ namespace ft {
         //===============================================================================
 
         // [default constructer]
-        explicit vector (const allocator_type& alloc_type = allocator_type()) : arr(NULL), elem_num(0), capa_num(0)
+        explicit vector (const allocator_type& alloc_type = allocator_type) : arr(NULL), elem_num(0), capa_num(0)
         {
             (void)alloc_type;
         }
 
         // [fill constructer]
-        explicit vector (size_type range, const value_type& val = value_type(), const allocator_type& alloc_type = allocator_type()) : arr(NULL), capa_num(0), elem_num(0) 
+        explicit vector (size_type range, const value_type& val = value_type, const allocator_type& alloc_type = allocator_type) : arr(NULL), capa_num(0), elem_num(0) 
         {
             (void)alloc_type;
             for (size_type i = 0; i < range; i++)
@@ -103,7 +103,7 @@ namespace ft {
 
         // [range constructer]
         template <class InputIterator>
-        vector(InputIterator first, InputIterator last, const allocator_type& alloc_type = allocator_type(), typename ft::enable_if<ft::is_integral<InputIterator>::value >::type dum = 0 ) : arr(NULL), capa_num(0), elem_num(0)
+        vector(InputIterator first, InputIterator last, const allocator_type& alloc_type = allocator_type, typename ft::enable_if<ft::is_integral<InputIterator>::value >::type dum = 0 ) : arr(NULL), capa_num(0), elem_num(0)
         {
             (void)alloc_type;
             dum = 0;
@@ -181,8 +181,32 @@ namespace ft {
 
         size_type size() const
         {
-            
+            return (this->elem_num);
         }
+
+        size_type max_size() const
+        {
+            Alloc allocer;
+
+            return (allocer.max_size());
+        }
+
+        void resize (size_type n, value_type val = value_type)
+        {
+            unsigned int element_num = this->elem_num;
+            unsigned int i = 0;
+            if (element_num < n)
+            {
+                for (i = 0; i < n - element_num; i++)
+                    push_back(val);
+            }
+            else
+            {
+                for (i = 0; i < element_num - n; i++)
+                    pop_back();
+            }
+        }
+
 
 
         //===============================================================================
@@ -198,6 +222,13 @@ namespace ft {
         {
             elem_num = 0;
         }
+
+        void pop_back()
+        {
+            if (elem_num > 0)
+                --elem_num;
+        }
+`
         void push_back(const value_type& val)
         {
             if (elem_num == capa_num)
