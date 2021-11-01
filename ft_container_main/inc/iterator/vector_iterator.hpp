@@ -209,7 +209,79 @@ namespace ft
         private :
             T*  ptr;
         public :
-            vectorConstIterator
+            //=========================default==========================
+            vectorConstIterator(T* ptr = NULL) : ptr(ptr)
+            {
+
+            }
+
+            //===========================copy===========================
+            vectorConstIterator(const vectorConstIterator<T> &origin) : ptr(origin.ptr)
+            {
+
+            }
+
+            vectorConstIterator(const vectorIterator<T> &origin) : ptr(origin.getPtr())
+            {
+
+            }
+
+            //===========================operator= ======================
+            vectorConstIterator<T>& operator=(const vectorConstIterator<T> &origin)
+            {
+                this->ptr = origin.ptr;
+                return (*this);
+            }
+
+            vectorConstIterator<T>& operator=(const vectorIterator<T> &origin)
+            {
+                this->ptr = origin.getPtr();
+                return (*this);
+            }
+
+
+            //=========================== destruct ======================
+            ~vectorConstIterator ()
+            {
+
+            }
+
+            T* getPtr() const
+            {
+                return (this->ptr);
+            }
+
+            const T& operator*(void) const
+            {
+                return (*ptr);
+            }
+
+            const T* operator->(void)
+            {
+                return (&(this->operator*()));
+            }
+
+            vectorConstIterator<T>& operator++(void)
+            {
+                this->ptr++;
+                return (*this);
+            }
+
+            vectorConstIterator<T> operator++(int)
+            {
+                vectorConstIterator<T> temp(*this);
+                this->ptr++;
+                return (temp);
+            }
+
+            vectorConstIterator<T>& operator--(void)
+            {
+                this->ptr--;
+                return (*this);
+            }
+
+            
+
 
     }
 
