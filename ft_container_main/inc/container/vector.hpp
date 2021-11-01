@@ -20,6 +20,7 @@ namespace ft {
             T*  arr;
             size_t elem_num;
             size_t capa_num;
+            Alloc allocer;
 
         //================================== Utility ===================================
 
@@ -27,8 +28,6 @@ namespace ft {
         {
             if (elem_num >= target_size)
                 return ;
-            
-            Alloc allocer;
 
             T* tmp = allocer.allocate(target_size);
             if (elem_num > 0)
@@ -44,8 +43,6 @@ namespace ft {
 
         void set_value(T* pos, const t& val)
         {
-            Alloc allocer;
-
             allocer.construct(pos, val);
         }
 
@@ -56,7 +53,6 @@ namespace ft {
 
         void vec_pusher(T* pos, unsigned int expend_size)
         {
-            Alloc allocer;
             unsigned int idx = getIdxFromPtr(pos);
 
             if (expand_size + elem_num >= capa_num)
@@ -65,6 +61,13 @@ namespace ft {
             for (unsigned int i = 0; i < elem_num - idx; i++;)
                 set_value(expend_size + arr + elem_num - 1 - i,  *(arr + elem_num - 1 - i));
 
+        }
+        class outRangeException : public std::exception
+        {
+            virtual const char * what() const throw()
+            {
+                return "this Index is out of range";
+            }
         }
 
 
@@ -103,7 +106,7 @@ namespace ft {
 
         // [range constructer]
         template <class InputIterator>
-        vector(InputIterator first, InputIterator last, const allocator_type& alloc_type = allocator_type, typename ft::enable_if<ft::is_integral<InputIterator>::value >::type dum = 0 ) : arr(NULL), capa_num(0), elem_num(0)
+        vector(InputIterator first, InputIterator last, const allocator_type& alloc_type = allocator_type, typename ft::enable_if<!ft::is_integral<InputIterator>::value >::type dum = 0 ) : arr(NULL), capa_num(0), elem_num(0)
         {
             (void)alloc_type;
             dum = 0;
@@ -126,8 +129,6 @@ namespace ft {
 
         ~vector()
         {
-            Alloc allcer;
-
             allocer.destroy(arr);
             allocer.deallocate(arr, capa_num);
         }
@@ -186,9 +187,7 @@ namespace ft {
 
         size_type max_size() const
         {
-            Alloc allocer;
-
-            return (allocer.max_size());
+            return (this->allocer.max_size());
         }
 
         void resize (size_type n, value_type val = value_type)
@@ -214,12 +213,12 @@ namespace ft {
 
         bool empty() const
         {
-            return (elem_num == 0);
+            return (this->elem_num == 0);
         }
 
         void reserve (size_type expend_size)
         {
-            if (elem_num < expend_size)
+            if (this->elem_num < expend_size)
                 expand(expend_size);
         }
 
@@ -227,13 +226,82 @@ namespace ft {
         //================================== elements ===================================
         //===============================================================================
 
-        reference
+        reference operator[] (size_type n)
+        {
+            return (at(n));
+        }
+
+        const_reference operator[] (size_type n) const
+        {
+            return (at(n));
+        }
+
+        reference at (size_type n)
+        {
+            if (n >=  this->elem_num)
+                throw outRangeException();
+            else
+                return arr[n];
+        }
+
+        const_reference at (size_type n) const
+        {
+            if (n >=  this->elem_num)
+                throw outRangeException();
+            else
+                return (arr[n]);
+        }
+
+        reference front()
+        {
+            return (at(0));
+        }
+
+        reference back()
+        {
+            return (at(elem_num - 1));
+        }
+
+        const_reference front() const
+        {
+            return (at(0));
+        }
+
+        const_reference back() const
+        {
+            return (at(elem_num - 1));
+        }
+
+    
 
         //===============================================================================
         //================================= functions ===================================
         //===============================================================================
 
-        void elem_num_clear()
+        template <class InputIterator>
+        void assign (InputIterator start, InputIterator end, typename ft::enable_if<!ft::is_integral<InputIterator>::value >::type dum = 0)
+        {
+            dum = 0;
+            clear();
+            unsigned int i = 0;
+            for (InputIterator it = first; it != last, it++)
+            {
+                set_value(arr + i, *it);
+                i++;
+            }
+            elem_num += i; 
+        }
+
+        //@if_error : push_back이 괜찮은가?!
+        void assign (size_type n, const value_type& val )
+        {
+            clear();
+            unsigned int i = 0;
+            for (i = 0; i < n; i++)
+                push_back(val);
+        }
+
+        void clear()
         {
             elem_num = 0;
         }
@@ -243,7 +311,7 @@ namespace ft {
             if (elem_num > 0)
                 --elem_num;
         }
-`
+
         void push_back(const value_type& val)
         {
             if (elem_num == capa_num)
@@ -273,8 +341,18 @@ namespace ft {
             }
             elem_num += i;
         }
-    }
 
+        void insert (iterator target_pos, size_type n, const value_type& val)
+        {
+            T* t_pos_ptr = target_pos.getPtr();
+            vec_pusher(t_pos_ptr, n);
+            for (unsigned int i = 0; i < n; i++)
+                set_value(arr + i, val);
+            this->elem_num += n;
+        }
+
+        v
+    }
 }
 
 
