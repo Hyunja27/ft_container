@@ -51,7 +51,7 @@ namespace ft {
             return (target - arr);
         }
 
-        void vec_pusher(T* pos, unsigned int expend_size)
+        void vec_pusher (T* pos, unsigned int expend_size)
         {
             unsigned int idx = getIdxFromPtr(pos);
 
@@ -62,6 +62,16 @@ namespace ft {
                 set_value(expend_size + arr + elem_num - 1 - i,  *(arr + elem_num - 1 - i));
 
         }
+
+        void vec_pusher_back (T* pos, unsigned int expend_size)
+        {
+            unsigned int idx = getIndexFromPtr(pos);
+
+            for (unsigned int i = idx; i < elem_num - expend_size; i++)
+                set_value(arr + i, *(arr + i + expend_size));
+            elem_num -= expend_size;
+        }
+        
         class outRangeException : public std::exception
         {
             virtual const char * what() const throw()
@@ -351,12 +361,98 @@ namespace ft {
             this->elem_num += n;
         }
 
-        v
+        iterator insert (iterator target_pos, const value_type& val)
+        {
+            T* t_pos_ptr = target_pos.getPtr();
+            vec_pusher(t_pos_ptr, 1);
+            set_value(t_pos_ptr, val);
+            this->elem_num++;
+            return (t_pos_ptr);
+        }
+
+        iterator erase (iterator pos)
+        {
+            unsigned int idx = getIndexFromPtr(pos.getPtr());
+
+            vec_pusher_back(pos.getPtr(), 1);
+            return (iterator(arr + idx));
+        }
+
+        iterator erase (iterator start, iterator end)
+        {
+            unsigned int idx = getIndexFromPtr(start.getPtr());
+
+            unsigned int i = 0;
+            for (iterator it = start; it != last; it++)
+                i++;
+            vec_pusher_back(start.getPtr(), i);
+
+            return (iterator(arr + idx));
+        }
+
+        void swap (vector& x)
+        {
+            T* tmp = this->arr;
+            this->arr = x.arr;
+            x.arr = tmp;
+
+            unsigned int tmp_elem_num = this->elem_num;
+            this->elem_num = x.elem_num;
+            x.elem_num = tmp_elem_num;
+
+            unsigned int tmp_capa_num = this->capa_num;
+            this->capa_num = x.capa_num;
+            x.capa_num = tmp_capa_num;
+        }
+    };
+
+
+    template <class T, class Alloc>
+    bool operator== (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
+    {
+        if (lhs.size() != rhs.size())
+            return false;
+        return equal(lhs.begin(), lhs.end(), rhs.begin());
     }
+
+    template <class T, class Alloc>
+    bool operator!= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
+    {
+        return (!(lhs==rhs));
+    }
+
+    template <class T, class Alloc>
+    bool operator< (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
+    {
+        return lexicographical_less(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+    }
+
+    template <class T, class Alloc>
+	bool operator<= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
+	{
+		return ((lhs == rhs) || (lhs < rhs));
+	}
+
+	template <class T, class Alloc>
+	bool operator> (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
+	{
+		return (!(lhs <= rhs));
+	}
+
+	template <class T, class Alloc>
+	bool operator>= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)
+	{
+		return ((lhs == rhs) || (lhs > rhs));
+	}
+
+	template <class T, class Alloc>
+	void swap (vector<T, Alloc>& x,vector<T, Alloc>& y)
+	{
+		x.swap(y);
+	}
 }
 
-
-
+#endif
 /*
 
     -> the STD vector library's text references below,  
