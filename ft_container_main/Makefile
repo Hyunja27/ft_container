@@ -13,7 +13,9 @@ SRC =  $(addprefix $(SRC_DIR)/, \
 		)
 
 INC =  $(addprefix $(INC_DIR)/, \
+		container/vector.hpp\
 		tools.hpp\
+		iterator/vector_iterator.hpp\
 		)
 
 GREEN = \033[32m
