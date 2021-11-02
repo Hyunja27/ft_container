@@ -107,12 +107,14 @@ namespace ft
         explicit vector(const allocator_type &alloc_type = allocator_type()) : arr(NULL), elem_num(0), capa_num(0)
         {
             (void)alloc_type;
+            expand(10);
         }
 
         // [fill constructer]
         explicit vector(size_type range, const value_type &val = value_type(), const allocator_type &alloc_type = allocator_type()) : arr(NULL), elem_num(0), capa_num(0)
         {
             (void)alloc_type;
+            expand(10);
             for (size_type i = 0; i < range; i++)
                 push_back(val);
         }
@@ -123,6 +125,7 @@ namespace ft
         {
             (void)alloc_type;
             dum = 0;
+            expand(10);
             for (InputIterator it = first; it != last; it++)
                 push_back(*it);
         }
@@ -130,6 +133,7 @@ namespace ft
         // [copy constructer]
         vector(const vector &target) : arr(NULL), elem_num(0), capa_num(0)
         {
+            expand(10);
             insert(begin(), target.begin(), target.end());
         }
 
@@ -326,7 +330,12 @@ namespace ft
         void push_back(const value_type &val)
         {
             if (elem_num == capa_num)
-                expand(capa_num + 1);
+            {
+                if (capa_num == 1)
+                    expand(capa_num * 2);
+                else
+                    expand((capa_num * 2) - 3);
+            }
             set_value(arr + elem_num, val);
             elem_num++;
         }
