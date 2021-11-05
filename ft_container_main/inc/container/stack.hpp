@@ -15,16 +15,101 @@ namespace ft
         typedef T  value_type;
         typedef Container container_type;
         typedef size_t size_type;
+
+
         //===============================================================================
         //================================= Constructer =================================
         //===============================================================================
 
+        explicit stack(const container_type& a = container_type()) : c(a) {}
+        stack(const stack<T> &a) : c(a.c) {}
+        stack<T>& operator=(const stack<T>& a) 
+        {
+            c = a.c; 
+            return *this; 
+        }
+        ~stack() {}
 
-    }
+        bool empty()
+        {
+            return c.empty();
+        }
+
+        size_type size()
+        {
+            return c.size();
+        }
+
+        value_type &top()
+        {
+            return c.back();
+        }
+
+        const value_type &top() const
+        {
+            return c.back();
+        }
+        
+        void push(const value_type &value)
+        {
+            c.push_back(value);
+        }
+
+        void pop()
+        {
+            c.pop_back();
+        }
+        template <class T, class Container>
+          bool operator==(const stack<T, Container>& x, const stack<T, Container>& y);
+        template <class T, class Container>
+          bool operator< (const stack<T, Container>& x, const stack<T, Container>& y);
+        template <class T, class Container>
+          bool operator!=(const stack<T, Container>& x, const stack<T, Container>& y);
+        template <class T, class Container>
+          bool operator> (const stack<T, Container>& x, const stack<T, Container>& y);
+        template <class T, class Container>
+          bool operator>=(const stack<T, Container>& x, const stack<T, Container>& y);
+        template <class T, class Container>
+          bool operator<=(const stack<T, Container>& x, const stack<T, Container>& y);
+    };
+
+    template <class T, class Container>
+      bool operator==(const stack<T, Container>& x, const stack<T, Container>& y)
+      {
+          return (x.c == y.c);
+      }
+
+    template <class T, class Container>
+      bool operator< (const stack<T, Container>& x, const stack<T, Container>& y)
+      {
+          return (x.c < y.c);
+      }
+
+    template <class T, class Container>
+      bool operator!=(const stack<T, Container>& x, const stack<T, Container>& y)
+      {
+          return (!(x.c == y.c));
+      }
+
+    template <class T, class Container>
+      bool operator> (const stack<T, Container>& x, const stack<T, Container>& y)
+      {
+          return (x.c > y.c);
+      }
+
+    template <class T, class Container>
+      bool operator>=(const stack<T, Container>& x, const stack<T, Container>& y)
+      {
+          return (!(x.c < y.c));
+      }
+
+    template <class T, class Container>
+      bool operator<=(const stack<T, Container>& x, const stack<T, Container>& y)
+      {
+          return (!(x.c > y.c));
+      }
 
 };
-
-
 
 #endif
 

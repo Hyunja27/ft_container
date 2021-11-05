@@ -65,6 +65,7 @@ namespace ft
 
             for (unsigned int i = 0; i < elem_num - idx; i++)
                 set_value(expend_size + arr + elem_num - 1 - i, *(arr + elem_num - 1 - i));
+        
         }
 
         void vec_pusher_back(T *pos, unsigned int expend_size)
@@ -344,23 +345,22 @@ namespace ft
         void insert(iterator target_pos, InputIterator begin, InputIterator end, typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type dum = 0)
         {
             dum = 0;
-            unsigned int i = 0;
+            unsigned int len = 0;
             T *t_pos_ptr = target_pos.getPtr();
-
             for (InputIterator tmp = begin; tmp != end; tmp++)
-                i++;
+                len++;
 
-            vec_pusher(t_pos_ptr, i);
+            vec_pusher(t_pos_ptr, len);
 
+            unsigned int i = 0;
             // @if_error@ 혹시 삽입에 1정도 길이 차이가 나면 이 부분을 고쳐보쟈
             i = 0;
             for (InputIterator iter = begin; iter != end; iter++)
             {
-                set_value(&(*(target_pos + i)), *iter);
-                ++i;
+                set_value((t_pos_ptr + i), *iter);
+                i++;
             }
-            elem_num += i;
-
+            elem_num += len;
         }
 
         void insert(iterator target_pos, size_type n, const value_type &val)
@@ -416,6 +416,11 @@ namespace ft
             x.capa_num = tmp_capa_num;
         }
     };
+
+
+        //===============================================================================
+        //================================= overload ===================================
+        //===============================================================================
 
     template <class T, class Alloc>
     bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
