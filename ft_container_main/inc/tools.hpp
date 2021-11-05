@@ -91,10 +91,46 @@ namespace ft
     {
         static const bool value = true;
     };
+
+    template <typename T>
+    struct less
+    {
+        bool operator()(const T &lhs, const T &rhs) const
+        {
+            return lhs < rhs;
+        }
+    };
+
+    template <typename Input1, typename Input2>
+    bool equal(Input1 it1_start, Input1 it1_end, Input2 it2_start)
+    {
+        while (it1_start != it1_end)
+        {
+            if (*it1_start != *it2_start)        
+                return false;
+            it1_start++;
+            it2_start++;
+        }
+        return true;
+    };
+
+    template<typename Input1, typename Input2>
+    bool lexicographical_compare(Input1 it1_start, Input1 it1_end, Input2 it2_start, Input2 it2_end)
+    {
+        while (it1_start != it1_end && it2_start != it2_end)
+        {
+            if (*it1_start < *it2_start)
+                return true;
+            else if (*it1_start > *it2_start)
+                return false;
+            it1_start++;
+            it2_start++;
+        }
+        return it1_start == it1_end && it2_start != it2_end;
+    }
 }
 
 template <typename T>
-
 void print_T(T a, int length)
 {
     // std::cout << '<' << typeid(a).name() << "> : ";
