@@ -7,8 +7,8 @@
 #include <limits>
 #include <string>
 
-#include "iterator/vector_iterator.hpp"
-#include "tools.hpp"
+#include "../inc/iterator/vector_iterator.hpp"
+#include "../inc/tools.hpp"
 
 namespace ft
 {
@@ -257,7 +257,7 @@ namespace ft
         reference at(size_type n)
         {
             if (n >= this->elem_num)
-                throw std::out_of_range("at_error");
+                throw outRangeException();
             else
                 return arr[n];
         }
@@ -265,7 +265,7 @@ namespace ft
         const_reference at(size_type n) const
         {
             if (n >= this->elem_num)
-                throw std::out_of_range("at_error");
+                throw outRangeException();
             else
                 return (arr[n]);
         }

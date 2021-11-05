@@ -38,7 +38,7 @@ namespace ft
             //===========================operator= ======================
             vectorIterator<T>& operator=(const vectorIterator<T> &origin)
             {
-                this->ptr = origin.ptr;
+                ptr = origin.ptr;
                 return (*this);
             }
 
@@ -50,7 +50,7 @@ namespace ft
 
             T*  getPtr() const
             {
-                return (this->ptr);
+                return (ptr);
             }
 
             T& operator*(void) const
@@ -65,59 +65,59 @@ namespace ft
 
 			vectorIterator<T>& operator++(void)
 			{
-				this->ptr++;
+				ptr++;
 				return (*this);
 			}
 
 			vectorIterator<T> operator++(int)
 			{
 				vectorIterator<T> temp(*this);
-				this->ptr++;
+				ptr++;
 				return (temp);
 			}
 
 			vectorIterator<T>& operator--(void)
 			{
-				this->ptr--;
+				ptr--;
 				return (*this);
 			}
 
 			vectorIterator<T> operator--(int)
 			{
 				vectorIterator<T> temp(*this);
-				this->ptr--;
+			    ptr--;
 				return (temp);
 			}
 
             vectorIterator<T> operator+(unsigned int n) const
             {
-                return (vectorIterator<T>(this->ptr + n));
+                return (vectorIterator<T>(ptr + n));
             }
 
             unsigned int operator+(const vectorIterator<T>target) const
             {
-                return (this->ptr + target.getPtr());
+                return (ptr + target.getPtr());
             }
 
             vectorIterator<T> operator-(unsigned int n) const
             {
-                return (vectorIterator<T>(this->ptr - n));
+                return (vectorIterator<T>(ptr - n));
             }
 
             unsigned int operator-(const vectorIterator<T>target) const
             {
-                return (this->ptr - target.getPtr());
+                return (ptr - target.getPtr());
             }
 
             vectorIterator<T>& operator+=(unsigned int n)
             {
-                this->ptr += n;
+                ptr += n;
                 return (*this);
             }
 
             vectorIterator<T>& operator-=(unsigned int n)
             {
-                this->ptr -= n;
+                ptr -= n;
                 return (*this);
             }
 
