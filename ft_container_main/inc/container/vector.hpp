@@ -7,8 +7,8 @@
 #include <limits>
 #include <string>
 
-#include "iterator/vector_iterator.hpp"
-#include "tools.hpp"
+#include "../iterator/vector_iterator.hpp"
+#include "../tools.hpp"
 
 namespace ft
 {
@@ -95,9 +95,9 @@ namespace ft
         typedef const T *const_pointer;
 
         typedef vectorIterator<T> iterator;
-        typedef vectorIterator<const T> const_iterator;
-        typedef ReverseIterator<T> reverse_iterator;
-        typedef ReverseIterator<const T> reverse_const_iterator;
+        typedef vectorConstIterator<T> const_iterator;
+        typedef vectorReverseIterator<T> reverse_iterator;
+        typedef vectorReverseConstIterator<T> const_reverse_iterator;
 
         //===============================================================================
         //================================= Constructer =================================
@@ -368,24 +368,27 @@ namespace ft
         void insert(iterator target_pos, size_type n, const value_type &val)
         {
             T *t_pos_ptr = target_pos.getPtr();
+            size_t remind_idx = getIdxFromPtr(t_pos_ptr);
             vec_pusher(t_pos_ptr, n);
             for (unsigned int i = 0; i < n; i++)
-                set_value(arr + i, val);
+                set_value(arr + remind_idx + i, val);
             this->elem_num += n;
         }
 
         iterator insert(iterator target_pos, const value_type &val)
         {
             T *t_pos_ptr = target_pos.getPtr();
+            size_t remind_idx = getIdxFromPtr(t_pos_ptr);
+
             vec_pusher(t_pos_ptr, 1);
-            set_value(t_pos_ptr, val);
+            set_value(t_pos_ptr + remind_idx, val);
             this->elem_num++;
             return (t_pos_ptr);
         }
 
         iterator erase(iterator pos)
         {
-            unsigned int idx = getIndexFromPtr(pos.getPtr());
+            unsigned int idx = getIdxFromPtr(pos.getPtr());
 
             vec_pusher_back(pos.getPtr(), 1);
             return (iterator(arr + idx));
@@ -393,7 +396,7 @@ namespace ft
 
         iterator erase(iterator start, iterator end)
         {
-            unsigned int idx = getIndexFromPtr(start.getPtr());
+            unsigned int idx = getIdxFromPtr(start.getPtr());
 
             unsigned int i = 0;
             for (iterator it = start; it != end; it++)
@@ -441,7 +444,7 @@ namespace ft
     template <class T, class Alloc>
     bool operator<(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
     {
-        return lexicographical_less(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+        return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
     }
 
     template <class T, class Alloc>
