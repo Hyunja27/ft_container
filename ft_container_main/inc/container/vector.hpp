@@ -355,7 +355,6 @@ namespace ft
             vec_pusher(t_pos_ptr, len);
 
             unsigned int i = 0;
-            // @if_error@ 혹시 삽입에 1정도 길이 차이가 나면 이 부분을 고쳐보쟈
             i = 0;
             for (InputIterator iter = begin; iter != end; iter++)
             {
@@ -381,9 +380,9 @@ namespace ft
             size_t remind_idx = getIdxFromPtr(t_pos_ptr);
 
             vec_pusher(t_pos_ptr, 1);
-            set_value(t_pos_ptr + remind_idx, val);
+            set_value(arr + remind_idx, val);
             this->elem_num++;
-            return (t_pos_ptr);
+            return (arr + remind_idx);
         }
 
         iterator erase(iterator pos)

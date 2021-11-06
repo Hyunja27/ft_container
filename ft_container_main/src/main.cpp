@@ -6,7 +6,7 @@
 /*   By: sunghyunpark <sunghyunpark@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 18:15:39 by sunghyunpar       #+#    #+#             */
-/*   Updated: 2021/11/06 16:18:59 by sunghyunpar      ###   ########.fr       */
+/*   Updated: 2021/11/06 17:31:10 by sunghyunpar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -436,118 +436,136 @@
 
 #include "tools.hpp"
 #include "container/vector.hpp"
+#include "container/stack.hpp"
 #include "iterator/vector_iterator.hpp"
 
-// int main(void)
-// {
-//     ft::vector<int> vec_1;
-// 	ft::vector<int>::iterator iter_1;
-//     std::vector<int> vec_2;
-// 	std::vector<int>::iterator iter_2;
+
+int main(void)
+{
+    ft::vector<int> vec_1;
+	ft::vector<int>::iterator iter_1;
+    std::vector<int> vec_2;
+	std::vector<int>::iterator iter_2;
+	ft::stack<int> stack_1;
     
-// 	// ft::vector<int>::iterator iter_1;
-//     // ft::vector<int>::reverse_iterator iter_2;
-//     // // std::vector<int> *vec_iter;
+	// ft::vector<int>::iterator iter_1;
+    // ft::vector<int>::reverse_iterator iter_2;
+    // // std::vector<int> *vec_iter;
     
-//     vec_1.push_back(1);
-//     vec_1.push_back(2);
-//     vec_1.push_back(3);
-//     vec_1.push_back(4);
-//     vec_1.push_back(5);
-//     vec_1.push_back(6);
-//     vec_1.push_back(7);
-//     vec_1.push_back(8);
-//     vec_1.push_back(9);
-//     vec_1.push_back(10);
-//     vec_1.push_back(11);
-//     vec_1.push_back(12);
+    vec_1.push_back(1);
+    vec_1.push_back(2);
+    vec_1.push_back(3);
+    vec_1.push_back(4);
+    vec_1.push_back(5);
+    vec_1.push_back(6);
+    vec_1.push_back(7);
+    vec_1.push_back(8);
+    vec_1.push_back(9);
+    vec_1.push_back(10);
+    vec_1.push_back(11);
+    vec_1.push_back(12);
 
-//     vec_2.push_back(1);
-//     vec_2.push_back(2);
-//     vec_2.push_back(3);
-//     vec_2.push_back(4);
-//     vec_2.push_back(5);
-//     vec_2.push_back(6);
-//     vec_2.push_back(7);
-//     vec_2.push_back(8);
-//     vec_2.push_back(9);
-//     vec_2.push_back(10);
-//     vec_2.push_back(11);
-//     vec_2.push_back(12);
+    vec_2.push_back(1);
+    vec_2.push_back(2);
+    vec_2.push_back(3);
+    vec_2.push_back(4);
+    vec_2.push_back(5);
+    vec_2.push_back(6);
+    vec_2.push_back(7);
+    vec_2.push_back(8);
+    vec_2.push_back(9);
+    vec_2.push_back(10);
+    vec_2.push_back(11);
+    vec_2.push_back(12);
     
 
-//     // std::cout << *(vec_1.begin()) << std::endl;
-//     // std::cout << *(vec_1.end()) << std::endl;
+    // std::cout << *(vec_1.begin()) << std::endl;
+    // std::cout << *(vec_1.end()) << std::endl;
 
-//     // std::cout << *(vec_1.rbegin()) << std::endl;
-//     // std::cout << *(vec_1.rend()) << std::endl;
+    // std::cout << *(vec_1.rbegin()) << std::endl;
+    // std::cout << *(vec_1.rend()) << std::endl;
 
-//     std::cout << std::endl;
-//     std::cout << "========================== my vec ===================== " << std::endl;
+    std::cout << std::endl;
+    std::cout << "========================== my vec ===================== " << std::endl;
         
-//     std::cout << vec_1[0] << std::endl;
-//     std::cout << vec_1[1] << std::endl;
-//     std::cout << vec_1[2] << std::endl;
-//     std::cout << vec_1[3] << std::endl;
-//     std::cout << vec_1[4] << std::endl;
-//     std::cout << vec_1[5] << std::endl;
-//     std::cout << vec_2[6] << std::endl;
-//     std::cout << vec_2[7] << std::endl;
-//     std::cout << vec_2[8] << std::endl;
-//     std::cout << vec_2[9] << std::endl;
-//     std::cout << vec_2[10] << std::endl;
+    std::cout << vec_1[0] << std::endl;
+    std::cout << vec_1[1] << std::endl;
+    std::cout << vec_1[2] << std::endl;
+    std::cout << vec_1[3] << std::endl;
+    std::cout << vec_1[4] << std::endl;
+    std::cout << vec_1[5] << std::endl;
+    std::cout << vec_2[6] << std::endl;
+    std::cout << vec_2[7] << std::endl;
+    std::cout << vec_2[8] << std::endl;
+    std::cout << vec_2[9] << std::endl;
+    std::cout << vec_2[10] << std::endl;
     
-//     std::cout << std::endl;
+    std::cout << std::endl;
     
-//     // std::cout << vec_1.capacity() << std::endl;
+    // std::cout << vec_1.capacity() << std::endl;
     
-//     // print_T(vec_1, 12);
-// 	iter_1 = vec_1.begin();
-// 	ft::vector<int>::iterator iter_1_tmp = iter_1 + 3;
+    // print_T(vec_1, 12);
+	iter_1 = vec_1.begin();
+	ft::vector<int>::iterator iter_1_tmp = iter_1 + 3;
 
-// 	for (int i = 0; i < 12; i++)
-// 		std::cout << iter_1[i] << "|";
+	for (int i = 0; i < 12; i++)
+		std::cout << iter_1[i] << "|";
 
-// 	// vec_1.erase(iter_1_tmp);
+	// vec_1.erase(iter_1_tmp);
 
-// 	// for (int i = 0; i < 12; i++)
-// 	// 	std::cout << iter_1[i] << "|";
+	// for (int i = 0; i < 12; i++)
+	// 	std::cout << iter_1[i] << "|";
 
-// 	// vec_1.erase(6);
+	// vec_1.erase(6);
 	
 
 
-//     std::cout << std::endl;
-//     std::cout << "========================== real vec ===================== " << std::endl;
+    std::cout << std::endl;
+    std::cout << "========================== real vec ===================== " << std::endl;
 
-//     std::cout << vec_2[0] << std::endl;
-//     std::cout << vec_2[1] << std::endl;
-//     std::cout << vec_2[2] << std::endl;
-//     std::cout << vec_2[3] << std::endl;
-//     std::cout << vec_2[4] << std::endl;
-//     std::cout << vec_2[5] << std::endl;
-//     std::cout << vec_2[6] << std::endl;
-//     std::cout << vec_2[7] << std::endl;
-//     std::cout << vec_2[8] << std::endl;
-//     std::cout << vec_2[9] << std::endl;
-//     std::cout << vec_2[10] << std::endl;
+    std::cout << vec_2[0] << std::endl;
+    std::cout << vec_2[1] << std::endl;
+    std::cout << vec_2[2] << std::endl;
+    std::cout << vec_2[3] << std::endl;
+    std::cout << vec_2[4] << std::endl;
+    std::cout << vec_2[5] << std::endl;
+    std::cout << vec_2[6] << std::endl;
+    std::cout << vec_2[7] << std::endl;
+    std::cout << vec_2[8] << std::endl;
+    std::cout << vec_2[9] << std::endl;
+    std::cout << vec_2[10] << std::endl;
     
-//     std::cout << std::endl;
-//     // std::cout << vec_2.capacity() << std::endl;
+    std::cout << std::endl;
+    // std::cout << vec_2.capacity() << std::endl;
 
-//     // print_T(vec_2, 12);
-// 	iter_2 = vec_2.begin();
-// 	// std::vector<int>::iterator iter_2_tmp = iter_2 + 3;
+    // print_T(vec_2, 12);
+	iter_2 = vec_2.begin();
+	// std::vector<int>::iterator iter_2_tmp = iter_2 + 3;
 	
-// 	for (int j = 0; j < 12; j++)
-// 		std::cout << iter_1[j] << "|";
+	for (int j = 0; j < 12; j++)
+		std::cout << iter_1[j] << "|";
 
-	
+	stack_1.push(1);
+	stack_1.push(1);
+	stack_1.push(1);
+	stack_1.push(1);
+	stack_1.push(1);
+	stack_1.push(1);
+	stack_1.push(1);
+	stack_1.push(1);
+	stack_1.push(1);
+	stack_1.push(1);
+	stack_1.push(100);
+
+	std::cout << stack_1.size() << std::endl;
+	std::cout << stack_1.top() << std::endl;
+	std::cout << stack_1.pop() << std::endl;
+	std::cout << stack_1.size() << std::endl;
     
         
 
-//     return 0;
-// }
+    return 0;
+}
 
 
 // #define TESTED_TYPE std::string
@@ -616,9 +634,9 @@
 // 	return (0);
 // }
 
-
-#define TESTED_TYPE foo
 #define TESTED_NAMESPACE ft
+// #define TESTED_TYPE foo
+// #define TESTED_TYPE int
 #define T_SIZE_TYPE typename TESTED_NAMESPACE::vector<T>::size_type
 
 template <typename T>
@@ -682,45 +700,73 @@ void ft_eq_ope(const Ite_1 &first, const Ite_2 &second, const bool redo = 1)
 		ft_eq_ope(second, first, 0);
 }
 
-int		main(void)
-{
-	const int size = 5;
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(size);
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator it_0(vct.rbegin());
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator it_1(vct.rend());
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator it_mid;
+// int		main(void)
+// {
+// 	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(5);
+// 	TESTED_NAMESPACE::vector<TESTED_TYPE> vct2;
+// 	const int cut = 3;
 
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::const_reverse_iterator cit_0 = vct.rbegin();
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::const_reverse_iterator cit_1;
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::const_reverse_iterator cit_mid;
+// 	for (unsigned long int i = 0; i < vct.size(); ++i)
+// 		vct[i] = (vct.size() - i) * 7;
+// 	printSize(vct);
 
-	for (int i = size; it_0 != it_1; --i)
-		*it_0++ = i;
-	printSize(vct, 1);
-	it_0 = vct.rbegin();
-	cit_1 = vct.rend();
-	it_mid = it_0 + 3;
-	cit_mid = it_0 + 3; cit_mid = cit_0 + 3; cit_mid = it_mid;
+// 	vct2.insert(vct2.begin(), vct.begin(), vct.begin() + cut);
+// 	printSize(vct2);
+// 	vct2.insert(vct2.begin(), vct.begin() + cut, vct.end());
+// 	printSize(vct2);
+// 	vct2.insert(vct2.end(), vct.begin(), vct.begin() + cut);
+// 	printSize(vct2);
 
-	std::cout << std::boolalpha;
-	std::cout << ((it_0 + 3 == cit_0 + 3) && (cit_0 + 3 == it_mid)) << std::endl;
+// 	std::cout << "insert return:" << std::endl;
 
-	std::cout << "\t\tft_eq_ope:" << std::endl;
-	// regular it
-	ft_eq_ope(it_0 + 3, it_mid);
-	ft_eq_ope(it_0, it_1);
-	ft_eq_ope(it_1 - 3, it_mid);
-	// const it
-	ft_eq_ope(cit_0 + 3, cit_mid);
-	ft_eq_ope(cit_0, cit_1);
-	ft_eq_ope(cit_1 - 3, cit_mid);
-	// both it
-	ft_eq_ope(it_0 + 3, cit_mid);
-	ft_eq_ope(it_mid, cit_0 + 3);
-	ft_eq_ope(it_0, cit_1);
-	ft_eq_ope(it_1, cit_0);
-	ft_eq_ope(it_1 - 3, cit_mid);
-	ft_eq_ope(it_mid, cit_1 - 3);
+// 	std::cout << *vct2.insert(vct2.end(), 42) << std::endl;
+// 	std::cout << *vct2.insert(vct2.begin() + 5, 84) << std::endl;
+// 	std::cout << "----------------------------------------" << std::endl;
 
-	return (0);
-}
+// 	printSize(vct2);
+// 	return (0);
+// }
+
+
+// int		main(void)
+// {
+// 	const int size = 5;
+// 	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(size);
+// 	TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator it = vct.rbegin();
+// 	TESTED_NAMESPACE::vector<TESTED_TYPE>::const_reverse_iterator ite = vct.rbegin();
+
+// 	for (int i = 0; i < size; ++i)
+// 	{
+// 		std::cout << &(it[i]) - 1 << std::endl; 
+// 		it[i] = (size - i)  * 5;
+// 	}
+
+// 	std::cout << "start : " << &(*it) << std::endl; 
+
+// 	it = it + 5;
+
+// 	std::cout << std::endl << " + 5 : " << &(*it) << std::endl; 
+	
+// 	it = 1 + it;
+
+// 	std::cout << std::endl << " + 1 : " << &(*it) << std::endl; 
+	
+// 	it = it - 4;
+
+// 	std::cout << std::endl << " - 4 : " << &(*it) << std::endl; 
+	
+// 	std::cout << *(it += 2) << std::endl;
+// 	std::cout << *(it -= 1) << std::endl;
+
+// 	*(it -= 2) = 42;
+// 	*(it += 2) = 21;
+
+// 	std::cout << "const_ite +=/-=: " << *(ite += 2) << " | " << *(ite -= 2) << std::endl;
+
+// 	std::cout << "(it == const_it): " << (ite == it) << std::endl;
+// 	std::cout << "(const_ite - it): " << (ite - it) << std::endl;
+// 	std::cout << "(ite + 3 == it): " << (ite + 3 == it) << std::endl;
+
+// 	printSize(vct, true);
+// 	return (0);
+// }

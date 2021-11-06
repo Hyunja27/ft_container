@@ -420,7 +420,7 @@ namespace ft
 
             }
 
-            vectorReverseIterator(const vectorReverseConstIterator<T> &origin) : ptr(origin.getPtr() - 1)
+            vectorReverseIterator(const vectorConstIterator<T> &origin) : ptr(origin.getPtr() - 1)
             {
 
             }
@@ -488,12 +488,12 @@ namespace ft
                 return (vectorReverseIterator<T>(this->ptr - n));
             }
 
-            unsigned int operator+(const vectorReverseConstIterator<T>target) const
+            int operator+(const vectorReverseConstIterator<T>target) const
             {
                 return (this->ptr - target.getPtr());
             }
 
-            unsigned int operator+(const vectorReverseIterator<T>target) const
+            int operator+(const vectorReverseIterator<T>target) const
             {
                 return (this->ptr - target.getPtr());
             }
@@ -503,12 +503,12 @@ namespace ft
                 return (vectorReverseIterator<T>(this->ptr + n));
             }
 
-            unsigned int operator-(const vectorReverseConstIterator<T>target) const
+            int operator-(const vectorReverseConstIterator<T>target) const
             {
                 return (this->ptr + target.getPtr());
             }   
 
-            unsigned int operator-(const vectorReverseIterator<T>target) const
+            int operator-(const vectorReverseIterator<T>target) const
             {
                 return (this->ptr + target.getPtr());
             }
@@ -591,16 +591,12 @@ namespace ft
                 return (operator>(original) || operator==(original));
             }
 
-            vectorReverseIterator<T> operator+(unsigned int n)
-            {
-                return (vectorReverseIterator<T>(this->ptr - n));
-            }
     };
 
     template<typename T>
     vectorReverseIterator<T> operator+(unsigned int n, vectorReverseIterator<T>& k)
     {
-        return (k - n);
+        return (&(*k) - n);
     }
 
     template <typename T>
