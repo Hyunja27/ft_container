@@ -1,11 +1,11 @@
 #ifndef VECTOR_CPP
 #define VECTOR_CPP
 
-#include <algorithm>
-#include <cstddef>
+// #include <algorithm>
+// #include <cstddef>
 #include <iostream>
-#include <limits>
-#include <string>
+// #include <limits>
+// #include <string>
 
 #include "../iterator/vector_iterator.hpp"
 #include "../tools.hpp"
