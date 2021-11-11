@@ -420,6 +420,7 @@ namespace ft
 
             }
 
+            //@question
             vectorReverseIterator(const vectorConstIterator<T> &origin) : ptr(origin.getPtr() - 1)
             {
 
@@ -434,7 +435,6 @@ namespace ft
 
             ~vectorReverseIterator()
             {
-
             }
 
             T* getPtr() const
@@ -446,7 +446,7 @@ namespace ft
             {
                 return (vectorIterator<T>(this->ptr + 1));
             }
-            
+
             T& operator*(void) const
             {
                 return (*ptr);
