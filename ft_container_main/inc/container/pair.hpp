@@ -1,6 +1,7 @@
 #ifndef PAIR_HPP
 #define PAIR_HPP
 
+#include "../tools.hpp"
 namespace ft
 {
     template<class T1, class T2>
@@ -79,13 +80,45 @@ namespace ft
     }
 
 
-    template<class T>
+    template<class Key, class Val, class Compare = less<Key> >
     class node
     {
+
+        //===============================================================================
+        //=============================== Private & public ==============================
+        //===============================================================================
+
+        private:
+            // 0: red, 1: black, 2: Unknown
+            int     color;
+            node    *left;
+            node    *right;
+            node    *parent;
+            Compare cmp;
+
         public:
+            pair<Key, Val> set;
 
+        //===============================================================================
+        //================================= Constructer =================================
+        //===============================================================================
 
+        node() : left(NULL), right(NULL), parent(NULL), color(2), set(NULL)
+        {
+        }
 
+        node(const pair<Key, Val> _set) : left(NULL), right(NULL), parent(NULL), color(2);
+        {
+            this->set = _set;
+        }
+
+        ~node()
+        {
+        }
+
+        //===============================================================================
+        //================================= functions ===================================
+        //===============================================================================
 
 
 

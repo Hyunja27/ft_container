@@ -7,15 +7,238 @@
 
 namespace ft
 {
-    template <class Key, class T, class Compare = ft::less<Key>, class Alloc = std::allocator<ft::pair<const Key, T> >
+    template <class Key, class T, class Compare = ft::less<Key>, class Alloc = std::allocator<ft::pair<const Key,T> > >
     class map
     {
+        private:
+            unsigned int    elem_num;
+            node *          pos;
+            Alloc           allocer;
+
+        public:
+            typedef Key                                      key_type;
+            typedef T                                        mapped_type;
+            typedef pair<const key_type, mapped_type>        value_type;
+            typedef Compare                                  key_compare;
+            typedef Alloc                                    allocator_type;
+            typedef typename allocator_type::reference       reference;
+            typedef typename allocator_type::const_reference const_reference;
+            typedef typename allocator_type::pointer         pointer;
+            typedef typename allocator_type::const_pointer   const_pointer;
+            typedef typename allocator_type::size_type       size_type;
+            typedef typename allocator_type::difference_type difference_type;
+
+            typedef ft::map_iterator                                    iterator;
+            typedef ft::map_const_iterator                              const_iterator;
+            typedef ft::map_reverse_iterator<iterator>                  reverse_iterator;
+            typedef ft::map_const_reverse_iterator<const_iterator>      const_reverse_iterator;
+        
+        //===============================================================================
+        //================================= Constructer =================================
+        //===============================================================================
+        map() : elem_num(0)
+        {
+        }
+
+        map() : elem_num(0)
+        {
+        }
+
+        ~map()
+        {
+        }
+
+        map& operator=(const map& _target)
+        {
+            this->elem_num = _target.elem_num;
+            return (*this);
+        }
 
 
+        //===============================================================================
+        //================================== elements ===================================
+        //===============================================================================
+
+        mapped_type& at( const Key& key )
+        {
+
+        }
+        
+        const mapped_type& at( const Key& key ) const
+        {
+
+        }
+
+        mapped_type& operator[]( const Key& key )
+        {
+
+        }
 
 
+        //===============================================================================
+        //================================== iterator ===================================
+        //===============================================================================
 
+        iterator begin()
+        {
+
+        }
+
+        const_iterator begin() const
+        {
+
+        }
+
+        iterator end()
+        {
+
+        }
+
+        const_iterator end() const
+        {
+
+        }
+
+        reverse_iterator rbegin()
+        {
+
+        }
+
+        const_reverse_iterator rbegin() const
+        {
+
+        }
+
+        reverse_iterator rend()
+        {
+
+        }
+
+        const_reverse_iterator rend() const
+        {
+
+        }
+
+        //===============================================================================
+        //================================== capacity ===================================
+        //===============================================================================
+
+        bool empty() const
+        {
+
+        }
+
+        size_type size() const
+        {
+
+        }
+
+        size_type max_size() const
+        {
+
+        }
+
+        //===============================================================================
+        //================================= functions ===================================
+        //===============================================================================
+
+        void clear()
+        {
+
+        }
+
+        ft::pair<iterator, bool> insert( const value_type& value )
+        {
+
+        }
+
+        iterator insert( iterator hint, const value_type& value )
+        {
+
+        }
+
+        template< class InputIt >
+        void insert( InputIt first, InputIt last )
+        {
+
+        }
+
+        void erase(iterator pos)
+        {
+
+        }
+
+        void erase( iterator first, iterator last )
+        {
+
+        }
+
+        void swap( map& other )
+        {
+
+        }
+
+        size_type count( const Key& key ) const
+        {
+
+        }
+
+        iterator find( const Key& key )
+        {
+
+        }
+
+        const_iterator find( const Key& key ) const
+        {
+
+        }
+
+        std::pair<iterator,iterator> equal_range( const Key& key )
+        {
+
+        }
+
+        std::pair<const_iterator,const_iterator> equal_range( const Key& key ) const
+        {
+
+        }
+
+        iterator lower_bound( const Key& key )
+        {
+
+        }
+
+        const_iterator lower_bound( const Key& key ) const
+        {
+
+        }
+
+        iterator upper_bound( const Key& key )
+        {
+
+        }
+
+        const_iterator upper_bound( const Key& key ) const
+        {
+
+        }
+
+        key_compare key_comp() const
+        {
+
+        }
+
+        ft::map::value_compare value_comp() const;
+        {
+
+        }
     };
+
+
+    //===============================================================================
+    //================================= overload ===================================
+    //===============================================================================
+    template <class>
 
 }
 
