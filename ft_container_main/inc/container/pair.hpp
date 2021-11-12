@@ -105,6 +105,7 @@ namespace ft
 
         node() : left(NULL), right(NULL), parent(NULL), color(2), set(NULL)
         {
+            
         }
 
         node(const pair<Key, Val> _set) : left(NULL), right(NULL), parent(NULL), color(2);
@@ -114,6 +115,7 @@ namespace ft
 
         ~node()
         {
+
         }
 
         //===============================================================================
