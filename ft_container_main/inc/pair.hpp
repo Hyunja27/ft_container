@@ -156,19 +156,83 @@ namespace ft
             return (base->parent);
         }
 
-        node<Key, Val, Compare>* insert(node<Key, Val, Compare>* base)
+        node<Key, Val, Compare>* find(node<Key, Val, Compare>* base, const Key& target_key)
         {
-
+            if (target_key == base->set.first)
+                return (base);
+            if (base == NULL)
+                return (NULL);
+            if (this->cmp(target_key, base->set.first))
+                return (find(base->left, target_key));
+            else
+                return (find(base->right, target_key));
         }
 
-        node<Key, Val, Compare>* find(node<Key, Val, Compare>* base, Key& target_key)
+        node<Key, Val, Compare>* insert(node<Key, Val, Compare>* base, const Key& target_key, const Val& target_val)
         {
+            node<Key, Val, Compare>* tmp;
+
+            tmp = find(base, target_key);
+            if (tmp)
+            {
+                tmp.second = target_val;
+                return (tmp);
+            }
             if (this->cmp(target_key, base->set.first))
             {
-                
+                if (base->left == NULL)
+                {
+                    tmp = new node<Key, Val, Compare>(target_key, target_val);
+                    tmp->parent = base;
+                    tmp->left = NULL;
+                    tmp->right = NULL;
+                    tmp->color = 0;
+                    base->left = tmp;
+                    color_checker(tmp);
+                    return (tmp);
+                }
+                return (insert(base->left, target_key));
+            }
+            else
+            {
+                if (base->right == NULL)
+                {
+                    tmp = new node<Key, Val, Compare>(target_key, target_val);
+                    tmp->parent = base;
+                    tmp->left = NULL;
+                    tmp->right = NULL;
+                    tmp->color = 0;
+                    base->right = tmp;
+                    color_checker(tmp);
+                    return (tmp);
+                }
+                return (insert(base->right, target_key));
             }
 
 
+        }
+
+        void color_checker(node<Key, Val, Compare>* base)
+        {
+            if ((base->color == 0) && (base->parent == 1))
+                return ;
+            else if ((base->color == 0) && (base->parent == 0))
+            {
+                if (base->parent->parent->right == base->parent)
+                {
+                    if (base->parent->parent->left->color == 0)
+                        // recolor(base);
+                    else if (base->parent->parent->left->color == 1)
+                        // restructure(base);
+                }
+                else if (base->parent->parent->left == base->parent)
+                {
+                    if (base->parent->parent->right->color == 0)
+                        // recolor(base);
+                    else if (base->parent->parent->right->color == 1)
+                        // restructure(base);
+                }
+            }
         }
 
         void deleteTree(node<Key, Val, Compare>* root)
@@ -179,7 +243,7 @@ namespace ft
                 deleteTree(root->right);
             if (root->left != NULL)
                 deleteTree(root->left);
-            delete(node);
+            delete(root);
         }
         
         void deleteNode(node<Key, Val, Compare>* target)

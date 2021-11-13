@@ -3,7 +3,8 @@
 
 #include <iostream>
 #include <memory>
-#include "pair.hpp"
+#include "../pair.hpp"
+#include "../iterator/map_iterator.hpp"
 
 namespace ft
 {
@@ -11,9 +12,9 @@ namespace ft
     class map
     {
         private:
-            unsigned int    elem_num;
-            node *          pos;
-            Alloc           allocer;
+            unsigned int                    elem_num;
+            node<Key, T, Compare> *         root;
+            Alloc                           allocer;
 
         public:
             typedef Key                                      key_type;
@@ -28,19 +29,52 @@ namespace ft
             typedef typename allocator_type::size_type       size_type;
             typedef typename allocator_type::difference_type difference_type;
 
-            typedef ft::map_iterator                                    iterator;
-            typedef ft::map_const_iterator                              const_iterator;
-            typedef ft::map_reverse_iterator<iterator>                  reverse_iterator;
-            typedef ft::map_const_reverse_iterator<const_iterator>      const_reverse_iterator;
+            typedef ft::mapIterator                                  iterator;
+            typedef ft::mapConstIterator                             const_iterator;
+            typedef ft::mapReverseIterator<iterator>                 reverse_iterator;
+            typedef ft::mapReverseConstIterator<const_iterator>      const_reverse_iterator;
+
+
+
+        //From c plusplus Refer.  pair를 직접비교
+			class value_compare
+			{
+				private :
+					Compare comp;
+					value_compare (Compare c) : comp(c){}
+				public	:
+					typedef bool result_type;
+  					typedef value_type first_argument_type;
+  					typedef value_type second_argument_type;
+
+					value_compare(){}
+
+					value_compare(const value_compare& origin) : comp(origin.comp) {}
+
+					~value_compare(){}
+
+					value_compare& operator=(const value_compare& origin)
+					{
+						comp = origin.comp;
+						return (*this);
+					}
+
+					bool operator() (const value_type& x, const value_type& y) const
+  					{
+    					return comp(x.first, y.first);
+					}
+			};
+
         
         //===============================================================================
         //================================= Constructer =================================
         //===============================================================================
-        map() : elem_num(0)
+        map() : elem_num(0), root(NULL)
         {
+
         }
 
-        map() : elem_num(0)
+        map() : elem_num(0), root(NULL)
         {
         }
 
