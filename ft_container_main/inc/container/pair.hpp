@@ -80,7 +80,7 @@ namespace ft
     }
 
 
-    template<class Key, class Val, class Compare = less<Key> >
+    template<class Key, class Val, class Compare = ft::less<Key> >
     class node
     {
 
@@ -121,6 +121,78 @@ namespace ft
         //===============================================================================
         //================================= functions ===================================
         //===============================================================================
+
+        node<Key, Val, Compare>* getRoot(node<Key, Val, Compare>* base)
+        {
+            if (base->parent == NULL)
+                return (base);
+            return (getRoot(base->parent));
+        }
+
+        node<Key, Val, Compare>* getRight(node<Key, Val, Compare>* base)
+        {
+            // if (base->right == NULL)
+            // {
+            //     throw std::out_of_range("No Right Node!");
+            // }
+            return (base->right);
+        }
+
+        node<Key, Val, Compare>* getLeft(node<Key, Val, Compare>* base)
+        {
+            // if (base->left == NULL)
+            // {
+            //     throw std::out_of_range("No Right Node!");
+            // }
+            return (base->left);
+        }
+
+        node<Key, Val, Compare>* getParent(node<Key, Val, Compare>* base)
+        {
+            // if (base->left == NULL)
+            // {
+            //     throw std::out_of_range("No Right Node!");
+            // }
+            return (base->parent);
+        }
+
+        node<Key, Val, Compare>* insert(node<Key, Val, Compare>* base)
+        {
+
+        }
+
+        node<Key, Val, Compare>* find(node<Key, Val, Compare>* base, Key& target_key)
+        {
+            if (this->cmp(target_key, base->set.first))
+            {
+                
+            }
+
+
+        }
+
+        void deleteTree(node<Key, Val, Compare>* root)
+        {
+            if (root == NULL)
+                return ;
+            if (root->right != NULL)
+                deleteTree(root->right);
+            if (root->left != NULL)
+                deleteTree(root->left);
+            delete(node);
+        }
+        
+        void deleteNode(node<Key, Val, Compare>* target)
+        {
+            if (target->left == NULL && target->right == NULL)
+            {
+                delete(target);
+                return ;
+            }
+
+        }
+
+
 
 
 
