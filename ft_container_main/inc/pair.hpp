@@ -17,9 +17,7 @@ namespace ft
             //===============================================================================
             //================================= Constructer =================================
             //===============================================================================
-            
 
-            
             pair() : first(), second() {}
 
             pair(const T1& param_first, const T2& param_second) : first(param_first), second(param_second)
@@ -159,6 +157,20 @@ namespace ft
             return (base->parent);
         }
 
+        node<Key, Val, Compare>* getRightest(node<Key, Val, Compare>* base)
+        {
+            if (base->right == NULL || base == NULL)
+                return (base);
+            return (getRightest(base->right));
+        }
+
+        node<Key, Val, Compare>* getleftest(node<Key, Val, Compare>* base)
+        {
+            if (base->left == NULL || base == NULL)
+                return (base);
+            return (getleftest(base->left));
+        }
+
         node<Key, Val, Compare>* find(node<Key, Val, Compare>* base, const Key& target_key)
         {
             if (target_key == base->set.first)
@@ -211,10 +223,9 @@ namespace ft
                 }
                 return (insert(base->right, target_key));
             }
-
-
         }
 
+        // !? 사용가능할까 !?
         void color_checker(node<Key, Val, Compare>* base)
         {
             if ((base->color == 0) && (base->parent == 1))
@@ -258,9 +269,6 @@ namespace ft
             }
 
         }
-
-
-
 
 
     };

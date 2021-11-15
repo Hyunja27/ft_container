@@ -50,10 +50,32 @@ namespace ft
 
             }
 
-            // node<Key, Val, Compare>*  getPtr() const
-            // {
-            //     return (ptr);
-            // }
+            node<Key, Val, Compare>*  getPtr() const
+            {
+                return (this->ptr);
+            }
+
+            node<Key, Val, Compare>*  getPrev() const
+            {
+                if (ptr->getleft() != NULL)
+                    return (ptr->getRightest(ptr->getLeft()));
+                node<Key, Val, Compare>* tmp = ptr->getParent();
+                while (tmp != NULL && com(ptr->set.first, tmp->set.first))
+                    tmp = tmp->getParent();
+
+                return (tmp);
+            }
+
+            node<Key, Val, Compare>*  getNext() const
+            {
+                if (ptr->getRight() != NULL)
+                    return (ptr->getLeftest((ptr->getRight())));
+                node<Key, Val, Compare>* tmp = ptr->getParent();
+                while (tmp != NULL && com(tmp->set.first, ptr->set.first))
+                    tmp = tmp->getParent();
+
+                return (tmp);
+            }
 
             pair<const Key, Val>& operator*(void) const
             {
@@ -74,59 +96,22 @@ namespace ft
 			mapIterator<Key, Val, Compare> operator++(int)
 			{
 				mapIterator<Key, Val, Compare> temp(*this);
-				ptr++;
+				this->ptr = getNext();
 				return (temp);
 			}
 
 			mapIterator<Key, Val, Compare>& operator--(void)
 			{
-				ptr--;
+				this->ptr = getPrev();
 				return (*this);
 			}
 
 			mapIterator<Key, Val, Compare> operator--(int)
 			{
 				mapIterator<Key, Val, Compare> temp(*this);
-			    ptr--;
+			    this->ptr = getPrev();
 				return (temp);
 			}
-
-            mapIterator<Key, Val, Compare> operator+(unsigned int n) const
-            {
-                return (mapIterator<Key, Val, Compare>(ptr + n));
-            }
-
-            unsigned int operator+(const mapIterator<Key, Val, Compare>target) const
-            {
-                return (ptr + target.getPtr());
-            }
-
-            mapIterator<Key, Val, Compare> operator-(unsigned int n) const
-            {
-                return (mapIterator<Key, Val, Compare>(ptr - n));
-            }
-
-            unsigned int operator-(const mapIterator<Key, Val, Compare>target) const
-            {
-                return (ptr - target.getPtr());
-            }
-
-            mapIterator<Key, Val, Compare>& operator+=(unsigned int n)
-            {
-                ptr += n;
-                return (*this);
-            }
-
-            mapIterator<Key, Val, Compare>& operator-=(unsigned int n)
-            {
-                ptr -= n;
-                return (*this);
-            }
-
-            node<Key, Val, Compare>&  operator[](unsigned int n)
-            {
-                return (*(operator+(n)));
-            }
 
             bool operator==(const mapIterator<Key, Val, Compare>& original) const
             {
@@ -148,51 +133,7 @@ namespace ft
                 return (!operator==(original));
             }
 
-            bool operator<(const mapIterator<Key, Val, Compare>& original) const
-            {
-                return (ptr < original.getPtr());
-            }
 
-            bool operator<(const mapConstIterator<Key, Val, Compare>& original) const
-            {
-                return (ptr < original.getPtr());
-            }
-
-            bool operator<=(const mapIterator<Key, Val, Compare>& original) const
-            {
-                return (operator<(original) || operator==(original));
-            }
-
-            bool operator<=(const mapConstIterator<Key, Val, Compare>& original) const
-            {
-                return (operator<(original) || operator==(original));
-            }
-
-            bool operator>(const mapIterator<Key, Val, Compare>& original) const
-            {
-                return (ptr > original.getPtr());
-            }
-
-            bool operator>(const mapConstIterator<Key, Val, Compare>& original) const
-            {
-                return (ptr > original.getPtr());
-            }
-
-            bool operator>=(const mapIterator<Key, Val, Compare>& original) const
-            {
-                return (ptr > original.getPtr() || ptr == original.getPtr());
-            }
-
-            bool operator>=(const mapConstIterator<Key, Val, Compare>& original) const
-            {
-                return (ptr > original.getPtr() || ptr == original.getPtr());
-            }
-
-
-            mapIterator<Key, Val, Compare> operator+(unsigned int n)
-            {
-                return (mapIterator<Key, Val, Compare> (this->ptr + n));
-            }
     };
 
     template<typename T>
