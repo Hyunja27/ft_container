@@ -1,7 +1,7 @@
 #ifndef PAIR_HPP
 #define PAIR_HPP
 
-#include "../tools.hpp"
+#include "./tools.hpp"
 namespace ft
 {
     template<class T1, class T2>
@@ -30,16 +30,10 @@ namespace ft
 
             }
 
-            pair(const pair &target)
-            {
-                this.first = target.first;
-                this.second = target.second;
-            }
-
             pair &operator=(const pair &target)
             {
-                this.first = target.first;
-                this.second = target.second;
+                this->first = target.first;
+                this->second = target.second;
                 return (*this);
             }
 
@@ -48,16 +42,6 @@ namespace ft
             //===============================================================================
             //================================= functions ===================================
             //===============================================================================
-
-            first()
-            {
-                return this->first;
-            }
-
-            second()
-            {
-                return this->second;
-            }
     };
 
     //===============================================================================
@@ -98,18 +82,23 @@ namespace ft
             Compare cmp;
 
         public:
-            pair<Key, Val> set;
+            pair<const Key, Val> set;
 
         //===============================================================================
         //================================= Constructer =================================
         //===============================================================================
-
+        
         node() : left(NULL), right(NULL), parent(NULL), color(2), set(NULL)
         {
             
         }
 
-        node(const pair<Key, Val> _set) : left(NULL), right(NULL), parent(NULL), color(2);
+        node(Key first, Key second = Val()) : left(NULL), right(NULL), parent(NULL),  set(first, second)
+		{
+
+        }
+
+        node(const pair<Key, Val> _set) : left(NULL), right(NULL), parent(NULL), color(2)
         {
             this->set = _set;
         }
@@ -183,16 +172,17 @@ namespace ft
                 return (find(base->right, target_key));
         }
 
-        node<Key, Val, Compare>* insert(node<Key, Val, Compare>* base, const Key& target_key, const Val& target_val)
+        node<Key, Val, Compare>* insert(node<Key, Val, Compare>* base, const Key& target_key, const Val& target_val = Val())
         {
             node<Key, Val, Compare>* tmp;
 
             tmp = find(base, target_key);
-            if (tmp)
+            if (tmp != NULL)
             {
-                tmp.second = target_val;
+                tmp->set.second = target_val;
                 return (tmp);
             }
+            
             if (this->cmp(target_key, base->set.first))
             {
                 if (base->left == NULL)
@@ -203,7 +193,7 @@ namespace ft
                     tmp->right = NULL;
                     tmp->color = 0;
                     base->left = tmp;
-                    color_checker(tmp);
+                    // color_checker(tmp);
                     return (tmp);
                 }
                 return (insert(base->left, target_key));
@@ -218,36 +208,92 @@ namespace ft
                     tmp->right = NULL;
                     tmp->color = 0;
                     base->right = tmp;
-                    color_checker(tmp);
+                    // color_checker(tmp);
                     return (tmp);
                 }
                 return (insert(base->right, target_key));
             }
         }
+        
+        bool isSame(const Key& k_1, const Key& k_2)
+        {
+            return (!cmp(k_1, k_2) && !cmp(k_2, k_1));
+        }
+
+        bool isFirstSmall(const Key& t1, const Val& t2)
+			{
+				return (cmp(t1, t2));
+			}
+
+		bool isFirstEqualOrSmall(const Key& t1, const Val& t2)
+		{
+			return (!cmp(t2, t1));
+		}
+
+        //key 보다 큰값중 가장 작은 값
+		node<Key, Val, Compare>* getUpperBound(node<Key, Val, Compare> *root, const Key& key)
+		{		
+			if (isFirstEqualOrSmall(root->set.first, key))
+			{
+				if (root->right == NULL)
+					return (NULL);
+				else 
+					return (getUpperBound(root->right, key));
+			}
+			else // key 가 더 작음.
+			{
+				if (root->left == NULL)
+					return (root);
+				else
+					return (getUpperBound(root->left, key));
+			}
+		}
+
+		//key 보다 큰값중 가장 작거나 같은 값
+		node<Key, Val, Compare>* getLowerBound(node<Key, Val, Compare> *root, const Key& key)
+		{
+			if (isSame(root->set.first, key)) // 값이 같다면 즉시 리턴
+				return (root);
+			
+			if (isFirstSmall(root->set.first, key))
+			{
+				if (root->right == NULL)
+					return (NULL);
+				else 
+					return (getLowerBound(root->right, key));
+			}
+			else // key 가 더 작음.
+			{
+				if (root->left == NULL)
+					return (root);
+				else
+					return (getLowerBound(root->left, key));
+			}
+		}
 
         // !? 사용가능할까 !?
-        void color_checker(node<Key, Val, Compare>* base)
-        {
-            if ((base->color == 0) && (base->parent == 1))
-                return ;
-            else if ((base->color == 0) && (base->parent == 0))
-            {
-                if (base->parent->parent->right == base->parent)
-                {
-                    if (base->parent->parent->left->color == 0)
-                        // recolor(base);
-                    else if (base->parent->parent->left->color == 1)
-                        // restructure(base);
-                }
-                else if (base->parent->parent->left == base->parent)
-                {
-                    if (base->parent->parent->right->color == 0)
-                        // recolor(base);
-                    else if (base->parent->parent->right->color == 1)
-                        // restructure(base);
-                }
-            }
-        }
+        // void color_checker(node<Key, Val, Compare>* base)
+        // {
+        //     if ((base->color == 0) && (base->parent == 1))
+        //         return ;
+        //     else if ((base->color == 0) && (base->parent == 0))
+        //     {
+        //         if (base->parent->parent->right == base->parent)
+        //         {
+        //             if (base->parent->parent->left->color == 0)
+        //                 // recolor(base);
+        //             else if (base->parent->parent->left->color == 1)
+        //                 // restructure(base);
+        //         }
+        //         else if (base->parent->parent->left == base->parent)
+        //         {
+        //             if (base->parent->parent->right->color == 0)
+        //                 // recolor(base);
+        //             else if (base->parent->parent->right->color == 1)
+        //                 // restructure(base);
+        //         }
+        //     }
+        // }
 
         void deleteTree(node<Key, Val, Compare>* root)
         {
@@ -270,18 +316,36 @@ namespace ft
 
         }
 
+        node<Key, Val, Compare>*		getLeft()
+		{
+			return (this->left);
+		}
+		node<Key, Val, Compare>*		getRight()
+		{
+			return (this->right);
+		}
+		node<Key, Val, Compare>*		getParent()
+		{
+			return (this->parent);
+		}
 
     };
 
-    template<class T>
-    struct less
-    {
-        bool operator()( const T& lhs, const T& rhs ) const;
-        {
-            return lhs < rhs;
-        }
-    };
-}
+    template <typename Key, typename T, class Compare = ft::less<Key> >
+	class saver
+	{
+		public	:
+			node<Key, T, Compare>* root;
+		
+			saver(node<Key, T, Compare>* root = NULL) : root(root){}
+			~saver(){}
+			saver(const saver<Key, T, Compare>& origin) : root(origin.root){}
+			saver& operator=(const saver<Key, T, Compare>& origin)
+			{
+				this->root = origin.root;
+				return (*this);
+			}
+	};
 
 
 #endif

@@ -13,9 +13,13 @@ SRC =  $(addprefix $(SRC_DIR)/, \
 		)
 
 INC =  $(addprefix $(INC_DIR)/, \
+		container/stack.hpp\
+		container/map.hpp\
 		container/vector.hpp\
-		tools.hpp\
+		inc/tools.hpp\
+		inc/pair.hpp\
 		iterator/vector_iterator.hpp\
+		iterator/map_iterator.hpp\
 		)
 
 GREEN = \033[32m

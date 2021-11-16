@@ -1,8 +1,8 @@
 #ifndef MAP_ITERATOR_HPP
 #define MAP_ITERATOR_HPP
 
-#include "../tools.hpp"
-#include "../pair.hpp"
+// #include "../tools.hpp"
+// #include "../pair.hpp"
 
 
 namespace ft
@@ -19,21 +19,26 @@ namespace ft
     template <typename Key, typename Val, typename Compare>
     class mapReverseConstIterator;
 
-    template <typename Key, typename Val, typename Compare = ft::less<Key> >
+    template <typename Key, typename Val, typename Compare = less<Key> >
     class mapIterator
     {
         private :
-            node<Key, Val, Compare>* ptr;
-
+            node<Key, Val, Compare>*    ptr;
+            saver<Key, Val, Compare>*   save;
+            Compare                     cmp;
 
         public :
             //=========================default==========================
-            mapIterator(node<Key, Val, Compare>* ptr = NULL) : ptr(ptr)
+            mapIterator()
+            {
+            }
+
+            mapIterator(node<Key, Val, Compare>* ptr, saver<Key, Val, Compare>* save) : ptr(ptr), save(save)
             {
             }
 
             //===========================copy===========================
-            mapIterator(const mapIterator<Key, Val, Compare> &origin) : ptr(origin.ptr)
+            mapIterator(const mapIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(origin.getSave())
             {
             }
 
@@ -41,6 +46,7 @@ namespace ft
             mapIterator<Key, Val, Compare>& operator=(const mapIterator<Key, Val, Compare> &origin)
             {
                 ptr = origin.ptr;
+                this->save = origin.save;
                 return (*this);
             }
 
@@ -55,12 +61,20 @@ namespace ft
                 return (this->ptr);
             }
 
+            saver<Key, Val, Compare>* getSave() const
+            {
+                return (this->save);
+            }
+
             node<Key, Val, Compare>*  getPrev() const
             {
+                if (ptr == NULL)
+                    return (ptr->getRightest(save->root));
+
                 if (ptr->getleft() != NULL)
                     return (ptr->getRightest(ptr->getLeft()));
                 node<Key, Val, Compare>* tmp = ptr->getParent();
-                while (tmp != NULL && com(ptr->set.first, tmp->set.first))
+                while (tmp != NULL && cmp(ptr->set.first, tmp->set.first))
                     tmp = tmp->getParent();
 
                 return (tmp);
@@ -68,10 +82,13 @@ namespace ft
 
             node<Key, Val, Compare>*  getNext() const
             {
+                if (ptr == NULL)
+                    return (ptr->getleftest(save->root));
+
                 if (ptr->getRight() != NULL)
-                    return (ptr->getLeftest((ptr->getRight())));
+                    return (ptr->getleftest((ptr->getRight())));
                 node<Key, Val, Compare>* tmp = ptr->getParent();
-                while (tmp != NULL && com(tmp->set.first, ptr->set.first))
+                while (tmp != NULL && cmp(tmp->set.first, ptr->set.first))
                     tmp = tmp->getParent();
 
                 return (tmp);
@@ -136,31 +153,33 @@ namespace ft
 
     };
 
-    template<typename T>
-    mapIterator<Key, Val, Compare> operator+(unsigned int n, mapIterator<Key, Val, Compare>& k)
-    {
-        return (k + n);
-    }
-
-    template<typename T>
+    template <typename Key, typename Val, typename Compare = less<Key> >
     class mapConstIterator
     {
         private :
             node<Key, Val, Compare>*  ptr;
+            saver<Key, Val, Compare>*   save;
+            Compare                   cmp;
+
         public :
             //=========================default==========================
-            mapConstIterator(node<Key, Val, Compare>* ptr = NULL) : ptr(ptr)
+            mapConstIterator()
+            {
+
+            }
+
+            mapConstIterator(node<Key, Val, Compare>* ptr, saver<Key, Val, Compare> *save) : ptr(ptr), save(save)
             {
 
             }
 
             //===========================copy===========================
-            mapConstIterator(const mapConstIterator<Key, Val, Compare> &origin) : ptr(origin.ptr)
+            mapConstIterator(const mapConstIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(origin.getSave())
             {
 
             }
 
-            mapConstIterator(const mapIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr())
+            mapConstIterator(const mapIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(origin.getSave())
             {
 
             }
@@ -168,13 +187,15 @@ namespace ft
             //===========================operator= ======================
             mapConstIterator<Key, Val, Compare>& operator=(const mapConstIterator<Key, Val, Compare> &origin)
             {
-                this->ptr = origin.ptr;
+                this->ptr = origin.getPtr();
+                this->save = origin.getSave();
                 return (*this);
             }
 
             mapConstIterator<Key, Val, Compare>& operator=(const mapIterator<Key, Val, Compare> &origin)
             {
                 this->ptr = origin.getPtr();
+                this->save = origin.getSave();
                 return (*this);
             }
 
@@ -185,92 +206,78 @@ namespace ft
 
             }
 
-            node<Key, Val, Compare>* getPtr() const
+            node<Key, Val, Compare>*  getPtr() const
             {
                 return (this->ptr);
             }
 
-            const node<Key, Val, Compare>& operator*(void) const
+            saver<Key, Val, Compare>* getSave() const
             {
-                return (*ptr);
+                return (this->save);
             }
 
-            const node<Key, Val, Compare>* operator->(void)
+            node<Key, Val, Compare>*  getPrev() const
+            {
+                if (ptr == NULL)
+                    return (ptr->getRightest(save->root));
+
+                if (ptr->getleft() != NULL)
+                    return (ptr->getRightest(ptr->getLeft()));
+                node<Key, Val, Compare>* tmp = ptr->getParent();
+                while (tmp != NULL && cmp(ptr->set.first, tmp->set.first))
+                    tmp = tmp->getParent();
+
+                return (tmp);
+            }
+
+            node<Key, Val, Compare>*  getNext() const
+            {
+                if (ptr == NULL)
+                    return (ptr->getleftest(save->root));
+
+                if (ptr->getRight() != NULL)
+                    return (ptr->getleftest((ptr->getRight())));
+                node<Key, Val, Compare>* tmp = ptr->getParent();
+                while (tmp != NULL && cmp(tmp->set.first, ptr->set.first))
+                    tmp = tmp->getParent();
+
+                return (tmp);
+            }
+
+            const pair<const Key, Val>& operator*(void) const
+            {
+                return (ptr->set);
+            }
+
+            const pair<const Key, Val>* operator->(void) const
             {
                 return (&(this->operator*()));
             }
 
             mapConstIterator<Key, Val, Compare>& operator++(void)
             {
-                this->ptr++;
+                this->ptr = getNext();
                 return (*this);
             }
 
             mapConstIterator<Key, Val, Compare> operator++(int)
             {
                 mapConstIterator<Key, Val, Compare> temp(*this);
-                this->ptr++;
+                this->ptr = getNext();
                 return (temp);
             }
 
             mapConstIterator<Key, Val, Compare>& operator--(void)
             {
-                this->ptr--;
+                this->ptr = getPrev();
                 return (*this);
             }
 
             mapConstIterator<Key, Val, Compare> operator--(int)
             {
                 mapConstIterator<Key, Val, Compare> temp(*this);
-                this->ptr--;
+                this->ptr = getPrev();
                 return (temp);
-            }
-
-            mapConstIterator<Key, Val, Compare> operator+(unsigned int n) const
-            {
-                return (mapConstIterator<Key, Val, Compare>(this->ptr + n));
-            }
-
-            unsigned int operator+(const mapConstIterator<Key, Val, Compare>target) const
-            {
-                return (this->ptr + target.getPtr());
-            }
-
-            unsigned int operator+(const mapIterator<Key, Val, Compare>target) const
-            {
-                return (this->ptr + target.getPtr());
-            }
-
-            mapConstIterator<Key, Val, Compare> operator-(unsigned int n) const
-            {
-                return (mapConstIterator<Key, Val, Compare>(this->ptr - n));
-            }
-
-            int operator-(const mapConstIterator<Key, Val, Compare>target) const
-            {
-                return (this->ptr - target.getPtr());
-            }
-
-            int operator-(const mapIterator<Key, Val, Compare>target) const
-            {
-                return (this->ptr - target.getPtr());
-            }
-
-            mapConstIterator<Key, Val, Compare>& operator+=(unsigned int n)
-            {
-                this->ptr += n;
-                return (*this);
-            }
-
-            mapConstIterator<Key, Val, Compare>& operator-=(unsigned int n)
-            {
-                this->ptr -= n;
-                return (*this);
-            }
-
-            const node<Key, Val, Compare>&  operator[](unsigned int n) const
-            {
-                return (*(operator+(n)));
             }
 
             bool operator==(const mapConstIterator<Key, Val, Compare>& original) const
@@ -292,79 +299,34 @@ namespace ft
             {
                 return (!operator==(original));
             }
-
-            bool operator<(const mapConstIterator<Key, Val, Compare>& original) const
-            {
-                return (this->ptr < original.getPtr());
-            }
-
-            bool operator<(const mapIterator<Key, Val, Compare>& original) const
-            {
-                return (this->ptr < original.getPtr());
-            }
-
-            bool operator<=(const mapConstIterator<Key, Val, Compare>& original) const
-            {
-                return (operator<(original) || operator==(original));
-            }
-
-            bool operator<=(const mapIterator<Key, Val, Compare>& original) const
-            {
-                return (operator<(original) || operator==(original));
-            }
-
-            bool operator>(const mapConstIterator<Key, Val, Compare>& original) const
-            {
-                return (!operator<=(original));
-            }
-
-            bool operator>(const mapIterator<Key, Val, Compare>& original) const
-            {
-                return (!operator<=(original));
-            }
-
-            bool operator>=(const mapConstIterator<Key, Val, Compare>& original) const
-            {
-                return (operator>(original) || operator==(original));
-            }
-
-            bool operator>=(const mapIterator<Key, Val, Compare>& original) const
-            {
-                return (operator>(original) || operator==(original));
-            }
-
-            mapConstIterator<Key, Val, Compare> operator+(unsigned int n)
-            {
-                return (mapIterator<Key, Val, Compare>(this->ptr + n));
-            }
     };
-
-    template<typename T>
-    mapConstIterator<Key, Val, Compare> operator+(unsigned int n, mapConstIterator<Key, Val, Compare>& k)
-    {
-        return (k + n);
-    }
-
-    template<typename T>
+    template <typename Key, typename Val, typename Compare = less<Key> >
     class mapReverseIterator
     {
         private :
             node<Key, Val, Compare>*  ptr;
+            saver<Key, Val, Compare>*   save;
+            Compare                   cmp;
         public :
             //=========================default==========================
-            mapReverseIterator(node<Key, Val, Compare>* ptr = NULL) : ptr(ptr)
+            mapReverseIterator()
+            {
+
+            }
+
+            mapReverseIterator(node<Key, Val, Compare>* ptr, saver<Key, Val, Compare>* save) : ptr(ptr->getPtr()), save(save->getSave())
             {
 
             }
 
             //===========================copy===========================
-            mapReverseIterator(const mapReverseIterator<Key, Val, Compare> &origin) : ptr(origin.ptr)
+            mapReverseIterator(const mapReverseIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(save->getSave())
             {
 
             }
 
             //@question
-            mapReverseIterator(const mapConstIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr() - 1)
+            mapReverseIterator(const mapConstIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(save->getSave())
             {
 
             }
@@ -372,7 +334,15 @@ namespace ft
             //===========================operator= ======================
             mapReverseIterator<Key, Val, Compare>& operator=(const mapReverseIterator<Key, Val, Compare> &origin)
             {
-                this->ptr = origin.ptr;
+                this->ptr = origin.getPtr();
+                this->save = origin.getSave();
+                return (*this);
+            }
+
+            mapReverseIterator<Key, Val, Compare>& operator=(const mapIterator<Key, Val, Compare> &origin)
+            {
+                this->ptr = origin.getPtr();
+                this->save = origin.getSave();
                 return (*this);
             }
 
@@ -380,97 +350,78 @@ namespace ft
             {
             }
 
-            node<Key, Val, Compare>* getPtr() const
+            node<Key, Val, Compare>*  getPtr() const
             {
                 return (this->ptr);
             }
 
-            mapIterator<Key, Val, Compare> base()
+            saver<Key, Val, Compare>* getSave() const
             {
-                return (mapIterator<Key, Val, Compare>(this->ptr + 1));
+                return (this->save);
             }
 
-            node<Key, Val, Compare>& operator*(void) const
+            node<Key, Val, Compare>*  getPrev() const
             {
-                return (*ptr);
+                if (ptr == NULL)
+                    return (ptr->getleftest(save->root));
+    
+                if (ptr->getleft() != NULL)
+                    return (ptr->getRightest(ptr->getLeft()));
+                node<Key, Val, Compare>* tmp = ptr->getParent();
+                while (tmp != NULL && cmp(ptr->set.first, tmp->set.first))
+                    tmp = tmp->getParent();
+
+                return (tmp);
             }
 
-            node<Key, Val, Compare>* operator->(void)
+            node<Key, Val, Compare>*  getNext() const
+            {
+                if (ptr == NULL)
+                    return (ptr->getRightest(save->root));
+
+                if (ptr->getRight() != NULL)
+                    return (ptr->getleftest((ptr->getRight())));
+                node<Key, Val, Compare>* tmp = ptr->getParent();
+                while (tmp != NULL && cmp(tmp->set.first, ptr->set.first))
+                    tmp = tmp->getParent();
+
+                return (tmp);
+            }
+
+            pair<const Key, Val>& operator*(void) const
+            {
+                return (ptr->set);
+            }
+
+            pair<const Key, Val>* operator->(void) const
             {
                 return (&(this->operator*()));
             }
 
             mapReverseIterator<Key, Val, Compare>& operator++(void)
             {
-                this->ptr--;
+                this->ptr = getPrev();
                 return (*this);
             }
 
             mapReverseIterator<Key, Val, Compare> operator++(int)
             {
                 mapReverseIterator<Key, Val, Compare> temp(*this);
-                this->ptr--;
+                this->ptr = getPrev();
                 return (temp);
             }
 
             mapReverseIterator<Key, Val, Compare>& operator--(void)
             {
-                this->ptr++;
+                this->ptr = getNext();
                 return (*this);
             }
 
             mapReverseIterator<Key, Val, Compare> operator--(int)
             {
                 mapReverseIterator<Key, Val, Compare> temp(*this);
-                this->ptr++;
+                this->ptr = getNext();
                 return (temp);
-            }
-
-            mapReverseIterator<Key, Val, Compare> operator+(unsigned int n) const
-            {
-                return (mapReverseIterator<Key, Val, Compare>(this->ptr - n));
-            }
-
-            int operator+(const mapReverseConstIterator<Key, Val, Compare>target) const
-            {
-                return (this->ptr - target.getPtr());
-            }
-
-            int operator+(const mapReverseIterator<Key, Val, Compare>target) const
-            {
-                return (this->ptr - target.getPtr());
-            }
-
-            mapReverseIterator<Key, Val, Compare> operator-(unsigned int n) const
-            {
-                return (mapReverseIterator<Key, Val, Compare>(this->ptr + n));
-            }
-
-            int operator-(const mapReverseConstIterator<Key, Val, Compare>target) const
-            {
-                return (this->ptr + target.getPtr());
-            }   
-
-            int operator-(const mapReverseIterator<Key, Val, Compare>target) const
-            {
-                return (this->ptr + target.getPtr());
-            }
-
-            mapReverseIterator<Key, Val, Compare>& operator+=(unsigned int n)
-            {
-                this->ptr -= n;
-                return (*this);
-            }
-            
-            mapReverseIterator<Key, Val, Compare>& operator-=(unsigned int n)
-            {
-                this->ptr += n;
-                return (*this);
-            }
-
-            node<Key, Val, Compare>& operator[](unsigned int n)
-            {
-                return (*(operator+(n)));
             }
 
             bool operator==(const mapReverseIterator<Key, Val, Compare>& original) const
@@ -494,96 +445,77 @@ namespace ft
                 return (!operator==(original));
             }
 
-            bool operator<(const mapReverseIterator<Key, Val, Compare>& original) const
-            {
-                return (ptr > original.getPtr());
-            }
-            
-            bool operator<(const mapReverseConstIterator<Key, Val, Compare>& original) const
-            {
-                return (ptr > original.getPtr());
-            }
-
-            bool operator<=(const mapReverseIterator<Key, Val, Compare>& original) const
-            {
-                return (operator<(original) || operator==(original));
-            }
-
-            bool operator<=(const mapReverseConstIterator<Key, Val, Compare>& original) const
-            {
-                return (operator<(original) || operator==(original));
-            }
-
-            bool operator>(const mapReverseIterator<Key, Val, Compare>& original) const
-            {
-                return (!operator<=(original));
-            }
-
-            bool operator>(const mapReverseConstIterator<Key, Val, Compare>& original) const
-            {
-                return (!operator<=(original));
-            }
-
-            bool operator>=(const mapReverseIterator<Key, Val, Compare>& original) const
-            {
-                return (operator>(original) || operator==(original));
-            }
-
-            bool operator>=(const mapReverseConstIterator<Key, Val, Compare>& original) const
-            {
-                return (operator>(original) || operator==(original));
-            }
+            mapIterator<Key, Val, Compare> base(void) const
+			{
+				return (mapIterator<Key, Val, Compare>(getPrev(), save));
+			}
 
     };
 
-    template<typename T>
-    mapReverseIterator<Key, Val, Compare> operator+(unsigned int n, mapReverseIterator<Key, Val, Compare>& k)
-    {
-        return (&(*k) - n);
-    }
-
-    template <typename Key, typename Val, typename Compare>
-	class mapReverseConstIterator
+    template <typename Key, typename Val, typename Compare = less<Key> >
+    class mapReverseConstIterator
 	{
 		private	:
 			node<Key, Val, Compare>* ptr;
+            saver<Key, Val, Compare>*   save;
+            Compare                  cmp;
 
 		public	:
 			//default
-			mapReverseConstIterator(node<Key, Val, Compare>* ptr = NULL) : ptr(ptr)
+            mapReverseConstIterator()
 			{
-				
 			}
+
+			mapReverseConstIterator(node<Key, Val, Compare>* ptr, saver<Key, Val, Compare>* save) : ptr(ptr->getPtr()), save(save->getsave())
+			{
+			}
+
 			//copy
-			mapReverseConstIterator(const mapReverseConstIterator<Key, Val, Compare> &origin) : ptr(origin.ptr)
+			mapReverseConstIterator(const mapReverseConstIterator<Key, Val, Compare> &origin) : ptr(origin.ptr.getPtr()), save(save->getsave())
 			{
 				
 			}
 
-			mapReverseConstIterator(const mapReverseIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr())
+			mapReverseConstIterator(const mapReverseIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(save->getsave())
 			{
 				
 			}
 
-			mapReverseConstIterator(const mapIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr() - 1)
+			mapReverseConstIterator(const mapIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(save->getsave())
 			{
 				
 			}
 
-			mapReverseConstIterator(const mapConstIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr() -1)
+			mapReverseConstIterator(const mapConstIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(save->getsave())
 			{
 				
 			}
 			//operator=
 			mapReverseConstIterator<Key, Val, Compare>& operator=(const mapReverseConstIterator<Key, Val, Compare> &origin)
 			{
-				this->ptr = origin.ptr;
+				this->ptr = origin.getPtr();
+                this->save = origin.getSave();
 				return (*this);
 			}
 			
 			mapReverseConstIterator<Key, Val, Compare>& operator=(const mapReverseIterator<Key, Val, Compare> &origin)
 			{
 				this->ptr = origin.getPtr();
+                this->save = origin.getSave();
+				return (*this);
+			}
+
+            mapReverseConstIterator<Key, Val, Compare>& operator=(const mapConstIterator<Key, Val, Compare> &origin)
+			{
+				this->ptr = origin.getPtr();
+                this->save = origin.getSave();
+				return (*this);
+			}
+			
+			mapReverseConstIterator<Key, Val, Compare>& operator=(const mapIterator<Key, Val, Compare> &origin)
+			{
+				this->ptr = origin.getPtr();
+                this->save = origin.getSave();
 				return (*this);
 			}
 
@@ -592,97 +524,79 @@ namespace ft
 				
 			}
 
-			node<Key, Val, Compare>*	getPtr() const
-			{
-				return (ptr);
-			}
+            node<Key, Val, Compare>*  getPtr() const
+            {
+                return (this->ptr);
+            }
 
-			mapConstIterator<Key, Val, Compare> base()
-			{
-				return (mapConstIterator<Key, Val, Compare>(this->ptr + 1));
-			}
+            saver<Key, Val, Compare>* getSave() const
+            {
+                return (this->save);
+            }
 
-			const node<Key, Val, Compare>& operator*(void) const
-			{
-				return (*ptr);
-			}
+            node<Key, Val, Compare>*  getPrev() const
+            {
+                if (ptr == NULL)
+                    return (ptr->getleftest(save->root));
 
-			const node<Key, Val, Compare>* operator->(void)
-			{
-				return (&(this->operator*()));
-			}
+                if (ptr->getleft() != NULL)
+                    return (ptr->getRightest(ptr->getLeft()));
+                node<Key, Val, Compare>* tmp = ptr->getParent();
+                while (tmp != NULL && cmp(ptr->set.first, tmp->set.first))
+                    tmp = tmp->getParent();
+
+                return (tmp);
+            }
+
+            node<Key, Val, Compare>*  getNext() const
+            {
+                if (ptr == NULL)
+                    return (ptr->getRightest(save->root));
+
+                if (ptr->getRight() != NULL)
+                    return (ptr->getLeftest((ptr->getRight())));
+                node<Key, Val, Compare>* tmp = ptr->getParent();
+                while (tmp != NULL && cmp(tmp->set.first, ptr->set.first))
+                    tmp = tmp->getParent();
+
+                return (tmp);
+            }
+
+			pair<const Key, Val>& operator*(void) const
+            {
+                return (ptr->set);
+            }
+
+            pair<const Key, Val>* operator->(void) const
+            {
+                return (&(this->operator*()));
+            }
+
 			//전위 - 미리 증가시키고 보낸다.
 			mapReverseConstIterator<Key, Val, Compare>& operator++(void)
 			{
-				this->ptr--;
+				this->ptr = getPrev();
 				return (*this);
 			}
 			//후위 - 보내고 증가 시킨다.
 			mapReverseConstIterator<Key, Val, Compare> operator++(int)
 			{
 				mapReverseConstIterator<Key, Val, Compare> temp(*this);
-				this->ptr--;
+				this->ptr = getPrev();
 				return (temp);
 			}
 			//전위 - 미리 증가시키고 보낸다.
 			mapReverseConstIterator<Key, Val, Compare>& operator--(void)
 			{
-				this->ptr++;
+				this->ptr = getNext();
 				return (*this);
 			}
 			//후위 - 보내고 증가
 			mapReverseConstIterator<Key, Val, Compare> operator--(int)
 			{
 				mapReverseConstIterator<Key, Val, Compare> temp(*this);
-				this->ptr++;
+				this->ptr = getNext();;
 				return (temp);
-			}
-
-			mapReverseConstIterator<Key, Val, Compare> operator+(unsigned int n) const
-			{
-				return (mapReverseConstIterator<Key, Val, Compare>(this->ptr - n));
-			}
-
-			unsigned int operator+(const mapReverseIterator<Key, Val, Compare>target) const
-			{
-				return (this->ptr - target.getPtr());
-			}
-
-			unsigned int operator+(const mapReverseConstIterator<Key, Val, Compare>target) const
-			{
-				return (this->ptr - target.getPtr());
-			}
-
-			mapReverseConstIterator<Key, Val, Compare> operator-(unsigned int n) const
-			{
-				return (mapReverseConstIterator<Key, Val, Compare>(this->ptr + n));
-			}
-
-			int operator-(const mapReverseIterator<Key, Val, Compare>target) const
-			{
-				return (target.getPtr() - this->ptr);
-			}
-
-			int operator-(const mapReverseConstIterator<Key, Val, Compare>target) const
-			{
-				return (target.getPtr() - this->ptr);
-			}
-
-			mapReverseConstIterator<Key, Val, Compare>& operator+=(unsigned int n)
-			{
-				this->ptr -= n;
-				return (*this);
-			}
-
-			mapReverseConstIterator<Key, Val, Compare>& operator-=(unsigned int n)
-			{
-				this->ptr += n;
-				return (*this);
-			}
-
-			node<Key, Val, Compare>&				operator[](unsigned int n)
-			{
-				return (*(operator+(n)));
 			}
 
 			bool		  operator==(const mapReverseConstIterator<Key, Val, Compare> &origin) const
@@ -744,13 +658,13 @@ namespace ft
 			{
 				return (operator>(origin) || operator==(origin));
 			}
-	};
 
-	template<typename T>
-    mapReverseConstIterator<Key, Val, Compare> operator+(unsigned int n, mapReverseConstIterator<Key, Val, Compare>& rai)
-    {
-            return (&(*rai) - n);
-    }
+            mapConstIterator<Key, Val, Compare> base(void) const
+			{
+				return (mapConstIterator<Key, Val, Compare>(getPrev(), save));
+			}
+	};
+	};
 
 }
     
