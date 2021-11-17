@@ -5,6 +5,7 @@ INC_DIR = inc
 CC = clang++
 C98_FLAG = -std=c++98
 GCC_FLAG = -Wall -Wextra -Werror
+SEG_CHECK = -fsanitize=address -fno-omit-frame-pointer -g
 RM = rm
 RMFLAGS = -f
 
@@ -37,6 +38,13 @@ $(NAME) :
 	@echo "${PURPLE}[${RED} Makefile${PURPLE} :starting.. ]"
 	@echo "${PURPLE}->making $(NAME).."
 	@$(CC) $(C98_FLAG) $(GCC_FLAG) -I $(INC_DIR) $(SRC) -o $(NAME)
+	@echo "${PURPLE}->resting.. drinking some coffee..."
+	@echo "${MINT}making Done."
+
+seg_check :
+	@echo "${PURPLE}[${RED} Makefile for Segment Check${PURPLE} :starting.. ]"
+	@echo "${PURPLE}->making $(NAME).."
+	@$(CC) $(C98_FLAG) $(SEG_CHECK) $(GCC_FLAG) -I $(INC_DIR) $(SRC) -o $(NAME)
 	@echo "${PURPLE}->resting.. drinking some coffee..."
 	@echo "${MINT}making Done."
 

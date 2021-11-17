@@ -19,7 +19,7 @@ namespace ft
 
             void	saveRoot()
 			{
-				save->root = root;
+				save->root = this->root;
 			}
 
         public:
@@ -92,9 +92,10 @@ namespace ft
             insert(start, end);
         }
 
-        map (const map& param) : root(NULL), elem_num(0)
+        map (const map& param) : elem_num(0), root(NULL)
         {
-            this->root = new node<Key, T, Compare>(*(param.root));
+            // std::cout << "Bye ! " << param.root->set.first << " : " << param.root->set.second << std::endl;
+            this->root = new node<Key, T, Compare>(* param.root);
             this->elem_num = param.elem_num;
             save = new saver<Key, T, Compare>();
             saveRoot();
@@ -102,17 +103,20 @@ namespace ft
 
         ~map()
         {
-            root->deleteTree(root);
+            if (elem_num > 0)
+                this->root->deleteTree(this->root);
             delete(save);
         }
 
-        map<Key, T, Compare, Alloc> operator=(const map& _target)
+        map<Key, T, Compare, Alloc> &operator=(const map& _target)
         {
-            this->root->deleteTree(this->root);
-            this->root = new node<Key, T, Compare>(*(_target.root));
-            this->elem_num = _target.elem_num;
-            save = new saver<Key, T, Compare>();
-            saveRoot();
+            if (this != &_target) 
+            {
+                this->root->deleteTree(this->root);
+                this->root = new node<Key, T, Compare>(* _target.root);
+                this->elem_num = _target.elem_num;
+                saveRoot();
+            }
             return (*this);
         }
 
@@ -268,7 +272,7 @@ namespace ft
             {
                 if (root->find(root, param) != NULL)
                 {
-                    root->deleteTree(root);
+                    root->deleteNode(&root, root, param);
                     saveRoot();
                     elem_num--;
                     if (elem_num == 0)

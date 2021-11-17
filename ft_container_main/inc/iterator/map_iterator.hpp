@@ -1,9 +1,6 @@
 #ifndef MAP_ITERATOR_HPP
 #define MAP_ITERATOR_HPP
 
-// #include "../tools.hpp"
-// #include "../pair.hpp"
-
 
 namespace ft
 {
@@ -71,7 +68,7 @@ namespace ft
                 if (ptr == NULL)
                     return (ptr->getRightest(save->root));
 
-                if (ptr->getleft() != NULL)
+                if (ptr->getLeft() != NULL)
                     return (ptr->getRightest(ptr->getLeft()));
                 node<Key, Val, Compare>* tmp = ptr->getParent();
                 while (tmp != NULL && cmp(ptr->set.first, tmp->set.first))
@@ -664,9 +661,6 @@ namespace ft
 				return (mapConstIterator<Key, Val, Compare>(getPrev(), save));
 			}
 	};
-	};
-
-}
-    
+};
 
 #endif

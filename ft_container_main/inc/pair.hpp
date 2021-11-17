@@ -93,7 +93,7 @@ namespace ft
             
         }
 
-        node(Key first, Key second = Val()) : left(NULL), right(NULL), parent(NULL),  set(first, second)
+        node(Key first, Val second = Val()) : left(NULL), right(NULL), parent(NULL),  set(first, second)
 		{
 
         }
@@ -103,14 +103,54 @@ namespace ft
             this->set = _set;
         }
 
+        node(const node<Key, Val, Compare>& origin, node<Key, Val, Compare>* parent = NULL) : left(NULL), right(NULL), parent(parent), set(origin.set)
+			{
+				if (origin.left != NULL)
+					left = new node<Key, Val, Compare>(*origin.left, this);
+				if (origin.right != NULL)
+					right = new node<Key, Val, Compare>(*origin.right, this);				
+			}
+
         ~node()
         {
 
         }
 
+        node<Key, Val, Compare>& operator=(const node<Key, Val, Compare>& origin)
+		{
+			delete (parent);
+			parent = new node<Key, Val, Compare>(origin.parent);
+			delete (left);
+			left = new node<Key, Val, Compare>(origin.left);
+			delete (right);
+			right = new node<Key, Val, Compare>(origin.right);
+			
+            set = origin.set;
+			
+            return (*this);
+		}
+
         //===============================================================================
         //================================= functions ===================================
         //===============================================================================
+
+        void childChange(node *from, node *to)
+			{
+				if (left == from)
+					left = to;
+				if (right == from)
+					right = to;
+			}
+
+			void makeParentChildToMyChild()
+			{
+				if (parent == NULL)
+					return ;
+				if (left == NULL)
+					parent->childChange(this, right);
+				else
+					parent->childChange(this, left);
+			}
 
         node<Key, Val, Compare>* getRoot(node<Key, Val, Compare>* base)
         {
@@ -148,39 +188,46 @@ namespace ft
 
         node<Key, Val, Compare>* getRightest(node<Key, Val, Compare>* base)
         {
-            if (base->right == NULL || base == NULL)
+            if (base == NULL || base->right == NULL)
                 return (base);
             return (getRightest(base->right));
         }
 
         node<Key, Val, Compare>* getleftest(node<Key, Val, Compare>* base)
         {
-            if (base->left == NULL || base == NULL)
+            if (base == NULL || base->left == NULL)
                 return (base);
             return (getleftest(base->left));
         }
 
         node<Key, Val, Compare>* find(node<Key, Val, Compare>* base, const Key& target_key)
         {
-            if (target_key == base->set.first)
-                return (base);
             if (base == NULL)
                 return (NULL);
+            if ((cmp(base->set.first, target_key) == false) && (cmp(target_key, base->set.first) == false))
+                return (base);
             if (this->cmp(target_key, base->set.first))
+            {
+                if (base->left == NULL)
+                    return NULL;
                 return (find(base->left, target_key));
+            }
             else
+            {
+                if (base->right == NULL)
+                    return NULL;
                 return (find(base->right, target_key));
+            }
         }
 
         node<Key, Val, Compare>* insert(node<Key, Val, Compare>* base, const Key& target_key, const Val& target_val = Val())
         {
             node<Key, Val, Compare>* tmp;
 
-            tmp = find(base, target_key);
-            if (tmp != NULL)
+            if ((cmp(base->set.first, target_key) == false) && (cmp(target_key, base->set.first) == false))
             {
-                tmp->set.second = target_val;
-                return (tmp);
+                base->set.second = target_val;
+                return (base);
             }
             
             if (this->cmp(target_key, base->set.first))
@@ -196,7 +243,7 @@ namespace ft
                     // color_checker(tmp);
                     return (tmp);
                 }
-                return (insert(base->left, target_key));
+                return (insert(base->left, target_key, target_val));
             }
             else
             {
@@ -211,7 +258,7 @@ namespace ft
                     // color_checker(tmp);
                     return (tmp);
                 }
-                return (insert(base->right, target_key));
+                return (insert(base->right, target_key, target_val));
             }
         }
         
@@ -305,16 +352,75 @@ namespace ft
                 deleteTree(root->left);
             delete(root);
         }
-        
-        void deleteNode(node<Key, Val, Compare>* target)
-        {
-            if (target->left == NULL && target->right == NULL)
-            {
-                delete(target);
-                return ;
-            }
 
-        }
+        void deleteNode(node<Key, Val, Compare>**real_root, node<Key, Val, Compare> *root, const Key& tk)
+			{
+				node<Key, Val, Compare> *newRoot;
+
+				if ((cmp(root->set.first, tk) == false) && (cmp(tk, root->set.first) == false))
+				{
+					if (root->left != NULL)
+					{
+						newRoot = getRightest(root->left);
+						newRoot->makeParentChildToMyChild(); // 부모와 자신자식의 라인을 이어준다. (이떄 newRoot 는 반드시 자식이 하나이므로 반드시 연결된다.)
+						
+						////////////
+						if (newRoot->left != NULL)
+							newRoot->left->parent = newRoot->parent;
+						if (newRoot->right != NULL)
+							newRoot->right->parent = newRoot->parent;
+						///////////
+						
+						newRoot->left = root->left;
+						newRoot->right = root->right;
+						newRoot->parent = root->parent;
+						if (root->parent != NULL)
+							root->parent->childChange(root, newRoot);
+						if (root->left != NULL)
+							root->left->parent = newRoot;
+						if (root->right != NULL)
+							root->right->parent = newRoot;
+						if (root == *real_root)
+							*real_root = newRoot;
+						delete (root);
+					}
+					else if (root->right != NULL)
+					{
+						newRoot = getleftest(root->right);
+						newRoot->makeParentChildToMyChild(); // 부모와 자신자식의 라인을 이어준다. (이떄 newRoot 는 반드시 자식이 하나이므로 반드시 연결된다.)
+						
+						////////////
+						if (newRoot->left != NULL)
+							newRoot->left->parent = newRoot->parent;
+						if (newRoot->right != NULL)
+							newRoot->right->parent = newRoot->parent;
+						///////////
+						
+						newRoot->left = root->left;
+						newRoot->right = root->right;
+						newRoot->parent = root->parent;
+						if (root->parent != NULL)
+							root->parent->childChange(root, newRoot);
+						if (root->left != NULL)
+							root->left->parent = newRoot;
+						if (root->right != NULL)
+							root->right->parent = newRoot;
+						if (root == *real_root)
+							*real_root = newRoot;
+						delete (root);
+					}
+					else // 양쪽 자식 모두 없다. (부모쪽 링크만 없애주면됨. 아래에 아무것도 없다)
+					{
+						root->makeParentChildToMyChild();
+						delete root;
+					}
+					return ;
+				}
+				if (cmp(root->set.first, tk) == false)
+					deleteNode(real_root, root->left, tk);
+				else if (cmp(root->set.first, tk))
+					deleteNode(real_root, root->right, tk);
+			}
 
         node<Key, Val, Compare>*		getLeft()
 		{
@@ -331,7 +437,7 @@ namespace ft
 
     };
 
-    template <typename Key, typename T, class Compare = ft::less<Key> >
+    template <typename Key, typename T, class Compare = less<Key> >
 	class saver
 	{
 		public	:
@@ -347,5 +453,6 @@ namespace ft
 			}
 	};
 
+}
 
 #endif
