@@ -23,14 +23,13 @@ Tree * tree = new Tree;
 void left_lotate(node* target)
 {
     node* tmp_root;
-    std::cout << "left_lotate! "<< std::endl;
 
     if (target->parent == NULL)
     {
         tmp_root = target->right;
         target->right = tmp_root->left;
-        if (tmp_root->right != NULL)
-            tmp_root->right->parent = target;
+        if (tmp_root->left != NULL)
+            tmp_root->left->parent = target;
 
         tmp_root->parent = NULL;        
         tmp_root->left = target;
@@ -40,14 +39,21 @@ void left_lotate(node* target)
     }
     else
     {
+        // std::cout << "root's key:" << tree->root->key << std::endl;
+        // std::cout << "target's key:" << target->key << std::endl;
+        // std::cout << "target's parent's key:" << target->parent->key << std::endl;
+
         tmp_root = target->right;
         target->right = tmp_root->left;
         if (tmp_root->left != NULL)
             tmp_root->left->parent = target;
+        tmp_root->left = NULL;
 
         tmp_root->parent = target->parent;
         if ((target->parent->right != NULL) && (target->parent->right == target))
+        {
             target->parent->right = tmp_root;
+        }
         else if ((target->parent->left != NULL) && (target->parent->left == target))
             target->parent->left = tmp_root;
 
@@ -64,8 +70,8 @@ void right_lotate(node* target)
     {
         tmp_root = target->left;
         target->left = tmp_root->right;
-        if (tmp_root->left != NULL)
-            tmp_root->left->parent = target;
+        if (tmp_root->right != NULL)
+            tmp_root->right->parent = target;
 
         tmp_root->parent = NULL;        
         tmp_root->right = target;
@@ -288,25 +294,25 @@ int main(void)
     newnode8->val = 88;
 
     // == order ==
-    insert(tree->root, newnode1);
-    insert(tree->root, newnode2);
-    insert(tree->root, newnode3);
-    insert(tree->root, newnode4);
-    insert(tree->root, newnode5);
+    // insert(tree->root, newnode1);
+    // insert(tree->root, newnode2);
+    // insert(tree->root, newnode3);
+    // insert(tree->root, newnode4);
+    // insert(tree->root, newnode5);
     // insert(tree->root, newnode6);
     // insert(tree->root, newnode7);
     // insert(tree->root, newnode8);
 
 
     // == disorder ==
-    // insert(tree->root, newnode2);
-    // insert(tree->root, newnode7);
-    // insert(tree->root, newnode6);
-    // insert(tree->root, newnode8);
-    // insert(tree->root, newnode4);
-    // insert(tree->root, newnode1);
-    // insert(tree->root, newnode5);
-    // insert(tree->root, newnode3);
+    insert(tree->root, newnode2);
+    insert(tree->root, newnode7);
+    insert(tree->root, newnode6);
+    insert(tree->root, newnode8);
+    insert(tree->root, newnode4);
+    insert(tree->root, newnode1);
+    insert(tree->root, newnode5);
+    insert(tree->root, newnode3);
 
 
     // print_all(tree->root);
