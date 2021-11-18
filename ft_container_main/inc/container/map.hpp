@@ -266,6 +266,7 @@ namespace ft
 
         size_type erase(const key_type& param)
         {
+            std::cout << " !? : " << param << std::endl;
             if (elem_num == 0)
                 return (0);
             else

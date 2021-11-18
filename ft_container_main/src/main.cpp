@@ -6,7 +6,7 @@
 /*   By: sunghyunpark <sunghyunpark@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 18:15:39 by sunghyunpar       #+#    #+#             */
-/*   Updated: 2021/11/17 15:48:38 by sunghyunpar      ###   ########.fr       */
+/*   Updated: 2021/11/17 16:08:17 by sunghyunpar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,13 @@ int		main(void)
 	TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
 	printSize(mp);
 
-	ft_erase(mp, ++mp.begin());
+	// ft_erase(mp, ++mp.begin());
 
-	ft_erase(mp, mp.begin());
-	ft_erase(mp, --mp.end());
+	// ft_erase(mp, mp.begin());
+	// ft_erase(mp, --mp.end());
 
 	ft_erase(mp, mp.begin(), ++(++(++mp.begin())));
+
 	ft_erase(mp, --(--(--mp.end())), --mp.end());
 
 	mp[10] = "Hello";
