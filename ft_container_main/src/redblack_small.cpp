@@ -151,6 +151,7 @@ void insert(node* &base, node* target)
         base->left = NULL;
         base->parent = NULL;
         base->color = BLACK;
+        return;
     }
     else
     {
@@ -188,7 +189,37 @@ void insert(node* &base, node* target)
 
 }
 
-void print_all()
+void print_all(node* base)
+{
+    std::cout << "[" << base->key << " : " << base->val << "]" << std::endl;
+    if (base->left != NULL)
+        print_all(base->left);
+    if (base->right != NULL)
+        print_all(base->right);
+
+}
+
+void printBT(const std::string& prefix, const node* node, bool isLeft)
+{
+    if( node != nullptr )
+    {
+        std::cout << prefix;
+
+        std::cout << (isLeft ? "├──" : "└──" );
+
+        // print the value of the node
+        std::cout << node->key << ":" << (node->color ? "Black":"Red") << std::endl;
+
+        // enter the next tree level - left and right branch
+        printBT( prefix + (isLeft ? "│   " : "    "), node->left, true);
+        printBT( prefix + (isLeft ? "│   " : "    "), node->right, false);
+    }
+}
+
+void printBT(const node* node)
+{
+    printBT("", node, false);    
+}
 
 int main(void)
 {
@@ -228,6 +259,7 @@ int main(void)
     newnode8->key = 61;
     newnode8->val = 88;
 
+    // == order ==
     insert(tree->root, newnode1);
     insert(tree->root, newnode2);
     insert(tree->root, newnode3);
@@ -237,6 +269,23 @@ int main(void)
     insert(tree->root, newnode7);
     insert(tree->root, newnode8);
 
-    print_all(tree->root);
+
+    // == disorder ==
+    // insert(tree->root, newnode2);
+    // insert(tree->root, newnode7);
+    // insert(tree->root, newnode6);
+    // insert(tree->root, newnode8);
+    // insert(tree->root, newnode4);
+    // insert(tree->root, newnode1);
+    // insert(tree->root, newnode5);
+    // insert(tree->root, newnode3);
+
+
+    // print_all(tree->root);
+    printBT(tree->root);
 
 }
+
+
+
+//==============================//
