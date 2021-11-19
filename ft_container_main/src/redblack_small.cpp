@@ -266,7 +266,7 @@ void deleteNode(unsigned int target_key)
             else if (target->parent->left == target)
                 target->parent->left = NULL;
         }
-        if (target->left != NULL)
+        else if (target->left != NULL)
         {
             tmp = getleftest(target->left);
 
@@ -319,10 +319,76 @@ void deleteNode(unsigned int target_key)
             delete(target);
         }
     }
-    // else
-    // {
+    else
+    {
+        if ((target->right == NULL) && (target->left == NULL))
+        {
+            if (target->parent->right == target)
+                target->parent->right = NULL;
+            else if (target->parent->left == target)
+                target->parent->left = NULL;
+            
+        }
+        else if (target->left != NULL)
+        {
+            tmp = getleftest(target->left);
 
-    // }
+            if (tmp->parent->right == tmp)
+            {
+                tmp->parent->right = NULL;
+
+                tmp->parent->left->parent = tmp;
+                tmp->left = tmp->parent->left;
+            }
+            else if (tmp->parent->left == tmp)
+            {
+                tmp->parent->left = NULL;
+
+                tmp->parent->right->parent = tmp;
+                tmp->right = tmp->parent->right;
+            }
+
+            tmp->parent = target->parent;
+            if (target->parent->right == target)
+                target->parent->right = tmp;
+            else if (target->parent->left == target)
+                target->parent->left = tmp;
+            delete(target);
+
+            if (tmp->color == RED)
+                tmp->color = BLACK;
+            
+        }
+        else if ((target->left == NULL) && (target->right != NULL))
+        {
+            tmp = getRightest(target->right);
+
+            if (tmp->parent->right == tmp)
+            {
+                tmp->parent->right = NULL;
+
+                tmp->parent->left->parent = tmp;
+                tmp->left = tmp->parent->left;
+            }
+            else if (tmp->parent->left == tmp)
+            {
+                tmp->parent->left = NULL;
+
+                tmp->parent->right->parent = tmp;
+                tmp->right = tmp->parent->right;
+            }
+
+            tmp->parent = target->parent;
+            if (target->parent->right == target)
+                target->parent->right = tmp;
+            else if (target->parent->left == target)
+                target->parent->left = tmp;
+            delete(target);
+
+            if (tmp->color == RED)
+                tmp->color = BLACK;
+        }
+    }
 }
 
 
