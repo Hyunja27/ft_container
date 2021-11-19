@@ -237,9 +237,25 @@ void insert(node* &base, node* target)
 
 }
 
-void deleteNode(node* target)
+node* find(node* base, unsigned int target_key)
 {
+    if (base == NULL)
+        return NULL;
+    if (base->key == target_key)
+        return base;
+    else if (target_key < base->key)
+        return find(base->left, target_key);
+    else
+        return find(base->right, target_key);
+    return NULL;
+}
+
+void deleteNode(unsigned int target_key)
+{
+    node* target = find(tree->root, target_key);
     node* tmp;
+
+    // std::cout << std::endl << "deleting : " << target->key << std::endl << std::endl << std::endl;
 
     if (target->color == RED)
     {
@@ -250,29 +266,63 @@ void deleteNode(node* target)
             else if (target->parent->left == target)
                 target->parent->left = NULL;
         }
-        if (target->right != NULL)
+        if (target->left != NULL)
         {
-            target->right->parent = target->parent;
-            if (target->parent->right == target)
-                target->parent->right = target->right;
-            else if (target->parent->left == target)
-                target->parent->left = target->right;
-            delete(target);
-        }
-        else if ((target->right == NULL) && target->left != NULL)
-        {
-            target->left->parent = target->parent;
-            if (target->parent->right == target)
-                target->parent->right = target->left;
-            else if (target->parent->left == target)
-                target->parent->left = target->left;
-            delete(target);
-        }
-    }
-    else
-    {
+            tmp = getleftest(target->left);
 
+            if (tmp->parent->right == tmp)
+            {
+                tmp->parent->right = NULL;
+
+                tmp->parent->left->parent = tmp;
+                tmp->left = tmp->parent->left;
+            }
+            else if (tmp->parent->left == tmp)
+            {
+                tmp->parent->left = NULL;
+
+                tmp->parent->right->parent = tmp;
+                tmp->right = tmp->parent->right;
+            }
+
+            tmp->parent = target->parent;
+            if (target->parent->right == target)
+                target->parent->right = tmp;
+            else if (target->parent->left == target)
+                target->parent->left = tmp;
+            delete(target);
+        }
+        else if ((target->left == NULL) && (target->right != NULL))
+        {
+            tmp = getRightest(target->right);
+
+            if (tmp->parent->right == tmp)
+            {
+                tmp->parent->right = NULL;
+
+                tmp->parent->left->parent = tmp;
+                tmp->left = tmp->parent->left;
+            }
+            else if (tmp->parent->left == tmp)
+            {
+                tmp->parent->left = NULL;
+
+                tmp->parent->right->parent = tmp;
+                tmp->right = tmp->parent->right;
+            }
+
+            tmp->parent = target->parent;
+            if (target->parent->right == target)
+                target->parent->right = tmp;
+            else if (target->parent->left == target)
+                target->parent->left = tmp;
+            delete(target);
+        }
     }
+    // else
+    // {
+
+    // }
 }
 
 
@@ -366,12 +416,15 @@ int main(void)
     insert(tree->root, newnode5);
     insert(tree->root, newnode3);
 
+    deleteNode(newnode2->key);
+
 
     // print_all(tree->root);
     printBT(tree->root);
 
     std::cout << std::endl << std::endl << std::endl << "elem_num : " << elem_num << std::endl;
     std::cout << std::endl << "root : " << tree->root->key << std::endl;
+    // std::cout << std::endl << "find_output : " << tmp->key << std::endl;
 
 }
 
