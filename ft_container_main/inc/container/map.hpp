@@ -300,7 +300,7 @@ namespace ft
             else
             {
                 iterator tmp_1 = first;
-                iterator tmp_2 = first;
+                iterator tmp_2;
                 while(tmp_1 != last)
                 {
                     tmp_2 = tmp_1;

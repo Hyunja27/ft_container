@@ -135,6 +135,20 @@ void lotater(node* target)
     }
 }
 
+node* getRightest(node* base)
+{
+    if (base == NULL || base->right == NULL)
+        return (base);
+    return (getRightest(base->right));
+}
+
+node* getleftest(node* base)
+{
+    if (base == NULL || base->left == NULL)
+        return (base);
+    return (getleftest(base->left));
+}
+
 node* uncle_getter(node* target)
 {   
     node* grandparent = target->parent->parent;
@@ -223,6 +237,45 @@ void insert(node* &base, node* target)
 
 }
 
+void deleteNode(node* target)
+{
+    node* tmp;
+
+    if (target->color == RED)
+    {
+        if ((target->right == NULL) && (target->left == NULL))
+        {
+            if (target->parent->right == target)
+                target->parent->right = NULL;
+            else if (target->parent->left == target)
+                target->parent->left = NULL;
+        }
+        if (target->right != NULL)
+        {
+            target->right->parent = target->parent;
+            if (target->parent->right == target)
+                target->parent->right = target->right;
+            else if (target->parent->left == target)
+                target->parent->left = target->right;
+            delete(target);
+        }
+        else if ((target->right == NULL) && target->left != NULL)
+        {
+            target->left->parent = target->parent;
+            if (target->parent->right == target)
+                target->parent->right = target->left;
+            else if (target->parent->left == target)
+                target->parent->left = target->left;
+            delete(target);
+        }
+    }
+    else
+    {
+
+    }
+}
+
+
 void print_all(node* base)
 {
     std::cout << "[" << base->key << " : " << base->val << "]" << std::endl;
@@ -230,7 +283,6 @@ void print_all(node* base)
         print_all(base->left);
     if (base->right != NULL)
         print_all(base->right);
-
 }
 
 void printBT(const std::string& prefix, const node* node, bool isLeft)
@@ -320,7 +372,6 @@ int main(void)
 
     std::cout << std::endl << std::endl << std::endl << "elem_num : " << elem_num << std::endl;
     std::cout << std::endl << "root : " << tree->root->key << std::endl;
-
 
 }
 
