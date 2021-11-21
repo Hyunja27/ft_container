@@ -319,7 +319,7 @@ void deleteNode(unsigned int target_key)
             delete(target);
         }
     }
-    else
+    else if (target->color == BLACK)
     {
         if ((target->right == NULL) && (target->left == NULL))
         {

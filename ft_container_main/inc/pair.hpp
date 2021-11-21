@@ -229,7 +229,6 @@ namespace ft
                 base->set.second = target_val;
                 return (base);
             }
-            
             if (this->cmp(target_key, base->set.first))
             {
                 if (base->left == NULL)
