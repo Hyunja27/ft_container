@@ -1,3 +1,4 @@
+
 #include <iostream>
 
 #define RED     false
@@ -19,6 +20,62 @@ struct Tree{
 
 unsigned int elem_num;
 Tree * tree = new Tree;
+
+bool isSame(const unsigned int k_1, const unsigned int k_2)
+{
+    return (!(k_1 < k_2) && !(k_2 <k_1));
+}
+
+bool isFirstSmall(const unsigned int t1, const unsigned int t2)
+{
+	return ((t1 < t2));
+}
+
+bool isFirstEqualOrSmall(const unsigned int t1, const unsigned int t2)
+{
+	return (!(t2 < t1));
+}
+
+//key 보다 큰값중 가장 작은 값
+node* getUpperBound(node *root, const unsigned int key)
+{		
+	if (isFirstEqualOrSmall(root->key, key))
+	{
+		if (root->right == NULL)
+			return (NULL);
+		else 
+			return (getUpperBound(root->right, key));
+	}
+	else // key 가 더 작음.
+	{
+		if (root->left == NULL)
+			return (root);
+		else
+			return (getUpperBound(root->left, key));
+	}
+}
+
+		//key 보다 큰값중 가장 작거나 같은 값
+node* getLowerBound(node *root, const unsigned int key)
+{
+	if (isSame(root->key, key)) // 값이 같다면 즉시 리턴
+		return (root);
+	
+	if (isFirstSmall(root->key, key))
+	{
+		if (root->right == NULL)
+			return (NULL);
+		else 
+			return (getLowerBound(root->right, key));
+	}
+	else // key 가 더 작음.
+	{
+		if (root->left == NULL)
+			return (root);
+		else
+			return (getLowerBound(root->left, key));
+	}
+}
 
 void left_lotate(node* target)
 {
@@ -76,7 +133,7 @@ void right_lotate(node* target)
         tmp_root->parent = NULL;        
         tmp_root->right = target;
         target->parent = tmp_root;
-        
+
         tree->root = tmp_root;
     }
     else
@@ -234,7 +291,6 @@ void insert(node* &base, node* target)
                 insert(base->right, target);
         }
     }
-
 }
 
 node* find(node* base, unsigned int target_key)
@@ -248,6 +304,118 @@ node* find(node* base, unsigned int target_key)
     else
         return find(base->right, target_key);
     return NULL;
+}
+
+void deleteRestructFivecase(node* p, node* c)
+{
+    bool islefted = 0;
+    node* s = NULL;
+    node* n_near = NULL;
+    node* n_far = NULL;
+
+    if (p->left == c)
+        islefted = 1;
+    else if (p->right == c)
+        islefted = 0;
+    if (islefted)
+    {
+        s = p->right;
+        n_far = s->right;
+        n_near = s->left;
+    }
+    else
+    {
+        s = p->left;
+        n_far = s->left;
+        n_near = s->right;
+    }
+    
+    if ((p->color == RED) && (s->color == BLACK) && (n_near->color == BLACK) && (n_far->color == BLACK))
+    {
+        p->color = BLACK;
+        s->color = RED;
+    }
+    else if ((s->color == BLACK) && (n_far->color == RED))
+    {
+        if (islefted)
+        {
+            left_lotate(p);
+            s->color = p->color;
+            p->color = BLACK;
+            n_far->color = BLACK;
+        }
+        else
+        {
+            right_lotate(p);
+            s->color = p->color;
+            p->color = BLACK;
+            n_far->color = BLACK;
+        }
+    }
+    else if ((s->color == BLACK) && (n_near->color == RED) && (n_far->color == BLACK))
+    {
+        if (islefted)
+        {
+            right_lotate(s);
+            s->color = RED;
+            n_near->color = BLACK;
+            deleteRestructFivecase(p, c);
+        }
+        else
+        {
+            left_lotate(s);
+            s->color = RED;
+            n_near->color = BLACK;
+            deleteRestructFivecase(p, c);
+        }
+    }
+    else if ((p->color == BLACK) && (s->color == BLACK) && (n_near->color == BLACK) && (n_far->color == BLACK))
+    {
+        s->color = RED;
+    }
+    else if ((p->color == BLACK) && (s->color == RED) && (n_near->color == BLACK) && (n_far->color == BLACK))
+    {
+        if (islefted)
+        {
+            left_lotate(p);
+            s->color = BLACK;
+            p->color = RED;
+        }
+        else
+        {
+            left_lotate(p);
+            s->color = BLACK;
+            p->color = RED;
+        }
+    }
+    
+
+
+}
+
+void deleteRestruct(node* hooim, node* h_jasic, bool isLeft)
+{
+    if (isLeft == 1)
+    {
+        hooim->parent->right = h_jasic;
+        h_jasic->parent = hooim->parent;
+    }
+    else
+    {
+        hooim->parent->left = h_jasic;
+        h_jasic->parent = hooim->parent;
+    }
+    if (hooim->color == BLACK )
+    {
+        if (h_jasic->color == RED)
+            h_jasic->color = BLACK;
+        else
+        {
+            node* p = hooim->parent;
+            node* c = h_jasic;
+            deleteRestructFivecase(p, c);
+        }
+    }
 }
 
 void deleteNode(unsigned int target_key)
@@ -268,54 +436,50 @@ void deleteNode(unsigned int target_key)
         }
         else if (target->left != NULL)
         {
-            tmp = getleftest(target->left);
-
-            if (tmp->parent->right == tmp)
-            {
-                tmp->parent->right = NULL;
-
-                tmp->parent->left->parent = tmp;
-                tmp->left = tmp->parent->left;
-            }
-            else if (tmp->parent->left == tmp)
-            {
-                tmp->parent->left = NULL;
-
-                tmp->parent->right->parent = tmp;
-                tmp->right = tmp->parent->right;
-            }
-
+            tmp = getUpperBound(tree->root, target->left->key);
+            if (tmp->left != NULL)
+                deleteRestruct(tmp, tmp->left, 1);
             tmp->parent = target->parent;
+            if (tmp->parent->right == tmp)
+                tmp->parent->right = NULL;
+            else if (tmp->parent->left == tmp)
+                tmp->parent->left = NULL;
             if (target->parent->right == target)
                 target->parent->right = tmp;
             else if (target->parent->left == target)
                 target->parent->left = tmp;
+            
+
+            tmp->right = target->right;
+            target->right->parent = tmp;
+            if (target->left != NULL)
+                tmp->left = target->left;
+                target->left->parent = tmp;
+            
             delete(target);
         }
         else if ((target->left == NULL) && (target->right != NULL))
         {
-            tmp = getRightest(target->right);
-
-            if (tmp->parent->right == tmp)
-            {
-                tmp->parent->right = NULL;
-
-                tmp->parent->left->parent = tmp;
-                tmp->left = tmp->parent->left;
-            }
-            else if (tmp->parent->left == tmp)
-            {
-                tmp->parent->left = NULL;
-
-                tmp->parent->right->parent = tmp;
-                tmp->right = tmp->parent->right;
-            }
-
+            tmp = getUpperBound(tree->root, target->right->key);
+            if (tmp->left != NULL)
+                deleteRestruct(tmp, tmp->right, 0);
             tmp->parent = target->parent;
+            if (tmp->parent->right == tmp)
+                tmp->parent->right = NULL;
+            else if (tmp->parent->left == tmp)
+                tmp->parent->left = NULL;
             if (target->parent->right == target)
                 target->parent->right = tmp;
             else if (target->parent->left == target)
                 target->parent->left = tmp;
+            
+
+            tmp->left = target->left;
+            target->left->parent = tmp;
+            if (target->right != NULL)
+                tmp->right = target->right;
+                target->right->parent = tmp;
+
             delete(target);
         }
     }
@@ -331,28 +495,27 @@ void deleteNode(unsigned int target_key)
         }
         else if (target->left != NULL)
         {
-            tmp = getleftest(target->left);
+            tmp = getUpperBound(tree->root, target->left->key);
 
-            if (tmp->parent->right == tmp)
-            {
-                tmp->parent->right = NULL;
-
-                tmp->parent->left->parent = tmp;
-                tmp->left = tmp->parent->left;
-            }
-            else if (tmp->parent->left == tmp)
-            {
-                tmp->parent->left = NULL;
-
-                tmp->parent->right->parent = tmp;
-                tmp->right = tmp->parent->right;
-            }
-
+            if (tmp->left != NULL)
+                deleteRestruct(tmp, tmp->left, 1);
             tmp->parent = target->parent;
+            if (tmp->parent->right == tmp)
+                tmp->parent->right = NULL;
+            else if (tmp->parent->left == tmp)
+                tmp->parent->left = NULL;
             if (target->parent->right == target)
                 target->parent->right = tmp;
             else if (target->parent->left == target)
                 target->parent->left = tmp;
+
+
+            tmp->right = target->right;
+            target->right->parent = tmp;
+
+            // if (target->left != NULL)
+            //     tmp->left = target->left;
+            //     target->left->parent = tmp;
             delete(target);
 
             if (tmp->color == RED)
@@ -361,28 +524,26 @@ void deleteNode(unsigned int target_key)
         }
         else if ((target->left == NULL) && (target->right != NULL))
         {
-            tmp = getRightest(target->right);
-
-            if (tmp->parent->right == tmp)
-            {
-                tmp->parent->right = NULL;
-
-                tmp->parent->left->parent = tmp;
-                tmp->left = tmp->parent->left;
-            }
-            else if (tmp->parent->left == tmp)
-            {
-                tmp->parent->left = NULL;
-
-                tmp->parent->right->parent = tmp;
-                tmp->right = tmp->parent->right;
-            }
-
+            tmp = getUpperBound(tree->root, target->right->key);
+            if (tmp->left != NULL)
+                deleteRestruct(tmp, tmp->right, 0);
             tmp->parent = target->parent;
+            if (tmp->parent->right == tmp)
+                tmp->parent->right = NULL;
+            else if (tmp->parent->left == tmp)
+                tmp->parent->left = NULL;
             if (target->parent->right == target)
                 target->parent->right = tmp;
             else if (target->parent->left == target)
                 target->parent->left = tmp;
+            
+
+            tmp->left = target->left;
+            target->left->parent = tmp;
+            if (target->right != NULL)
+                tmp->right = target->right;
+                target->right->parent = tmp;
+
             delete(target);
 
             if (tmp->color == RED)
@@ -390,7 +551,6 @@ void deleteNode(unsigned int target_key)
         }
     }
 }
-
 
 void print_all(node* base)
 {
@@ -433,6 +593,13 @@ int main(void)
     node * newnode6 = new node;
     node * newnode7 = new node;
     node * newnode8 = new node;
+    node * newnode9 = new node;
+    node * newnode10 = new node;
+    node * newnode11 = new node;
+    node * newnode12 = new node;
+    node * newnode13 = new node;
+    node * newnode14 = new node;
+    node * newnode15 = new node;
 
     elem_num = 0;
     tree->root = NULL;
@@ -461,6 +628,28 @@ int main(void)
     newnode8->key = 32;
     newnode8->val = 88;
 
+    newnode9->key = 36;
+    newnode9->val = 99;
+
+    newnode10->key = 100;
+    newnode10->val = 100;
+
+    newnode11->key = 110;
+    newnode11->val = 110;
+
+    newnode12->key = 120;
+    newnode12->val = 120;
+
+    newnode13->key = 130;
+    newnode13->val = 130;
+
+    newnode14->key = 140;
+    newnode14->val = 140;
+
+    newnode15->key = 150;
+    newnode15->val = 150;
+
+
     // == order ==
     // insert(tree->root, newnode1);
     // insert(tree->root, newnode2);
@@ -470,19 +659,32 @@ int main(void)
     // insert(tree->root, newnode6);
     // insert(tree->root, newnode7);
     // insert(tree->root, newnode8);
-
+    // insert(tree->root, newnode9);
+    // insert(tree->root, newnode10);
+    // insert(tree->root, newnode11);
+    // insert(tree->root, newnode12);
+    // insert(tree->root, newnode13);
+    // insert(tree->root, newnode14);
+    // insert(tree->root, newnode15);
 
     // == disorder ==
     insert(tree->root, newnode2);
+    insert(tree->root, newnode11);
     insert(tree->root, newnode7);
     insert(tree->root, newnode6);
     insert(tree->root, newnode8);
+    insert(tree->root, newnode13);
     insert(tree->root, newnode4);
+    insert(tree->root, newnode9);
     insert(tree->root, newnode1);
+    insert(tree->root, newnode14);
     insert(tree->root, newnode5);
+    insert(tree->root, newnode15);
     insert(tree->root, newnode3);
+    insert(tree->root, newnode10);
+    insert(tree->root, newnode12);
 
-    deleteNode(newnode2->key);
+    // deleteNode(newnode4->key);
 
 
     // print_all(tree->root);
