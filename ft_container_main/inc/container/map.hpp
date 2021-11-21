@@ -186,12 +186,12 @@ namespace ft
 
         reverse_iterator rend()
         {
-            return (reverse_iterator(root->getleftest(NULL, save)));
+            return (reverse_iterator(NULL, save));
         }
 
         const_reverse_iterator rend() const
         {
-            return (const_reverse_iterator(root->getleftest(NULL, save)));
+            return (const_reverse_iterator(NULL, save));
         }
 
         //===============================================================================
@@ -266,7 +266,6 @@ namespace ft
 
         size_type erase(const key_type& param)
         {
-            std::cout << " !? : " << param << std::endl;
             if (elem_num == 0)
                 return (0);
             else
@@ -295,20 +294,17 @@ namespace ft
 
         void erase( iterator first, iterator last )
         {
-            if (elem_num == 0)
-                return ;
-            else
+            iterator tmp_1 = first;
+            iterator tmp_2;
+            while(tmp_1 != last)
             {
-                iterator tmp_1 = first;
-                iterator tmp_2;
-                while(tmp_1 != last)
-                {
-                    tmp_2 = tmp_1;
-                    erase(tmp_1);
-                    tmp_2++;
-                    tmp_1 = tmp_2;
-                }
-            }   
+                tmp_2 = tmp_1;
+                tmp_2++;
+                erase(tmp_1);
+                tmp_1 = tmp_2;
+                if (tmp_1 == last)
+                    break ;
+            }
         }
 
         void swap( map& other )

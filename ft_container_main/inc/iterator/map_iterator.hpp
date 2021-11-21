@@ -218,7 +218,7 @@ namespace ft
                 if (ptr == NULL)
                     return (ptr->getRightest(save->root));
 
-                if (ptr->getleft() != NULL)
+                if (ptr->getLeft() != NULL)
                     return (ptr->getRightest(ptr->getLeft()));
                 node<Key, Val, Compare>* tmp = ptr->getParent();
                 while (tmp != NULL && cmp(ptr->set.first, tmp->set.first))
@@ -311,19 +311,30 @@ namespace ft
 
             }
 
-            mapReverseIterator(node<Key, Val, Compare>* ptr, saver<Key, Val, Compare>* save) : ptr(ptr->getPtr()), save(save->getSave())
+            mapReverseIterator(node<Key, Val, Compare>* ptr, saver<Key, Val, Compare>* save) : ptr(ptr), save(save)
             {
 
             }
 
             //===========================copy===========================
-            mapReverseIterator(const mapReverseIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(save->getSave())
+            mapReverseIterator(const mapReverseIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(origin.getSave())
+            {
+
+            }
+
+            mapReverseIterator(const mapReverseConstIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(origin.getSave())
             {
 
             }
 
             //@question
-            mapReverseIterator(const mapConstIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(save->getSave())
+            mapReverseIterator(const mapIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(origin.getSave())
+            {
+
+            }
+
+            //@question
+            mapReverseIterator(const mapConstIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(origin.getSave())
             {
 
             }
@@ -362,10 +373,10 @@ namespace ft
                 if (ptr == NULL)
                     return (ptr->getleftest(save->root));
     
-                if (ptr->getleft() != NULL)
-                    return (ptr->getRightest(ptr->getLeft()));
+                if (ptr->getRight() != NULL)
+                    return (ptr->getleftest(ptr->getRight()));
                 node<Key, Val, Compare>* tmp = ptr->getParent();
-                while (tmp != NULL && cmp(ptr->set.first, tmp->set.first))
+                while (tmp != NULL && cmp(tmp->set.first, ptr->set.first))
                     tmp = tmp->getParent();
 
                 return (tmp);
@@ -376,8 +387,8 @@ namespace ft
                 if (ptr == NULL)
                     return (ptr->getRightest(save->root));
 
-                if (ptr->getRight() != NULL)
-                    return (ptr->getleftest((ptr->getRight())));
+                if (ptr->getLeft() != NULL)
+                    return (ptr->getRightest((ptr->getLeft())));
                 node<Key, Val, Compare>* tmp = ptr->getParent();
                 while (tmp != NULL && cmp(tmp->set.first, ptr->set.first))
                     tmp = tmp->getParent();
@@ -397,27 +408,27 @@ namespace ft
 
             mapReverseIterator<Key, Val, Compare>& operator++(void)
             {
-                this->ptr = getPrev();
+                this->ptr = getNext();
                 return (*this);
             }
 
             mapReverseIterator<Key, Val, Compare> operator++(int)
             {
                 mapReverseIterator<Key, Val, Compare> temp(*this);
-                this->ptr = getPrev();
+                this->ptr = getNext();
                 return (temp);
             }
 
             mapReverseIterator<Key, Val, Compare>& operator--(void)
             {
-                this->ptr = getNext();
+                this->ptr = getPrev();
                 return (*this);
             }
 
             mapReverseIterator<Key, Val, Compare> operator--(int)
             {
                 mapReverseIterator<Key, Val, Compare> temp(*this);
-                this->ptr = getNext();
+                this->ptr = getPrev();
                 return (temp);
             }
 
@@ -463,27 +474,27 @@ namespace ft
 			{
 			}
 
-			mapReverseConstIterator(node<Key, Val, Compare>* ptr, saver<Key, Val, Compare>* save) : ptr(ptr->getPtr()), save(save->getsave())
+			mapReverseConstIterator(node<Key, Val, Compare>* ptr, saver<Key, Val, Compare>* save) : ptr(ptr), save(save)
 			{
 			}
 
 			//copy
-			mapReverseConstIterator(const mapReverseConstIterator<Key, Val, Compare> &origin) : ptr(origin.ptr.getPtr()), save(save->getsave())
+			mapReverseConstIterator(const mapReverseConstIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(origin.getSave())
 			{
 				
 			}
 
-			mapReverseConstIterator(const mapReverseIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(save->getsave())
+			mapReverseConstIterator(const mapReverseIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(origin.getSave())
 			{
 				
 			}
 
-			mapReverseConstIterator(const mapIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(save->getsave())
+			mapReverseConstIterator(const mapIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(origin.getSave())
 			{
 				
 			}
 
-			mapReverseConstIterator(const mapConstIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(save->getsave())
+			mapReverseConstIterator(const mapConstIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(origin.getSave())
 			{
 				
 			}
@@ -536,10 +547,10 @@ namespace ft
                 if (ptr == NULL)
                     return (ptr->getleftest(save->root));
 
-                if (ptr->getleft() != NULL)
-                    return (ptr->getRightest(ptr->getLeft()));
+                if (ptr->getRight() != NULL)
+                    return (ptr->getleftest(ptr->getRight()));
                 node<Key, Val, Compare>* tmp = ptr->getParent();
-                while (tmp != NULL && cmp(ptr->set.first, tmp->set.first))
+                while (tmp != NULL && cmp(tmp->set.first, ptr->set.first))
                     tmp = tmp->getParent();
 
                 return (tmp);
@@ -550,10 +561,10 @@ namespace ft
                 if (ptr == NULL)
                     return (ptr->getRightest(save->root));
 
-                if (ptr->getRight() != NULL)
-                    return (ptr->getLeftest((ptr->getRight())));
+                if (ptr->getLeft() != NULL)
+                    return (ptr->getRightest((ptr->getLeft())));
                 node<Key, Val, Compare>* tmp = ptr->getParent();
-                while (tmp != NULL && cmp(tmp->set.first, ptr->set.first))
+                while (tmp != NULL && cmp(ptr->set.first, tmp->set.first))
                     tmp = tmp->getParent();
 
                 return (tmp);
@@ -572,27 +583,27 @@ namespace ft
 			//전위 - 미리 증가시키고 보낸다.
 			mapReverseConstIterator<Key, Val, Compare>& operator++(void)
 			{
-				this->ptr = getPrev();
+				this->ptr = getNext();
 				return (*this);
 			}
 			//후위 - 보내고 증가 시킨다.
 			mapReverseConstIterator<Key, Val, Compare> operator++(int)
 			{
 				mapReverseConstIterator<Key, Val, Compare> temp(*this);
-				this->ptr = getPrev();
+				this->ptr = getNext();
 				return (temp);
 			}
 			//전위 - 미리 증가시키고 보낸다.
 			mapReverseConstIterator<Key, Val, Compare>& operator--(void)
 			{
-				this->ptr = getNext();
+				this->ptr = getPrev();
 				return (*this);
 			}
 			//후위 - 보내고 증가
 			mapReverseConstIterator<Key, Val, Compare> operator--(int)
 			{
 				mapReverseConstIterator<Key, Val, Compare> temp(*this);
-				this->ptr = getNext();;
+				this->ptr = getPrev();
 				return (temp);
 			}
 

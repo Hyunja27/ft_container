@@ -12,6 +12,7 @@
 template <typename T>
 std::string	printPair(const T &iterator, bool nl = true, std::ostream &o = std::cout)
 {
+	// std::cout << "!?!????? :  " <<  iterator->first << std::endl;
 	o << "key: " << iterator->first << " | value: " << iterator->second;
 	if (nl)
 		o << std::endl;
