@@ -382,6 +382,7 @@ void deleteRestructFivecase(node* p, node* c)
     }
     else if ((p->color == BLACK) && (s->color == BLACK) && (n_near->color == BLACK) && (n_far->color == BLACK))
     {
+        std::cout << std::endl << "case 4's p : " << p->key << std::endl << std::endl << std::endl;
         s->color = RED;
         deleteRestructFivecase(p->parent, c->parent);
     }
@@ -435,6 +436,13 @@ void deleteNode(unsigned int target_key)
 {
     node* target = find(tree->root, target_key);
     node* tmp;
+    node* nil = new node;
+
+    nil->color = BLACK;
+    nil->key = 0;
+    nil->right = NULL;
+    nil->left = NULL;
+    nil->parent = NULL;
 
     // std::cout << std::endl << "deleting : " << target->key << std::endl << std::endl << std::endl;
 
@@ -449,10 +457,22 @@ void deleteNode(unsigned int target_key)
         }
         else if (target->left != NULL)
         {
-            tmp = getLowerBound(tree->root, target->left->key);
+            tmp = getRightest(target->left);
+
+            // std::cout << std::endl << "red_del tmp : " << tmp->key << std::endl << std::endl << std::endl;
+            // std::cout << std::endl << "red_del target : " << target->key << std::endl << std::endl << std::endl;
+            // std::cout << std::endl << "red_del left : " << target->left->key << std::endl << std::endl << std::endl;
+            // std::cout << std::endl << "red_del right : " << target->right->key << std::endl << std::endl << std::endl;
+            // std::cout << std::endl << "red_del left->right : " << target->left->right->key << std::endl << std::endl << std::endl;
+
+            //!!
+            if ((tmp->left == NULL) && (tmp->right == NULL) && (tmp->color == BLACK))
+                nil->parent = tmp->parent;
 
             tmp->right = target->right;
             target->right->parent = tmp;
+            
+
             if (tmp->left != NULL)
                 deleteRestruct(tmp, tmp->left, 1);
             if (tmp->parent->right == tmp)
@@ -472,12 +492,25 @@ void deleteNode(unsigned int target_key)
             }
             tmp->color = RED;
             delete(target);
+
+            //!!
+            if (nil->parent != NULL)
+                if ((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK))
+                    nil->parent->left->color = RED;
+
+
         }
         else if ((target->left == NULL) && (target->right != NULL))
         {
-            tmp = getLowerBound(tree->root, target->right->key);
+            tmp = getRightest(target->right);
+
+            //!!
+            if ((tmp->left == NULL) && (tmp->right == NULL) && (tmp->color == BLACK))
+                nil->parent = tmp->parent;
+
             tmp->left = target->left;
             target->left->parent = tmp;
+
             if (tmp->left != NULL)
                 deleteRestruct(tmp, tmp->right, 0);
             if (tmp->parent->right == tmp)
@@ -496,8 +529,13 @@ void deleteNode(unsigned int target_key)
                 tmp->right = target->right;
                 target->right->parent = tmp;
             }
-            tmp->color = BLACK;
+            tmp->color = RED;
+
             delete(target);
+            //!!
+            if (nil->parent != NULL)
+                if ((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK))
+                    nil->parent->left->color = RED;
         }
         elem_num--;
     }
@@ -522,15 +560,15 @@ void deleteNode(unsigned int target_key)
         }
         else if (target->left != NULL)
         {
-            tmp = getLowerBound(tree->root, target->left->key);
+            tmp = getRightest(target->left);
 
-
-            //? 40dmf wldnsms
-            std::cout << std::endl << "tmp : " << tmp->key << std::endl << std::endl << std::endl;
-
+            //!!
+            if ((tmp->left == NULL) && (tmp->right == NULL) && (tmp->color == BLACK))
+                nil->parent = tmp->parent;
 
             tmp->right = target->right;
             target->right->parent = tmp;
+
             
             if (tmp->left != NULL)
                 deleteRestruct(tmp, tmp->left, 1);
@@ -557,13 +595,22 @@ void deleteNode(unsigned int target_key)
             }
             delete(target);
 
-            if (tmp->color == RED)
-                tmp->color = BLACK;
+            //!!
+            if (nil->parent != NULL)
+                if ((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK))
+                    nil->parent->left->color = RED;
+
+            tmp->color = BLACK;
             
         }
         else if ((target->left == NULL) && (target->right != NULL))
         {
-            tmp = getLowerBound(tree->root, target->right->key);
+            tmp = getRightest(target->right);
+
+            //!!
+            if ((tmp->left == NULL) && (tmp->right == NULL) && (tmp->color == BLACK))
+                nil->parent = tmp->parent;
+
             tmp->left = target->left;
             target->left->parent = tmp;
             if (tmp->left != NULL)
@@ -586,8 +633,13 @@ void deleteNode(unsigned int target_key)
             }
             delete(target);
 
-            if (tmp->color == RED)
-                tmp->color = BLACK;
+
+            //!!
+            if (nil->parent != NULL)
+                if ((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK))
+                    nil->parent->left->color = RED;
+
+            tmp->color = BLACK;
         }
         elem_num--;
     }
@@ -728,7 +780,7 @@ int main(void)
     // deleteNode(newnode12->key);
     deleteNode(newnode7->key);
     deleteNode(newnode8->key);
-    // deleteNode(newnode10->key);
+    deleteNode(newnode10->key);
 
 
 
