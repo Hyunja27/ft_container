@@ -317,10 +317,6 @@ void deleteRestructFivecase(node* p, node* c)
     node* n_near = NULL;
     node* n_far = NULL;
 
-    std::cout << "restruct Five Case! " << std::endl;
-    std::cout << "p : " << p->key << std::endl;
-    std::cout << "c : " << c->key << std::endl;
-
     if (p->left == c)
         islefted = 1;
     else if (p->right == c)
@@ -382,7 +378,6 @@ void deleteRestructFivecase(node* p, node* c)
     }
     else if ((p->color == BLACK) && (s->color == BLACK) && (n_near->color == BLACK) && (n_far->color == BLACK))
     {
-        std::cout << std::endl << "case 4's p : " << p->key << std::endl << std::endl << std::endl;
         s->color = RED;
         deleteRestructFivecase(p->parent, c->parent);
     }
@@ -496,7 +491,10 @@ void deleteNode(unsigned int target_key)
             //!!
             if (nil->parent != NULL)
                 if ((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK))
+                {
                     nil->parent->left->color = RED;
+                    deleteRestructFivecase(nil->parent->parent, nil->parent);
+                }
 
 
         }
@@ -535,7 +533,10 @@ void deleteNode(unsigned int target_key)
             //!!
             if (nil->parent != NULL)
                 if ((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK))
+                {
                     nil->parent->left->color = RED;
+                    deleteRestructFivecase(nil->parent->parent, nil->parent);
+                }
         }
         elem_num--;
     }
@@ -598,7 +599,10 @@ void deleteNode(unsigned int target_key)
             //!!
             if (nil->parent != NULL)
                 if ((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK))
+                {
                     nil->parent->left->color = RED;
+                    deleteRestructFivecase(nil->parent->parent, nil->parent);
+                }
 
             tmp->color = BLACK;
             
@@ -637,7 +641,10 @@ void deleteNode(unsigned int target_key)
             //!!
             if (nil->parent != NULL)
                 if ((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK))
+                {
                     nil->parent->left->color = RED;
+                    deleteRestructFivecase(nil->parent->parent, nil->parent);
+                }
 
             tmp->color = BLACK;
         }
@@ -781,6 +788,7 @@ int main(void)
     deleteNode(newnode7->key);
     deleteNode(newnode8->key);
     deleteNode(newnode10->key);
+    // deleteNode(newnode9->key);
 
 
 
@@ -793,7 +801,5 @@ int main(void)
     // std::cout << std::endl << "find_output : " << tmp->key << std::endl;
 
 }
-
-
 
 //==============================//
