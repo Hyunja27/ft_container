@@ -233,6 +233,8 @@ namespace ft
             {
                 elem_num++;
                 this->root = new node<Key, T, Compare>(value.first, value.second);
+                // 이런 방식ㅡㅗ 아래에 다  추가 
+                root = root->getRoot(root);
                 saveRoot();
                 return(pair<iterator, bool>(iterator(root, save), true));
             }

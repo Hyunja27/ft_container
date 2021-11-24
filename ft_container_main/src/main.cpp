@@ -6,7 +6,7 @@
 /*   By: sunghyunpark <sunghyunpark@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 18:15:39 by sunghyunpar       #+#    #+#             */
-/*   Updated: 2021/11/24 17:58:03 by sunghyunpar      ###   ########.fr       */
+/*   Updated: 2021/11/24 18:40:58 by sunghyunpar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,15 @@ int		main(void)
 	unsigned int lst_size = 10;
 	for (unsigned int i = 0; i < lst_size; ++i)
 		lst.push_back(T3(i + 1, (i + 1) * 3));
+
 	TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
+	
+	TESTED_NAMESPACE::mapIterator<T1, T2> iter;
+
+	iter = mp.begin();
+	
+	printBT(iter.getSave()->root);
+	
 	printSize(mp);
 
 	ft_const_bound(mp, -10);
