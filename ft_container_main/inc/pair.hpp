@@ -1,6 +1,9 @@
 #ifndef PAIR_HPP
 #define PAIR_HPP
 
+#define RED     false
+#define BLACK   true
+
 #include "./tools.hpp"
 namespace ft
 {
@@ -75,13 +78,13 @@ namespace ft
 
         private:
             // 0: red, 1: black, 2: Unknown
-            int     color;
-            node    *left;
-            node    *right;
-            node    *parent;
             Compare cmp;
 
         public:
+            node    *left;
+            node    *right;
+            node    *parent;
+            int     color;
             pair<const Key, Val> set;
 
         //===============================================================================
@@ -224,40 +227,246 @@ namespace ft
         {
             node<Key, Val, Compare>* tmp;
 
-            if ((cmp(base->set.first, target_key) == false) && (cmp(target_key, base->set.first) == false))
-            {
-                base->set.second = target_val;
-                return (base);
-            }
-            if (this->cmp(target_key, base->set.first))
+            if (target_key < base->set.first)
             {
                 if (base->left == NULL)
                 {
                     tmp = new node<Key, Val, Compare>(target_key, target_val);
-                    tmp->parent = base;
-                    tmp->left = NULL;
-                    tmp->right = NULL;
-                    tmp->color = 0;
                     base->left = tmp;
-                    // color_checker(tmp);
-                    return (tmp);
+                    tmp->color = RED;
+                    tmp->right = NULL;
+                    tmp->left = NULL;
+                    tmp->parent = base;
+                    logic_checker(tmp);
+                    return tmp;
                 }
-                return (insert(base->left, target_key, target_val));
+                else
+                    return insert(base->left, target_key, target_val);
             }
             else
             {
                 if (base->right == NULL)
                 {
                     tmp = new node<Key, Val, Compare>(target_key, target_val);
-                    tmp->parent = base;
-                    tmp->left = NULL;
-                    tmp->right = NULL;
-                    tmp->color = 0;
                     base->right = tmp;
-                    // color_checker(tmp);
-                    return (tmp);
+                    tmp->color = RED;
+                    tmp->right = NULL;
+                    tmp->left = NULL;
+                    tmp->parent = base;
+                    logic_checker(tmp);
+                    return tmp;
                 }
-                return (insert(base->right, target_key, target_val));
+                else
+                    return insert(base->right, target_key, target_val);
+            }
+
+        }
+
+        // node<Key, Val, Compare>* insert(node<Key, Val, Compare>* base, const Key& target_key, const Val& target_val = Val())
+        // {
+        //     node<Key, Val, Compare>* tmp;
+
+        //     if ((cmp(base->set.first, target_key) == false) && (cmp(target_key, base->set.first) == false))
+        //     {
+        //         base->set.second = target_val;
+        //         return (base);
+        //     }
+        //     if (this->cmp(target_key, base->set.first))
+        //     {
+        //         if (base->left == NULL)
+        //         {
+        //             tmp = new node<Key, Val, Compare>(target_key, target_val);
+        //             tmp->parent = base;
+        //             tmp->left = NULL;
+        //             tmp->right = NULL;
+        //             tmp->color = 0;
+        //             base->left = tmp;
+        //             // color_checker(tmp);
+        //             return (tmp);
+        //         }
+        //         return (insert(base->left, target_key, target_val));
+        //     }
+        //     else
+        //     {
+        //         if (base->right == NULL)
+        //         {
+        //             tmp = new node<Key, Val, Compare>(target_key, target_val);
+        //             tmp->parent = base;
+        //             tmp->left = NULL;
+        //             tmp->right = NULL;
+        //             tmp->color = 0;
+        //             base->right = tmp;
+        //             // color_checker(tmp);
+        //             return (tmp);
+        //         }
+        //         return (insert(base->right, target_key, target_val));
+        //     }
+        // }
+
+
+        void left_lotate(node<Key, Val, Compare>* target)
+        {
+           node<Key, Val, Compare>* tmp_root;
+
+           if (target->parent == NULL)
+           {
+               tmp_root = target->right;
+               target->right = tmp_root->left;
+               if (tmp_root->left != NULL)
+                   tmp_root->left->parent = target;
+
+               tmp_root->parent = NULL;        
+               tmp_root->left = target;
+               target->parent = tmp_root;
+
+            //    tree->root = tmp_root;
+           }
+           else
+           {
+               // std::cout << "root's key:" << tree->root->key << std::endl;
+               // std::cout << "target's key:" << target->key << std::endl;
+               // std::cout << "target's parent's key:" << target->parent->key << std::endl;
+
+               tmp_root = target->right;
+               target->right = tmp_root->left;
+               if (tmp_root->left != NULL)
+                   tmp_root->left->parent = target;
+               tmp_root->left = NULL;
+
+               tmp_root->parent = target->parent;
+               if ((target->parent->right != NULL) && (target->parent->right == target))
+               {
+                   target->parent->right = tmp_root;
+               }
+               else if ((target->parent->left != NULL) && (target->parent->left == target))
+                   target->parent->left = tmp_root;
+
+               tmp_root->left = target;
+               target->parent = tmp_root;
+           }
+        }
+
+        void right_lotate(node<Key, Val, Compare>* target)
+        {
+           node<Key, Val, Compare>* tmp_root;
+
+           if (target->parent == NULL)
+           {
+               tmp_root = target->left;
+               target->left = tmp_root->right;
+               if (tmp_root->right != NULL)
+                   tmp_root->right->parent = target;
+
+               tmp_root->parent = NULL;        
+               tmp_root->right = target;
+               target->parent = tmp_root;
+
+            //    tree->root = tmp_root;
+           }
+           else
+           {
+               tmp_root = target->left;
+               target->left = tmp_root->right;
+               if (tmp_root->right != NULL)
+                   tmp_root->right->parent = target;
+
+               tmp_root->parent = target->parent;
+               if ((target->parent->right != NULL) && (target->parent->right == target))
+                   target->parent->right = tmp_root;
+               else if ((target->parent->left != NULL) && (target->parent->left == target))
+                   target->parent->left = tmp_root;
+
+               tmp_root->right = target;
+               target->parent = tmp_root;
+           }
+
+        }
+
+        void lotater(node<Key, Val, Compare>* target)
+        {
+           node<Key, Val, Compare>* grandparent;
+
+            if (target->parent->parent != NULL)
+                grandparent = target->parent->parent;
+            else
+                return ;
+                
+           if ((grandparent->right != NULL) && (grandparent->right == target->parent))
+           {
+               if (target->parent->right == target)
+               {
+                   target->parent->color = BLACK;
+                   grandparent->color = RED;
+                   left_lotate(grandparent);
+               }
+               else
+               {
+                   target->color = BLACK;
+                   grandparent->color = RED;
+                   right_lotate(target->parent);
+                   left_lotate(grandparent);
+               }
+           }
+           else if ((grandparent->left != NULL) && (grandparent->left == target->parent))
+           {
+               if (target->parent->left == target)
+               {
+                   target->parent->color = BLACK;
+                   grandparent->color = RED;
+                   right_lotate(grandparent);
+               }
+               else
+               {
+                   target->color = BLACK;
+                   grandparent->color = RED;
+                   left_lotate(target->parent);
+                   right_lotate(grandparent);
+               }
+           }
+        }
+
+        node<Key, Val, Compare>* uncle_getter(node<Key, Val, Compare>* target)
+        {   
+            node<Key, Val, Compare>* grandparent;
+            
+            if (target->parent->parent != NULL)
+                grandparent = target->parent->parent;
+            else
+                return NULL;
+
+            if ((grandparent->left != NULL) && (grandparent->left == target->parent))
+                if (grandparent->right == NULL)
+                    return NULL;
+                else
+                    return grandparent->right;
+            else if ((grandparent->right != NULL) && (grandparent->right == target->parent))
+            {
+                if (grandparent->left == NULL)
+                    return NULL;
+                else
+                    return grandparent->left;
+            }
+            return NULL;
+        }
+
+        void logic_checker(node<Key, Val, Compare>* inserted)
+        {
+            if (inserted->parent->color == BLACK)
+                return ;
+            else
+            {
+                node<Key, Val, Compare>* uncle = uncle_getter(inserted);
+                if (uncle == NULL || uncle->color == BLACK) 
+                    lotater(inserted);
+                else
+                {
+                    inserted->parent->color = BLACK;
+                    uncle->color = BLACK;
+                    if (inserted->parent->parent->parent == NULL)
+                        return ;
+                    inserted->parent->parent->color = RED;
+                    logic_checker(inserted->parent->parent);
+                }
             }
         }
         
@@ -352,74 +561,418 @@ namespace ft
             delete(root);
         }
 
-        void deleteNode(node<Key, Val, Compare>**real_root, node<Key, Val, Compare> *root, const Key& tk)
-			{
-				node<Key, Val, Compare> *newRoot;
 
-				if ((cmp(root->set.first, tk) == false) && (cmp(tk, root->set.first) == false))
-				{
-					if (root->left != NULL)
-					{
-						newRoot = getRightest(root->left);
-						newRoot->makeParentChildToMyChild(); // 부모와 자신자식의 라인을 이어준다. (이떄 newRoot 는 반드시 자식이 하나이므로 반드시 연결된다.)
+        void deleteRestructFivecase(node<Key, Val, Compare>* p, node<Key, Val, Compare>* c)
+        {
+            bool islefted = 0;
+            node<Key, Val, Compare>* s = NULL;
+            node<Key, Val, Compare>* n_near = NULL;
+            node<Key, Val, Compare>* n_far = NULL;
+
+            if (p->left == c)
+                islefted = 1;
+            else if (p->right == c)
+                islefted = 0;
+            if (islefted)
+            {
+                s = p->right;
+                n_far = s->right;
+                n_near = s->left;
+            }
+            else
+            {
+                s = p->left;
+                n_far = s->left;
+                n_near = s->right;
+            }
+
+            if ((p->color == RED) && (s->color == BLACK) && (n_near->color == BLACK) && (n_far->color == BLACK))
+            {
+                // std::cout << "Case 1 " << std::endl;
+                // std::cout << "p : " << p->key << std::endl;
+                // std::cout << "c : " << c->key << std::endl;
+                p->color = BLACK;
+                s->color = RED;
+            }
+            else if ((s->color == BLACK) && (n_far->color == RED))
+            {
+                if (islefted)
+                {
+                    left_lotate(p);
+                    s->color = p->color;
+                    p->color = BLACK;
+                    n_far->color = BLACK;
+                }
+                else
+                {
+                    right_lotate(p);
+                    s->color = p->color;
+                    p->color = BLACK;
+                    n_far->color = BLACK;
+                }
+            }
+            else if ((s->color == BLACK) && (n_near->color == RED) && (n_far->color == BLACK))
+            {
+                if (islefted)
+                {
+                    right_lotate(s);
+                    s->color = RED;
+                    n_near->color = BLACK;
+                    deleteRestructFivecase(p, c);
+                }
+                else
+                {
+                    left_lotate(s);
+                    s->color = RED;
+                    n_near->color = BLACK;
+                    deleteRestructFivecase(p, c);
+                }
+            }
+            else if ((p->color == BLACK) && (s->color == BLACK) && (n_near->color == BLACK) && (n_far->color == BLACK))
+            {
+                s->color = RED;
+                deleteRestructFivecase(p->parent, c->parent);
+            }
+            else if ((p->color == BLACK) && (s->color == RED) && (n_near->color == BLACK) && (n_far->color == BLACK))
+            {
+                if (islefted)
+                {
+                    left_lotate(p);
+                    s->color = BLACK;
+                    p->color = RED;
+                }
+                else
+                {
+                    left_lotate(p);
+                    s->color = BLACK;
+                    p->color = RED;
+                }
+            }
+        }
+
+        void deleteRestruct(node<Key, Val, Compare>* hooim, node<Key, Val, Compare>* h_jasic, bool isLeft)
+        {
+            if (isLeft == 1)
+            {
+                hooim->parent->right = h_jasic;
+                h_jasic->parent = hooim->parent;
+            }
+            else
+            {
+                hooim->parent->left = h_jasic;
+                h_jasic->parent = hooim->parent;
+            }
+            if (hooim->color == BLACK)
+            {
+                // std::cout << "h_jasic : " << h_jasic->key << std::endl;
+                // std::cout << "hooim : " << hooim->key << std::endl;
+
+                if (h_jasic->color == RED)
+                    h_jasic->color = BLACK;
+                else
+                {
+                    node<Key, Val, Compare>* p = hooim->parent;
+                    node<Key, Val, Compare>* c = h_jasic;
+                    deleteRestructFivecase(p, c);
+                }
+            }
+        }
+
+        void deleteNode(node<Key, Val, Compare>* real_root, const Key& target_key)
+        {
+            node<Key, Val, Compare>* target = find(real_root, target_key);
+            node<Key, Val, Compare>* tmp;
+            node<Key, Val, Compare>* nil = new node;
+            nil->color = BLACK;
+            nil->key = 0;
+
+            nil->right = NULL;
+            nil->left = NULL;
+            nil->parent = NULL;
+            // std::cout << std::endl << "deleting : " << target->key << std::endl << std::endl << std::endl;
+
+            if (target->color == RED)
+            {  
+            
+                if ((target->right == NULL) && (target->left == NULL))
+                {
+                    if (target->parent->right == target)
+                        target->parent->right = NULL;
+                    else if (target->parent->left == target)
+                        target->parent->left = NULL;
+                }
+                else if (target->left != NULL)
+                {
+                    tmp = getRightest(target->left);
+                    // std::cout << std::endl << "red_del tmp : " << tmp->key << std::endl << std::endl << std::endl;
+                    // std::cout << std::endl << "red_del target : " << target->key << std::endl << std::endl << std::endl;
+
+                    // std::cout << std::endl << "red_del left : " << target->left->key << std::endl << std::endl << std::endl;
+                    // std::cout << std::endl << "red_del right : " << target->right->key << std::endl << std::endl << std::endl;
+                    // std::cout << std::endl << "red_del left->right : " << target->left->right->key << std::endl << std::endl << std::endl;
+                    //!!
+                    if ((tmp->left == NULL) && (tmp->right == NULL) && (tmp->color == BLACK))
+
+                        nil->parent = tmp->parent;
+                    tmp->right = target->right;
+                    target->right->parent = tmp;
+
+
+                    if (tmp->left != NULL)
+                        deleteRestruct(tmp, tmp->left, 1);
+
+                    if (tmp->parent->right == tmp)
+                        tmp->parent->right = NULL;
+                    else if (tmp->parent->left == tmp)
+                        tmp->parent->left = NULL;
+                    tmp->parent = target->parent;
+                    if (target->parent->right == target)
+                        target->parent->right = tmp;
+                    else if (target->parent->left == target)
+                        target->parent->left = tmp;
+
+                    if (target->left != NULL)
+                    {
+                        tmp->left = target->left;
+                        target->left->parent = tmp;
+                    }
+                    tmp->color = RED;
+                    delete(target);
+                    //!!
+                    if (nil->parent != NULL)
+
+                        if ((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK))
+                        {
+                            nil->parent->left->color = RED;
+                            deleteRestructFivecase(nil->parent->parent, nil->parent);
+                        }
+
+                }
+                else if ((target->left == NULL) && (target->right != NULL))
+
+                {
+                    tmp = getRightest(target->right);
+                    //!!
+                    if ((tmp->left == NULL) && (tmp->right == NULL) && (tmp->color == BLACK))
+
+                        nil->parent = tmp->parent;
+                    tmp->left = target->left;
+                    target->left->parent = tmp;
+
+                    if (tmp->left != NULL)
+                        deleteRestruct(tmp, tmp->right, 0);
+
+                    if (tmp->parent->right == tmp)
+                        tmp->parent->right = NULL;
+                    else if (tmp->parent->left == tmp)
+                        tmp->parent->left = NULL;
+                    tmp->parent = target->parent;
+                    if (target->parent->right == target)
+                        target->parent->right = tmp;
+                    else if (target->parent->left == target)
+                        target->parent->left = tmp;
+
+                    if (target->right != NULL)
+                    {
+                    
+                        tmp->right = target->right;
+                        target->right->parent = tmp;
+                    }
+                    tmp->color = RED;
+                    delete(target);
+                    //!!
+
+                    if (nil->parent != NULL)
+                        if ((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK))
+                        {
+                            nil->parent->left->color = RED;
+                            deleteRestructFivecase(nil->parent->parent, nil->parent);
+                        }
+                }
+            }
+            else if (target->color == BLACK)
+            {
+                if ((target->right == NULL) && (target->left == NULL))
+                {
+                    if (target->parent->right == target)
+                    {
+                        target->parent->right = NULL;
+                        if (target->parent->left != NULL && target->parent->left->color == BLACK)
+                            target->parent->left->color = RED;
+                        deleteRestructFivecase(target->parent->parent, target->parent);
+                    }
+                    else if (target->parent->left == target)
+            {
+                target->parent->left = NULL;
+                if (target->parent->right != NULL && target->parent->right->color == BLACK)
+                    target->parent->right->color = RED;
+                deleteRestructFivecase(target->parent->parent, target->parent);
+            }
+        }
+        else if (target->left != NULL)
+        {
+            tmp = getRightest(target->left);
+            //!!
+            if ((tmp->left == NULL) && (tmp->right == NULL) && (tmp->color == BLACK))
+
+                        nil->parent = tmp->parent;
+                    tmp->right = target->right;
+                    target->right->parent = tmp;
+
+
+                    if (tmp->left != NULL)
+
+                        deleteRestruct(tmp, tmp->left, 1);
+                    if (tmp->parent->right == tmp)
+                        tmp->parent->right = NULL;
+
+                    else if (tmp->parent->left == tmp)
+                        tmp->parent->left = NULL;
+                    tmp->parent = target->parent;
+                    if (target->parent->right == target)
+                        target->parent->right = tmp;
+                    else if (target->parent->left == target)
+                        target->parent->left = tmp;
+                    // std::cout << "tmp : " << tmp->key << std::endl;
+                    // std::cout << "tmp_right : " << tmp->right->key << std::endl;
+
+                    // std::cout << "tmp_left : " << tmp->left->key << std::endl;
+
+                    if (target->left != NULL)
+                    {
+                    
+                        tmp->left = target->left;
+                        target->left->parent = tmp;
+                    }
+                    delete(target);
+                    //!!
+                    if (nil->parent != NULL)
+
+                        if ((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK))
+                        {
+                            nil->parent->left->color = RED;
+                            deleteRestructFivecase(nil->parent->parent, nil->parent);
+                        }
+                    tmp->color = BLACK;
+
+
+                }
+                else if ((target->left == NULL) && (target->right != NULL))
+                {
+                    tmp = getRightest(target->right);
+                    //!!
+                    if ((tmp->left == NULL) && (tmp->right == NULL) && (tmp->color == BLACK))
+
+                        nil->parent = tmp->parent;
+                    tmp->left = target->left;
+                    target->left->parent = tmp;
+
+                    if (tmp->left != NULL)
+                        deleteRestruct(tmp, tmp->right, 0);
+                    if (tmp->parent->right == tmp)
+                        tmp->parent->right = NULL;
+                    else if (tmp->parent->left == tmp)
+                        tmp->parent->left = NULL;
+                    tmp->parent = target->parent;
+                    if (target->parent->right == target)
+                        target->parent->right = tmp;
+                    else if (target->parent->left == target)
+                        target->parent->left = tmp;
+
+                    if (target->right != NULL)
+
+                    {
+                        tmp->right = target->right;
+                        target->right->parent = tmp;
+                    }
+                    delete(target);
+
+
+                    //!!
+                    if (nil->parent != NULL)
+                        if ((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK))
+                        {
+                            nil->parent->left->color = RED;
+                            deleteRestructFivecase(nil->parent->parent, nil->parent);
+                        }
+
+                    tmp->color = BLACK;
+                }
+            }
+            delete(nil);
+        }
+
+        // void deleteNode(node<Key, Val, Compare>**real_root, node<Key, Val, Compare> *root, const Key& tk)
+		// 	{
+		// 		node<Key, Val, Compare> *newRoot;
+
+		// 		if ((cmp(root->set.first, tk) == false) && (cmp(tk, root->set.first) == false))
+		// 		{
+		// 			if (root->left != NULL)
+		// 			{
+		// 				newRoot = getRightest(root->left);
+		// 				newRoot->makeParentChildToMyChild(); // 부모와 자신자식의 라인을 이어준다. (이떄 newRoot 는 반드시 자식이 하나이므로 반드시 연결된다.)
 						
-						////////////
-						if (newRoot->left != NULL)
-							newRoot->left->parent = newRoot->parent;
-						if (newRoot->right != NULL)
-							newRoot->right->parent = newRoot->parent;
-						///////////
+		// 				////////////
+		// 				if (newRoot->left != NULL)
+		// 					newRoot->left->parent = newRoot->parent;
+		// 				if (newRoot->right != NULL)
+		// 					newRoot->right->parent = newRoot->parent;
+		// 				///////////
 						
-						newRoot->left = root->left;
-						newRoot->right = root->right;
-						newRoot->parent = root->parent;
-						if (root->parent != NULL)
-							root->parent->childChange(root, newRoot);
-						if (root->left != NULL)
-							root->left->parent = newRoot;
-						if (root->right != NULL)
-							root->right->parent = newRoot;
-						if (root == *real_root)
-							*real_root = newRoot;
-						delete (root);
-					}
-					else if (root->right != NULL)
-					{
-						newRoot = getleftest(root->right);
-						newRoot->makeParentChildToMyChild(); // 부모와 자신자식의 라인을 이어준다. (이떄 newRoot 는 반드시 자식이 하나이므로 반드시 연결된다.)
+		// 				newRoot->left = root->left;
+		// 				newRoot->right = root->right;
+		// 				newRoot->parent = root->parent;
+		// 				if (root->parent != NULL)
+		// 					root->parent->childChange(root, newRoot);
+		// 				if (root->left != NULL)
+		// 					root->left->parent = newRoot;
+		// 				if (root->right != NULL)
+		// 					root->right->parent = newRoot;
+		// 				if (root == *real_root)
+		// 					*real_root = newRoot;
+		// 				delete (root);
+		// 			}
+		// 			else if (root->right != NULL)
+		// 			{
+		// 				newRoot = getleftest(root->right);
+		// 				newRoot->makeParentChildToMyChild(); // 부모와 자신자식의 라인을 이어준다. (이떄 newRoot 는 반드시 자식이 하나이므로 반드시 연결된다.)
 						
-						////////////
-						if (newRoot->left != NULL)
-							newRoot->left->parent = newRoot->parent;
-						if (newRoot->right != NULL)
-							newRoot->right->parent = newRoot->parent;
-						///////////
+		// 				////////////
+		// 				if (newRoot->left != NULL)
+		// 					newRoot->left->parent = newRoot->parent;
+		// 				if (newRoot->right != NULL)
+		// 					newRoot->right->parent = newRoot->parent;
+		// 				///////////
 						
-						newRoot->left = root->left;
-						newRoot->right = root->right;
-						newRoot->parent = root->parent;
-						if (root->parent != NULL)
-							root->parent->childChange(root, newRoot);
-						if (root->left != NULL)
-							root->left->parent = newRoot;
-						if (root->right != NULL)
-							root->right->parent = newRoot;
-						if (root == *real_root)
-							*real_root = newRoot;
-						delete (root);
-					}
-					else // 양쪽 자식 모두 없다. (부모쪽 링크만 없애주면됨. 아래에 아무것도 없다)
-					{
-						root->makeParentChildToMyChild();
-						delete root;
-					}
-					return ;
-				}
-				if (cmp(root->set.first, tk) == false)
-					deleteNode(real_root, root->left, tk);
-				else if (cmp(root->set.first, tk))
-					deleteNode(real_root, root->right, tk);
-			}
+		// 				newRoot->left = root->left;
+		// 				newRoot->right = root->right;
+		// 				newRoot->parent = root->parent;
+		// 				if (root->parent != NULL)
+		// 					root->parent->childChange(root, newRoot);
+		// 				if (root->left != NULL)
+		// 					root->left->parent = newRoot;
+		// 				if (root->right != NULL)
+		// 					root->right->parent = newRoot;
+		// 				if (root == *real_root)
+		// 					*real_root = newRoot;
+		// 				delete (root);
+		// 			}
+		// 			else // 양쪽 자식 모두 없다. (부모쪽 링크만 없애주면됨. 아래에 아무것도 없다)
+		// 			{
+		// 				root->makeParentChildToMyChild();
+		// 				delete root;
+		// 			}
+		// 			return ;
+		// 		}
+		// 		if (cmp(root->set.first, tk) == false)
+		// 			deleteNode(real_root, root->left, tk);
+		// 		else if (cmp(root->set.first, tk))
+		// 			deleteNode(real_root, root->right, tk);
+		// 	}
+
+        
+        
 
         node<Key, Val, Compare>*		getLeft()
 		{

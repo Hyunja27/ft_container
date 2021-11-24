@@ -155,7 +155,7 @@ namespace ft
     {
         private :
             node<Key, Val, Compare>*  ptr;
-            saver<Key, Val, Compare>*   save;
+            saver<Key, Val, Compare>* save;
             Compare                   cmp;
 
         public :
@@ -390,7 +390,7 @@ namespace ft
                 if (ptr->getLeft() != NULL)
                     return (ptr->getRightest((ptr->getLeft())));
                 node<Key, Val, Compare>* tmp = ptr->getParent();
-                while (tmp != NULL && cmp(tmp->set.first, ptr->set.first))
+                while (tmp != NULL && cmp(ptr->set.first, tmp->set.first))
                     tmp = tmp->getParent();
 
                 return (tmp);

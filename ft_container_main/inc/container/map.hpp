@@ -131,6 +131,7 @@ namespace ft
             {
                 elem_num++;
                 this->root = new node<Key, T, Compare>(key);
+                root->color = BLACK;
                 saveRoot();
                 return (this->root->set.second);
             }
@@ -272,7 +273,7 @@ namespace ft
             {
                 if (root->find(root, param) != NULL)
                 {
-                    root->deleteNode(&root, root, param);
+                    root->deleteNode(save->root, param);
                     saveRoot();
                     elem_num--;
                     if (elem_num == 0)
