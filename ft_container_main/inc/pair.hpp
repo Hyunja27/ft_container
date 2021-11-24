@@ -77,21 +77,21 @@ namespace ft
         //===============================================================================
 
         private:
-            // 0: red, 1: black, 2: Unknown
+            // false: red, true: black, 2: Unknown
             Compare cmp;
 
         public:
             node    *left;
             node    *right;
             node    *parent;
-            int     color;
+            bool     color;
             pair<const Key, Val> set;
 
         //===============================================================================
         //================================= Constructer =================================
         //===============================================================================
         
-        node() : left(NULL), right(NULL), parent(NULL), color(2), set(NULL)
+        node() : left(NULL), right(NULL), parent(NULL), color(false), set(NULL)
         {
             
         }
@@ -101,7 +101,7 @@ namespace ft
 
         }
 
-        node(const pair<Key, Val> _set) : left(NULL), right(NULL), parent(NULL), color(2)
+        node(const pair<Key, Val> _set) : left(NULL), right(NULL), parent(NULL), color(false)
         {
             this->set = _set;
         }
@@ -696,9 +696,9 @@ namespace ft
         {
             node<Key, Val, Compare>* target = find(real_root, target_key);
             node<Key, Val, Compare>* tmp;
-            node<Key, Val, Compare>* nil = new node;
+            node<Key, Val, Compare>* nil = new node(0);
             nil->color = BLACK;
-            nil->key = 0;
+            // nil->set.first = 0;
 
             nil->right = NULL;
             nil->left = NULL;
@@ -816,26 +816,24 @@ namespace ft
                         deleteRestructFivecase(target->parent->parent, target->parent);
                     }
                     else if (target->parent->left == target)
-            {
-                target->parent->left = NULL;
-                if (target->parent->right != NULL && target->parent->right->color == BLACK)
-                    target->parent->right->color = RED;
-                deleteRestructFivecase(target->parent->parent, target->parent);
-            }
-        }
-        else if (target->left != NULL)
-        {
-            tmp = getRightest(target->left);
-            //!!
-            if ((tmp->left == NULL) && (tmp->right == NULL) && (tmp->color == BLACK))
-
+                    {
+                        target->parent->left = NULL;
+                        if (target->parent->right != NULL && target->parent->right->color == BLACK)
+                            target->parent->right->color = RED;
+                        deleteRestructFivecase(target->parent->parent, target->parent);
+                    }
+                }
+                else if (target->left != NULL)
+                {
+                    tmp = getRightest(target->left);
+                    //!!
+                    if ((tmp->left == NULL) && (tmp->right == NULL) && (tmp->color == BLACK))
                         nil->parent = tmp->parent;
                     tmp->right = target->right;
                     target->right->parent = tmp;
 
 
                     if (tmp->left != NULL)
-
                         deleteRestruct(tmp, tmp->left, 1);
                     if (tmp->parent->right == tmp)
                         tmp->parent->right = NULL;
@@ -854,21 +852,22 @@ namespace ft
 
                     if (target->left != NULL)
                     {
-                    
                         tmp->left = target->left;
                         target->left->parent = tmp;
                     }
                     delete(target);
                     //!!
+
                     if (nil->parent != NULL)
+                    {
 
                         if ((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK))
                         {
                             nil->parent->left->color = RED;
                             deleteRestructFivecase(nil->parent->parent, nil->parent);
                         }
+                    }
                     tmp->color = BLACK;
-
 
                 }
                 else if ((target->left == NULL) && (target->right != NULL))
@@ -876,7 +875,6 @@ namespace ft
                     tmp = getRightest(target->right);
                     //!!
                     if ((tmp->left == NULL) && (tmp->right == NULL) && (tmp->color == BLACK))
-
                         nil->parent = tmp->parent;
                     tmp->left = target->left;
                     target->left->parent = tmp;
@@ -894,22 +892,21 @@ namespace ft
                         target->parent->left = tmp;
 
                     if (target->right != NULL)
-
                     {
                         tmp->right = target->right;
                         target->right->parent = tmp;
                     }
                     delete(target);
 
-
                     //!!
                     if (nil->parent != NULL)
+                    {
                         if ((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK))
                         {
                             nil->parent->left->color = RED;
                             deleteRestructFivecase(nil->parent->parent, nil->parent);
                         }
-
+                    }
                     tmp->color = BLACK;
                 }
             }

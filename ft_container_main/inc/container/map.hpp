@@ -132,6 +132,7 @@ namespace ft
                 elem_num++;
                 this->root = new node<Key, T, Compare>(key);
                 root->color = BLACK;
+                root = root->getRoot(root);
                 saveRoot();
                 return (this->root->set.second);
             }
@@ -144,8 +145,12 @@ namespace ft
                     return (tmp->set.second);
                 else
                 {
+                    node<Key, T, Compare>* tmp;
                     elem_num++;
-                    return (root->insert(this->root, key)->set.second);
+                    tmp = (root->insert(this->root, key));
+                    root = root->getRoot(root);
+                    saveRoot();
+                    return tmp->set.second;
                 }
             }
         }
