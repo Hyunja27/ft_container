@@ -281,14 +281,26 @@ namespace ft
             {
                 if (root->find(root, param) != NULL)
                 {
+                    node<Key, T, Compare>* tmp = root;
                     root->deleteNode(save->root, param);
-                    saveRoot();
+                    
+                    // std::cout << "root " << root << std::endl;
+                    // std::cout << "tmp : " << tmp << std::endl;
+
                     elem_num--;
                     if (elem_num == 0)
                     {
                         root = NULL;
                         saveRoot();
                     }
+                    else if (tmp != NULL)
+                    {
+                        /////??????????????
+                        while (tmp && tmp->getParent(tmp))
+                            tmp = tmp->getParent(tmp);
+                        root = tmp;
+                    }
+                    saveRoot();
                     return (1);
                 }
                 else
@@ -303,12 +315,14 @@ namespace ft
 
         void erase( iterator first, iterator last )
         {
+
             iterator tmp_1 = first;
             iterator tmp_2;
             while(tmp_1 != last)
             {
                 tmp_2 = tmp_1;
                 tmp_2++;
+                std::cout << "erase : " << tmp_1.getPtr()->set.first << std::endl;
                 erase(tmp_1);
                 tmp_1 = tmp_2;
                 if (tmp_1 == last)

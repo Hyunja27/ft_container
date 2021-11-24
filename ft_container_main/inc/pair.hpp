@@ -158,7 +158,9 @@ namespace ft
         node<Key, Val, Compare>* getRoot(node<Key, Val, Compare>* base)
         {
             if (base->parent == NULL)
+            {
                 return (base);
+            }
             return (getRoot(base->parent));
         }
 
@@ -186,6 +188,9 @@ namespace ft
             // {
             //     throw std::out_of_range("No Right Node!");
             // }
+            std::cout << "base : " << base << std::endl;
+            std::cout << "base->p : " << base->parent << std::endl;
+
             return (base->parent);
         }
 
@@ -583,6 +588,8 @@ namespace ft
             node<Key, Val, Compare>* n_near = NULL;
             node<Key, Val, Compare>* n_far = NULL;
 
+            if (p == NULL)
+                return ;
             if (p->left == c)
                 islefted = 1;
             else if (p->right == c)
@@ -699,12 +706,16 @@ namespace ft
             node<Key, Val, Compare>* nil = new node(0);
             nil->color = BLACK;
             // nil->set.first = 0;
-
             nil->right = NULL;
             nil->left = NULL;
             nil->parent = NULL;
             // std::cout << std::endl << "deleting : " << target->key << std::endl << std::endl << std::endl;
-
+            if (target->parent == NULL && (target->right == NULL) && (target->left == NULL))
+            {
+                delete(nil);
+                delete(target);
+                return ;
+            }
             if (target->color == RED)
             {  
             
@@ -726,7 +737,6 @@ namespace ft
                     // std::cout << std::endl << "red_del left->right : " << target->left->right->key << std::endl << std::endl << std::endl;
                     //!!
                     if ((tmp->left == NULL) && (tmp->right == NULL) && (tmp->color == BLACK))
-
                         nil->parent = tmp->parent;
                     tmp->right = target->right;
                     target->right->parent = tmp;
@@ -754,24 +764,23 @@ namespace ft
                     delete(target);
                     //!!
                     if (nil->parent != NULL)
-
+                    {
                         if ((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK))
                         {
                             nil->parent->left->color = RED;
                             deleteRestructFivecase(nil->parent->parent, nil->parent);
                         }
+                    }
 
                 }
                 else if ((target->left == NULL) && (target->right != NULL))
-
                 {
                     tmp = getRightest(target->right);
                     //!!
                     if ((tmp->left == NULL) && (tmp->right == NULL) && (tmp->color == BLACK))
-
                         nil->parent = tmp->parent;
                     tmp->left = target->left;
-                    target->left->parent = tmp;
+                    // target->left->parent = tmp;
 
                     if (tmp->left != NULL)
                         deleteRestruct(tmp, tmp->right, 0);
@@ -799,7 +808,7 @@ namespace ft
                     if (nil->parent != NULL)
                         if ((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK))
                         {
-                            nil->parent->left->color = RED;
+                            nil->parent->left->color = 0;
                             deleteRestructFivecase(nil->parent->parent, nil->parent);
                         }
                 }
@@ -828,16 +837,16 @@ namespace ft
                     tmp = getRightest(target->left);
                     //!!
                     if ((tmp->left == NULL) && (tmp->right == NULL) && (tmp->color == BLACK))
+                    {
                         nil->parent = tmp->parent;
+                    }
                     tmp->right = target->right;
                     target->right->parent = tmp;
-
 
                     if (tmp->left != NULL)
                         deleteRestruct(tmp, tmp->left, 1);
                     if (tmp->parent->right == tmp)
                         tmp->parent->right = NULL;
-
                     else if (tmp->parent->left == tmp)
                         tmp->parent->left = NULL;
                     tmp->parent = target->parent;
@@ -849,24 +858,23 @@ namespace ft
                     // std::cout << "tmp_right : " << tmp->right->key << std::endl;
 
                     // std::cout << "tmp_left : " << tmp->left->key << std::endl;
-
                     if (target->left != NULL)
                     {
                         tmp->left = target->left;
                         target->left->parent = tmp;
                     }
-                    delete(target);
+                    // if (target == nil->parent)
+                    //     nil->parent->left->color = 0;
                     //!!
-
                     if (nil->parent != NULL)
                     {
-
-                        if ((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK))
+                        if (((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK)))
                         {
-                            nil->parent->left->color = RED;
+                            nil->parent->left->color = 0;
                             deleteRestructFivecase(nil->parent->parent, nil->parent);
                         }
                     }
+                    delete(target);
                     tmp->color = BLACK;
 
                 }
@@ -877,7 +885,7 @@ namespace ft
                     if ((tmp->left == NULL) && (tmp->right == NULL) && (tmp->color == BLACK))
                         nil->parent = tmp->parent;
                     tmp->left = target->left;
-                    target->left->parent = tmp;
+                    // target->left->parent = tmp;
 
                     if (tmp->left != NULL)
                         deleteRestruct(tmp, tmp->right, 0);
@@ -886,9 +894,14 @@ namespace ft
                     else if (tmp->parent->left == tmp)
                         tmp->parent->left = NULL;
                     tmp->parent = target->parent;
-                    if (target->parent->right == target)
+
+                    // std::cout << "target : " << target->parent << std::endl;
+                    // std::cout << "target : " << target->parent->right << std::endl;
+                    // std::cout << "target : " << target->parent->left << std::endl;
+                    
+                    if ((target->parent != NULL) && target->parent->right == target)
                         target->parent->right = tmp;
-                    else if (target->parent->left == target)
+                    else if ((target->parent != NULL) && target->parent->left == target)
                         target->parent->left = tmp;
 
                     if (target->right != NULL)
@@ -896,7 +909,6 @@ namespace ft
                         tmp->right = target->right;
                         target->right->parent = tmp;
                     }
-                    delete(target);
 
                     //!!
                     if (nil->parent != NULL)
@@ -907,6 +919,7 @@ namespace ft
                             deleteRestructFivecase(nil->parent->parent, nil->parent);
                         }
                     }
+                    delete(target);
                     tmp->color = BLACK;
                 }
             }
