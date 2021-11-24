@@ -490,17 +490,25 @@ namespace ft
 		{		
 			if (isFirstEqualOrSmall(root->set.first, key))
 			{
-				if (root->right == NULL)
-					return (NULL);
 				else 
+                {
+                    // std::cout << "  equalsmall : "<< root->set.first << "  key : " << key << std::endl;
 					return (getUpperBound(root->right, key));
+                }
 			}
 			else // key 가 더 작음.
 			{
 				if (root->left == NULL)
-					return (root);
+				{
+                    // if (root->right != NULL)
+                    //     return root->right;
+                    return (root);
+                }
 				else
+                {
+                    // std::cout << "  big : "<< root->set.first << "  key : " << key << std::endl;
 					return (getUpperBound(root->left, key));
+                }
 			}
 		}
 
