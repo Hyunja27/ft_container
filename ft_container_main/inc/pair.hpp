@@ -490,6 +490,12 @@ namespace ft
 		{		
 			if (isFirstEqualOrSmall(root->set.first, key))
 			{
+				if (root->right == NULL)
+				{
+                    if ((root->parent != NULL) && root->parent->set.first < root->set.first)    
+                        return (NULL);
+                    return (root->parent);
+                }
 				else 
                 {
                     // std::cout << "  equalsmall : "<< root->set.first << "  key : " << key << std::endl;
