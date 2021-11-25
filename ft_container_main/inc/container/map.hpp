@@ -284,7 +284,7 @@ namespace ft
                     node<Key, T, Compare>* tmp = root->getRightest(root);
                     if (tmp == NULL)
                         tmp = root->getleftest(root);
-                    root->deleteNode(save->root, param);
+                    root->deleteNode(root, param);
                     
                     // std::cout << "root " << root << std::endl;
                     // std::cout << "tmp : " << tmp << std::endl;
@@ -302,8 +302,13 @@ namespace ft
                         // {
                         //     tmp = tmp->getParent(tmp);
                         // }
-                        tmp = root->getRoot(tmp);
-                        root = tmp;
+                        // std::cout << "?????" << std::endl;
+                        // tmp = root->getRoot(tmp);
+
+                        // while (tmp->parent != NULL)
+                        //     tmp = tmp->parent;
+                        // root = tmp;
+
                         saveRoot();
                     }
                     return (1);

@@ -138,25 +138,28 @@ namespace ft
         //===============================================================================
  
         void childChange(node *from, node *to)
-			{
-				if (left == from)
-					left = to;
-				if (right == from)
-					right = to;
-			}
+		{
+			if (left == from)
+				left = to;
+			if (right == from)
+				right = to;
+		}
 
-			void makeParentChildToMyChild()
-			{
-				if (parent == NULL)
-					return ;
-				if (left == NULL)
-					parent->childChange(this, right);
-				else
-					parent->childChange(this, left);
-			}
+		void makeParentChildToMyChild()
+		{
+			if (parent == NULL)
+				return ;
+			if (left == NULL)
+				parent->childChange(this, right);
+			else
+				parent->childChange(this, left);
+		}
 
         node<Key, Val, Compare>* getRoot(node<Key, Val, Compare>* base)
         {
+            // std::cout << " getRoot -> base : " << base << std::endl;
+            if (base == NULL)
+                return NULL;
             if (base->parent == NULL)
             {
                 return (base);
@@ -209,7 +212,7 @@ namespace ft
         {
             if (base == NULL)
                 return (NULL);
-            if ((cmp(base->set.first, target_key) == false) && (cmp(target_key, base->set.first) == false))
+            if (((base->set.first < target_key) == false) && ((target_key < base->set.first) == false))
                 return (base);
             if (this->cmp(target_key, base->set.first))
             {
@@ -239,7 +242,7 @@ namespace ft
                     tmp->right = NULL;
                     tmp->left = NULL;
                     tmp->parent = base;
-                    logic_checker(tmp);
+                    logic_checker(tmp, base);
                     return tmp;
                 }
                 else
@@ -255,7 +258,7 @@ namespace ft
                     tmp->right = NULL;
                     tmp->left = NULL;
                     tmp->parent = base;
-                    logic_checker(tmp);
+                    logic_checker(tmp, base);
                     return tmp;
                 }
                 else
@@ -306,7 +309,7 @@ namespace ft
         // }
 
 
-        void left_lotate(node<Key, Val, Compare>* target)
+        void left_lotate(node<Key, Val, Compare>* target, node<Key, Val, Compare>* real_root)
         {
            node<Key, Val, Compare>* tmp_root;
 
@@ -321,7 +324,7 @@ namespace ft
                tmp_root->left = target;
                target->parent = tmp_root;
 
-            //    tree->root = tmp_root;
+               real_root = tmp_root;
            }
            else
            {
@@ -345,10 +348,12 @@ namespace ft
 
                tmp_root->left = target;
                target->parent = tmp_root;
+
+               real_root = tmp_root;
            }
         }
 
-        void right_lotate(node<Key, Val, Compare>* target)
+        void right_lotate(node<Key, Val, Compare>* target, node<Key, Val, Compare>* real_root)
         {
            node<Key, Val, Compare>* tmp_root;
 
@@ -363,7 +368,7 @@ namespace ft
                tmp_root->right = target;
                target->parent = tmp_root;
 
-            //    tree->root = tmp_root;
+               real_root = tmp_root;
            }
            else
            {
@@ -380,11 +385,13 @@ namespace ft
 
                tmp_root->right = target;
                target->parent = tmp_root;
+
+               real_root = tmp_root;
            }
 
         }
 
-        void lotater(node<Key, Val, Compare>* target)
+        void lotater(node<Key, Val, Compare>* target, node<Key, Val, Compare>* real_root)
         {
            node<Key, Val, Compare>* grandparent;
 
@@ -399,14 +406,14 @@ namespace ft
                {
                    target->parent->color = BLACK;
                    grandparent->color = RED;
-                   left_lotate(grandparent);
+                   left_lotate(grandparent, real_root);
                }
                else
                {
                    target->color = BLACK;
                    grandparent->color = RED;
-                   right_lotate(target->parent);
-                   left_lotate(grandparent);
+                   right_lotate(target->parent, real_root);
+                   left_lotate(grandparent, real_root);
                }
            }
            else if ((grandparent->left != NULL) && (grandparent->left == target->parent))
@@ -415,14 +422,14 @@ namespace ft
                {
                    target->parent->color = BLACK;
                    grandparent->color = RED;
-                   right_lotate(grandparent);
+                   right_lotate(grandparent, real_root);
                }
                else
                {
                    target->color = BLACK;
                    grandparent->color = RED;
-                   left_lotate(target->parent);
-                   right_lotate(grandparent);
+                   left_lotate(target->parent, real_root);
+                   right_lotate(grandparent, real_root);
                }
            }
         }
@@ -451,7 +458,7 @@ namespace ft
             return NULL;
         }
 
-        void logic_checker(node<Key, Val, Compare>* inserted)
+        void logic_checker(node<Key, Val, Compare>* inserted, node<Key, Val, Compare>* real_root)
         {
             if (inserted->parent->color == BLACK)
                 return ;
@@ -459,7 +466,7 @@ namespace ft
             {
                 node<Key, Val, Compare>* uncle = uncle_getter(inserted);
                 if (uncle == NULL || uncle->color == BLACK) 
-                    lotater(inserted);
+                    lotater(inserted, real_root);
                 else
                 {
                     inserted->parent->color = BLACK;
@@ -467,7 +474,7 @@ namespace ft
                     if (inserted->parent->parent->parent == NULL)
                         return ;
                     inserted->parent->parent->color = RED;
-                    logic_checker(inserted->parent->parent);
+                    logic_checker(inserted->parent->parent, real_root);
                 }
             }
         }
@@ -578,7 +585,7 @@ namespace ft
         }
 
 
-        void deleteRestructFivecase(node<Key, Val, Compare>* p, node<Key, Val, Compare>* c)
+        void deleteRestructFivecase(node<Key, Val, Compare>* p, node<Key, Val, Compare>* c, node<Key, Val, Compare>* real_root)
         {
             bool islefted = 0;
             node<Key, Val, Compare>* s = NULL;
@@ -609,6 +616,7 @@ namespace ft
                 // std::cout << "Case 1 " << std::endl;
                 // std::cout << "p : " << p->key << std::endl;
                 // std::cout << "c : " << c->key << std::endl;
+
                 p->color = BLACK;
                 s->color = RED;
             }
@@ -616,14 +624,14 @@ namespace ft
             {
                 if (islefted)
                 {
-                    left_lotate(p);
+                    left_lotate(p, real_root);
                     s->color = p->color;
                     p->color = BLACK;
                     n_far->color = BLACK;
                 }
                 else
                 {
-                    right_lotate(p);
+                    right_lotate(p, real_root);
                     s->color = p->color;
                     p->color = BLACK;
                     n_far->color = BLACK;
@@ -633,42 +641,42 @@ namespace ft
             {
                 if (islefted)
                 {
-                    right_lotate(s);
+                    right_lotate(s, real_root);
                     s->color = RED;
                     n_near->color = BLACK;
-                    deleteRestructFivecase(p, c);
+                    deleteRestructFivecase(p, c, real_root);
                 }
                 else
                 {
-                    left_lotate(s);
+                    left_lotate(s, real_root);
                     s->color = RED;
                     n_near->color = BLACK;
-                    deleteRestructFivecase(p, c);
+                    deleteRestructFivecase(p, c, real_root);
                 }
             }
             else if ((p->color == BLACK) && (s->color == BLACK) && (n_near->color == BLACK) && (n_far->color == BLACK))
             {
                 s->color = RED;
-                deleteRestructFivecase(p->parent, c->parent);
+                deleteRestructFivecase(p->parent, c->parent, real_root);
             }
             else if ((p->color == BLACK) && (s->color == RED) && (n_near->color == BLACK) && (n_far->color == BLACK))
             {
                 if (islefted)
                 {
-                    left_lotate(p);
+                    left_lotate(p, real_root);
                     s->color = BLACK;
                     p->color = RED;
                 }
                 else
                 {
-                    left_lotate(p);
+                    left_lotate(p, real_root);
                     s->color = BLACK;
                     p->color = RED;
                 }
             }
         }
 
-        void deleteRestruct(node<Key, Val, Compare>* hooim, node<Key, Val, Compare>* h_jasic, bool isLeft)
+        void deleteRestruct(node<Key, Val, Compare>* hooim, node<Key, Val, Compare>* h_jasic, bool isLeft, node<Key, Val, Compare>* real_root)
         {
             if (isLeft == 1)
             {
@@ -691,7 +699,7 @@ namespace ft
                 {
                     node<Key, Val, Compare>* p = hooim->parent;
                     node<Key, Val, Compare>* c = h_jasic;
-                    deleteRestructFivecase(p, c);
+                    deleteRestructFivecase(p, c, real_root);
                 }
             }
         }
@@ -699,7 +707,7 @@ namespace ft
         void deleteNode(node<Key, Val, Compare>* real_root, const Key& target_key)
         {
             node<Key, Val, Compare>* target = find(real_root, target_key);
-            node<Key, Val, Compare>* tmp;
+            node<Key, Val, Compare>* tmp = NULL;
             node<Key, Val, Compare>* nil = new node(0);
             nil->color = BLACK;
             // nil->set.first = 0;
@@ -738,9 +746,12 @@ namespace ft
                     tmp->right = target->right;
                     target->right->parent = tmp;
 
+                    // tmp->left = target->left;
+                    // target->left->parent = tmp;
+
 
                     if (tmp->left != NULL)
-                        deleteRestruct(tmp, tmp->left, 1);
+                        deleteRestruct(tmp, tmp->left, 1, real_root);
 
                     if (tmp->parent->right == tmp)
                         tmp->parent->right = NULL;
@@ -765,12 +776,12 @@ namespace ft
                         if ((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK))
                         {
                             nil->parent->left->color = RED;
-                            deleteRestructFivecase(nil->parent->parent, nil->parent);
+                            deleteRestructFivecase(nil->parent->parent, nil->parent, real_root);
                         }
                     }
 
                 }
-                else if ((target->left == NULL) && (target->right != NULL))
+                else if ((target->right != NULL))
                 {
                     tmp = getRightest(target->right);
                     //!!
@@ -780,7 +791,7 @@ namespace ft
                     // target->left->parent = tmp;
 
                     if (tmp->left != NULL)
-                        deleteRestruct(tmp, tmp->right, 0);
+                        deleteRestruct(tmp, tmp->right, 0, real_root);
 
                     if (tmp->parent->right == tmp)
                         tmp->parent->right = NULL;
@@ -803,11 +814,13 @@ namespace ft
                     //!!
 
                     if (nil->parent != NULL)
+                    {
                         if ((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK))
                         {
                             nil->parent->left->color = 0;
-                            deleteRestructFivecase(nil->parent->parent, nil->parent);
+                            deleteRestructFivecase(nil->parent->parent, nil->parent, real_root);
                         }
+                    }
                 }
             }
             else if (target->color == BLACK)
@@ -819,14 +832,14 @@ namespace ft
                         target->parent->right = NULL;
                         if (target->parent->left != NULL && target->parent->left->color == BLACK)
                             target->parent->left->color = RED;
-                        deleteRestructFivecase(target->parent->parent, target->parent);
+                        deleteRestructFivecase(target->parent->parent, target->parent, real_root);
                     }
                     else if (target->parent->left == target)
                     {
                         target->parent->left = NULL;
                         if (target->parent->right != NULL && target->parent->right->color == BLACK)
                             target->parent->right->color = RED;
-                        deleteRestructFivecase(target->parent->parent, target->parent);
+                        deleteRestructFivecase(target->parent->parent, target->parent, real_root);
                     }
                 }
                 else if (target->left != NULL)
@@ -840,8 +853,11 @@ namespace ft
                     tmp->right = target->right;
                     target->right->parent = tmp;
 
+                    // tmp->left = target->left;
+                    // target->left->parent = tmp;
+
                     if (tmp->left != NULL)
-                        deleteRestruct(tmp, tmp->left, 1);
+                        deleteRestruct(tmp, tmp->left, 1, real_root);
                     if (tmp->parent->right == tmp)
                         tmp->parent->right = NULL;
                     else if (tmp->parent->left == tmp)
@@ -868,14 +884,14 @@ namespace ft
                         if (((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK)))
                         {
                             nil->parent->left->color = 0;
-                            deleteRestructFivecase(nil->parent->parent, nil->parent);
+                            deleteRestructFivecase(nil->parent->parent, nil->parent, real_root);
                         }
                     }
                     delete(target);
                     tmp->color = BLACK;
 
                 }
-                else if ((target->left == NULL) && (target->right != NULL))
+                else if ((target->right != NULL))
                 {
                     tmp = getRightest(target->right);
                     //!!
@@ -885,7 +901,7 @@ namespace ft
                     // target->left->parent = tmp;
 
                     if (tmp->left != NULL)
-                        deleteRestruct(tmp, tmp->right, 0);
+                        deleteRestruct(tmp, tmp->right, 0, real_root);
                     if (tmp->parent->right == tmp)
                         tmp->parent->right = NULL;
                     else if (tmp->parent->left == tmp)
@@ -913,13 +929,15 @@ namespace ft
                         if ((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK))
                         {
                             nil->parent->left->color = RED;
-                            deleteRestructFivecase(nil->parent->parent, nil->parent);
+                            deleteRestructFivecase(nil->parent->parent, nil->parent, real_root);
                         }
                     }
                     delete(target);
                     tmp->color = BLACK;
                 }
             }
+            // new_root = getRoot(tmp);
+            // real_root = new_root;
             delete(nil);
         }
 
