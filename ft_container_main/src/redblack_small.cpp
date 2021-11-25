@@ -786,8 +786,8 @@ int main(void)
 
     // deleteNode(newnode12->key);
     deleteNode(newnode7->key);
-    deleteNode(newnode8->key);
-    deleteNode(newnode10->key);
+    deleteNode(newnode4->key);
+    // deleteNode(newnode10->key);
     // deleteNode(newnode9->key);
 
 

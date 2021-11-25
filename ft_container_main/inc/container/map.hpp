@@ -281,7 +281,9 @@ namespace ft
             {
                 if (root->find(root, param) != NULL)
                 {
-                    node<Key, T, Compare>* tmp = root;
+                    node<Key, T, Compare>* tmp = root->getRightest(root);
+                    if (tmp == NULL)
+                        tmp = root->getleftest(root);
                     root->deleteNode(save->root, param);
                     
                     // std::cout << "root " << root << std::endl;
@@ -296,11 +298,14 @@ namespace ft
                     else if (tmp != NULL)
                     {
                         /////??????????????
-                        while (tmp && tmp->getParent(tmp))
-                            tmp = tmp->getParent(tmp);
+                        // while ((tmp->getParent(tmp) && (tmp != tmp->getParent(tmp))))
+                        // {
+                        //     tmp = tmp->getParent(tmp);
+                        // }
+                        tmp = root->getRoot(tmp);
                         root = tmp;
+                        saveRoot();
                     }
-                    saveRoot();
                     return (1);
                 }
                 else
@@ -322,7 +327,7 @@ namespace ft
             {
                 tmp_2 = tmp_1;
                 tmp_2++;
-                std::cout << "erase : " << tmp_1.getPtr()->set.first << std::endl;
+                // std::cout << "erase : " << tmp_1.getPtr()->set.first << std::endl;
                 erase(tmp_1);
                 tmp_1 = tmp_2;
                 if (tmp_1 == last)

@@ -188,9 +188,6 @@ namespace ft
             // {
             //     throw std::out_of_range("No Right Node!");
             // }
-            std::cout << "base : " << base << std::endl;
-            std::cout << "base->p : " << base->parent << std::endl;
-
             return (base->parent);
         }
 

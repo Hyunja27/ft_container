@@ -6,7 +6,7 @@
 /*   By: sunghyunpark <sunghyunpark@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 18:15:39 by sunghyunpar       #+#    #+#             */
-/*   Updated: 2021/11/25 02:16:29 by sunghyunpar      ###   ########.fr       */
+/*   Updated: 2021/11/25 19:06:51 by sunghyunpar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,15 +70,23 @@ int		main(void)
 	for (unsigned int i = 0; i < lst_size; ++i)
 		lst.push_back(T3(i, std::string((lst_size - i), i + 65)));
 	TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
+	TESTED_NAMESPACE::mapIterator<T1, T2> iter = mp.begin();
 	printSize(mp);
 
+	printBT(iter.getSave()->root);
+	
 	ft_erase(mp, ++mp.begin());
 
+	printBT(iter.getSave()->root);
+
 	ft_erase(mp, mp.begin());
+
+	printBT(iter.getSave()->root);
+
 	ft_erase(mp, --mp.end());
 
 	ft_erase(mp, mp.begin(), ++(++(++mp.begin())));
-	ft_erase(mp, --(--(--mp.end())), --mp.end());
+	// ft_erase(mp, --(--(--mp.end())), --mp.end());
 
 	// mp[10] = "Hello";
 	// mp[11] = "Hi there";
