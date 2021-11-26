@@ -785,11 +785,11 @@ int main(void)
     // insert(tree->root, newnode12);
 
     // deleteNode(newnode12->key);
-    deleteNode(newnode7->key);
-    deleteNode(newnode4->key);
+    // deleteNode(newnode7->key);
     // deleteNode(newnode10->key);
     // deleteNode(newnode9->key);
 
+    // deleteNode(newnode4->key);
 
 
 
