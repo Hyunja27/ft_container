@@ -309,7 +309,7 @@ namespace ft
         // }
 
 
-        void left_lotate(node<Key, Val, Compare>* target, node<Key, Val, Compare>* real_root)
+        void left_lotate(node<Key, Val, Compare>* target, node<Key, Val, Compare>* (&real_root))
         {
            node<Key, Val, Compare>* tmp_root;
 
@@ -323,6 +323,9 @@ namespace ft
                tmp_root->parent = NULL;        
                tmp_root->left = target;
                target->parent = tmp_root;
+
+               std::cout << "      left_lo_target     : " << target->set.first << std::endl;
+               std::cout << "      tmp_val            : " << tmp_root->set.first << std::endl;
 
                real_root = tmp_root;
            }
@@ -348,12 +351,10 @@ namespace ft
 
                tmp_root->left = target;
                target->parent = tmp_root;
-
-               real_root = tmp_root;
            }
         }
 
-        void right_lotate(node<Key, Val, Compare>* target, node<Key, Val, Compare>* real_root)
+        void right_lotate(node<Key, Val, Compare>* target, node<Key, Val, Compare>* (&real_root))
         {
            node<Key, Val, Compare>* tmp_root;
 
@@ -367,6 +368,9 @@ namespace ft
                tmp_root->parent = NULL;        
                tmp_root->right = target;
                target->parent = tmp_root;
+
+               std::cout << "      right_lo_target     : " << target->set.first << std::endl;
+               std::cout << "      tmp_val            : " << tmp_root->set.first << std::endl;
 
                real_root = tmp_root;
            }
@@ -385,13 +389,11 @@ namespace ft
 
                tmp_root->right = target;
                target->parent = tmp_root;
-
-               real_root = tmp_root;
            }
 
         }
 
-        void lotater(node<Key, Val, Compare>* target, node<Key, Val, Compare>* real_root)
+        void lotater(node<Key, Val, Compare>* target, node<Key, Val, Compare>* (&real_root))
         {
            node<Key, Val, Compare>* grandparent;
 
@@ -458,7 +460,7 @@ namespace ft
             return NULL;
         }
 
-        void logic_checker(node<Key, Val, Compare>* inserted, node<Key, Val, Compare>* real_root)
+        void logic_checker(node<Key, Val, Compare>* inserted, node<Key, Val, Compare>* (&real_root))
         {
             if (inserted->parent->color == BLACK)
                 return ;
@@ -585,7 +587,7 @@ namespace ft
         }
 
 
-        void deleteRestructFivecase(node<Key, Val, Compare>* p, node<Key, Val, Compare>* c, node<Key, Val, Compare>* real_root)
+        void deleteRestructFivecase(node<Key, Val, Compare>* p, node<Key, Val, Compare>* c, node<Key, Val, Compare>* (&real_root))
         {
             bool islefted = 0;
             node<Key, Val, Compare>* s = NULL;
@@ -611,9 +613,15 @@ namespace ft
                 n_near = s->right;
             }
 
+            std::cout << "Five_ p :  " << p->set.first << std::endl;
+            std::cout << "Five_ c :  " << c->set.first << std::endl;
+            std::cout << "Five_ s :  " << s->set.first << std::endl;
+            std::cout << "Five_ n_far :  " << n_far->set.first << std::endl;
+            std::cout << "Five_ n_near :  " << n_near->set.first << std::endl;
+
             if ((p->color == RED) && (s->color == BLACK) && (n_near->color == BLACK) && (n_far->color == BLACK))
             {
-                // std::cout << "Case 1 " << std::endl;
+                std::cout << "Case 1 " << std::endl;
                 // std::cout << "p : " << p->key << std::endl;
                 // std::cout << "c : " << c->key << std::endl;
 
@@ -622,6 +630,7 @@ namespace ft
             }
             else if ((s->color == BLACK) && (n_far->color == RED))
             {
+                std::cout << "case 2 !!!!  " << std::endl;
                 if (islefted)
                 {
                     left_lotate(p, real_root);
@@ -639,6 +648,7 @@ namespace ft
             }
             else if ((s->color == BLACK) && (n_near->color == RED) && (n_far->color == BLACK))
             {
+                std::cout << "case 3 !!!!  " << std::endl;
                 if (islefted)
                 {
                     right_lotate(s, real_root);
@@ -657,10 +667,12 @@ namespace ft
             else if ((p->color == BLACK) && (s->color == BLACK) && (n_near->color == BLACK) && (n_far->color == BLACK))
             {
                 s->color = RED;
+                std::cout << "case 4 !!!!  " << std::endl;
                 deleteRestructFivecase(p->parent, c->parent, real_root);
             }
             else if ((p->color == BLACK) && (s->color == RED) && (n_near->color == BLACK) && (n_far->color == BLACK))
             {
+                std::cout << "case 5 !!!!  " << std::endl;
                 if (islefted)
                 {
                     left_lotate(p, real_root);
@@ -676,7 +688,7 @@ namespace ft
             }
         }
 
-        void deleteRestruct(node<Key, Val, Compare>* hooim, node<Key, Val, Compare>* h_jasic, bool isLeft, node<Key, Val, Compare>* real_root)
+        void deleteRestruct(node<Key, Val, Compare>* hooim, node<Key, Val, Compare>* h_jasic, bool isLeft, node<Key, Val, Compare>* (&real_root))
         {
             if (isLeft == 1)
             {
@@ -704,11 +716,12 @@ namespace ft
             }
         }
 
-        void deleteNode(node<Key, Val, Compare>* real_root, const Key& target_key)
+        void deleteNode(node<Key, Val, Compare> *(&real_root), const Key& target_key)
         {
             node<Key, Val, Compare>* target = find(real_root, target_key);
             node<Key, Val, Compare>* tmp = NULL;
             node<Key, Val, Compare>* nil = new node(0);
+
             nil->color = BLACK;
             // nil->set.first = 0;
             nil->right = NULL;
@@ -723,7 +736,6 @@ namespace ft
             }
             if (target->color == RED)
             {  
-            
                 if ((target->right == NULL) && (target->left == NULL))
                 {
                     if (target->parent->right == target)
@@ -742,7 +754,10 @@ namespace ft
                     // std::cout << std::endl << "red_del left->right : " << target->left->right->key << std::endl << std::endl << std::endl;
                     //!!
                     if ((tmp->left == NULL) && (tmp->right == NULL) && (tmp->color == BLACK))
+                    {
                         nil->parent = tmp->parent;
+                    
+                    }
                     tmp->right = target->right;
                     target->right->parent = tmp;
 
@@ -758,6 +773,9 @@ namespace ft
                     else if (tmp->parent->left == tmp)
                         tmp->parent->left = NULL;
                     tmp->parent = target->parent;
+
+                    if (target->parent == NULL)
+                        ;
                     if (target->parent->right == target)
                         target->parent->right = tmp;
                     else if (target->parent->left == target)
@@ -825,6 +843,7 @@ namespace ft
             }
             else if (target->color == BLACK)
             {
+                std::cout << "  delete Black node :  " << target_key << std::endl;
                 if ((target->right == NULL) && (target->left == NULL))
                 {
                     if (target->parent->right == target)
@@ -839,16 +858,27 @@ namespace ft
                         target->parent->left = NULL;
                         if (target->parent->right != NULL && target->parent->right->color == BLACK)
                             target->parent->right->color = RED;
+                        // 이 부분에, 타겟의 페어런츠가 루트일 경우를 생각하여 조건 넣기!
                         deleteRestructFivecase(target->parent->parent, target->parent, real_root);
                     }
+                    //?
+                    delete(target);
                 }
                 else if (target->left != NULL)
                 {
+                    std::cout << "  delete Black node has left :  " << target_key << std::endl;
                     tmp = getRightest(target->left);
+                    std::cout << "  delete Black node's hooim :  " << tmp->set.first << std::endl;
                     //!!
                     if ((tmp->left == NULL) && (tmp->right == NULL) && (tmp->color == BLACK))
                     {
-                        nil->parent = tmp->parent;
+                        std::cout << "  delete Black node's nil ready :  " << tmp->parent->set.first << std::endl;
+                        if (target != tmp->parent)
+                            nil->parent = tmp->parent;
+                        else
+                            nil->parent = tmp;
+                        std::cout << "  delete Black node's nil->parent :  " << nil->parent->set.first << std::endl;
+
                     }
                     tmp->right = target->right;
                     target->right->parent = tmp;
@@ -857,7 +887,10 @@ namespace ft
                     // target->left->parent = tmp;
 
                     if (tmp->left != NULL)
+                    {
+                        // std::cout << "  error1 !  :  " << std::endl;
                         deleteRestruct(tmp, tmp->left, 1, real_root);
+                    }
                     if (tmp->parent->right == tmp)
                         tmp->parent->right = NULL;
                     else if (tmp->parent->left == tmp)
@@ -881,9 +914,10 @@ namespace ft
                     //!!
                     if (nil->parent != NULL)
                     {
-                        if (((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK)))
+                        if (((nil->parent->color == BLACK) && (nil->parent->right != NULL) && (nil->parent->right->color == BLACK)))
                         {
-                            nil->parent->left->color = 0;
+                            std::cout << "  delete Black node's nil rotate' :  " << target_key << std::endl;
+                            nil->parent->right->color = 0;
                             deleteRestructFivecase(nil->parent->parent, nil->parent, real_root);
                         }
                     }

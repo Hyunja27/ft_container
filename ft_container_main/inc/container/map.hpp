@@ -279,12 +279,22 @@ namespace ft
                 return (0);
             else
             {
+                // std::cout << "param : " << param << std::endl;
                 if (root->find(root, param) != NULL)
                 {
-                    node<Key, T, Compare>* tmp = root->getRightest(root);
-                    if (tmp == NULL)
-                        tmp = root->getleftest(root);
-                    root->deleteNode(root, param);
+                    // node<Key, T, Compare>* tmp = root->getRightest(root);
+                    // if (tmp == NULL)
+                    //     tmp = root->getleftest(root);
+                    std::cout << "before erase root : " << root << std::endl;
+                    std::cout << "erase key : " << param << std::endl;
+
+
+                    root->deleteNode(this->root, param);
+
+
+                    // root = root->getRoot(root);
+
+                    std::cout << "after erase root : " << root << std::endl;
                     
                     // std::cout << "root " << root << std::endl;
                     // std::cout << "tmp : " << tmp << std::endl;
@@ -295,22 +305,23 @@ namespace ft
                         root = NULL;
                         saveRoot();
                     }
-                    else if (tmp != NULL)
-                    {
-                        /////??????????????
-                        // while ((tmp->getParent(tmp) && (tmp != tmp->getParent(tmp))))
-                        // {
-                        //     tmp = tmp->getParent(tmp);
-                        // }
-                        // std::cout << "?????" << std::endl;
-                        // tmp = root->getRoot(tmp);
+                    // else if (tmp != NULL)
+                    // {
+                    //     // /////??????????????
+                    //     // while ((tmp->getParent(tmp) && (tmp != tmp->getParent(tmp))))
+                    //     // {
+                    //     //     tmp = tmp->getParent(tmp);
+                    //     // }
+                    //     // // std::cout << "?????" << std::endl;
+                    //     // tmp = root->getRoot(tmp);
 
-                        // while (tmp->parent != NULL)
-                        //     tmp = tmp->parent;
-                        // root = tmp;
+                    //     // while (tmp->parent != NULL)
+                    //     //     tmp = tmp->parent;
+                    //     // root = tmp;
 
-                        saveRoot();
-                    }
+                    //     saveRoot();
+                    // }
+                    saveRoot();
                     return (1);
                 }
                 else

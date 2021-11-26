@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sunghyunpark <sunghyunpark@student.42.f    +#+  +:+       +#+        */
+/*   By: spark <spark@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 18:15:39 by sunghyunpar       #+#    #+#             */
-/*   Updated: 2021/11/25 19:40:30 by sunghyunpar      ###   ########.fr       */
+/*   Updated: 2021/11/26 19:29:11 by spark            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,19 +86,19 @@ int		main(void)
 	ft_erase(mp, --mp.end());
 
 	ft_erase(mp, mp.begin(), ++(++(++mp.begin())));
-	// ft_erase(mp, --(--(--mp.end())), --mp.end());
+	ft_erase(mp, --(--(--mp.end())), --mp.end());
 
-	// mp[10] = "Hello";
-	// mp[11] = "Hi there";
-	// printSize(mp);
-	// ft_erase(mp, --(--(--mp.end())), mp.end());
+	mp[10] = "Hello";
+	mp[11] = "Hi there";
+	printSize(mp);
+	ft_erase(mp, --(--(--mp.end())), mp.end());
 
-	// mp[12] = "ONE";
-	// mp[13] = "TWO";
-	// mp[14] = "THREE";
-	// mp[15] = "FOUR";
-	// printSize(mp);
-	// ft_erase(mp, mp.begin(), mp.end());
+	mp[12] = "ONE";
+	mp[13] = "TWO";
+	mp[14] = "THREE";
+	mp[15] = "FOUR";
+	printSize(mp);
+	ft_erase(mp, mp.begin(), mp.end());
 
 	return (0);
 }

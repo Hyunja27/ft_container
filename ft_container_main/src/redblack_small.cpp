@@ -579,7 +579,10 @@ void deleteNode(unsigned int target_key)
             else if (tmp->parent->left == tmp)
                 tmp->parent->left = NULL;
             tmp->parent = target->parent;
-            if (target->parent->right == target)
+
+            if (target->parent == NULL)
+                ;
+            else if (target->parent->right == target)
                 target->parent->right = tmp;
             else if (target->parent->left == target)
                 target->parent->left = tmp;
@@ -587,7 +590,6 @@ void deleteNode(unsigned int target_key)
             // std::cout << "tmp : " << tmp->key << std::endl;
             // std::cout << "tmp_right : " << tmp->right->key << std::endl;
             // std::cout << "tmp_left : " << tmp->left->key << std::endl;
-
 
             if (target->left != NULL)
             {
@@ -786,7 +788,13 @@ int main(void)
 
     // deleteNode(newnode12->key);
     // deleteNode(newnode7->key);
-    // deleteNode(newnode10->key);
+
+    std::cout << std::endl << std::endl << std::endl << "elem_num : " << elem_num << std::endl;
+    std::cout << std::endl << "root : " << tree->root->key << std::endl;
+
+    
+    deleteNode(newnode4->key);
+
     // deleteNode(newnode9->key);
 
     // deleteNode(newnode4->key);
