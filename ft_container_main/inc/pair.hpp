@@ -914,8 +914,8 @@ namespace ft
                     else if (target->parent->left == target)
                     {
                         target->parent->left = NULL;
-                        if (target->parent->right != NULL && target->parent->right->color == BLACK)
-                            target->parent->right->color = RED;
+                        // if (target->parent->right != NULL && target->parent->right->color == BLACK)
+                        //     target->parent->right->color = RED;
                         // 이 부분에, 타겟의 페어런츠가 루트일 경우를 생각하여 조건 넣기!
                         if (target->parent->parent != NULL)
                             deleteRestructFivecase(target->parent->parent, target->parent, real_root);
@@ -1002,6 +1002,7 @@ namespace ft
                 else if ((target->right != NULL))
                 {
                     tmp = getRightest(target->right);
+                    std::cout << "  delete Black node's only right child' :  " << tmp->set.first << std::endl;
                     //!!
                     if ((tmp->left == NULL) && (tmp->right == NULL) && (tmp->color == BLACK))
                         nil->parent = tmp->parent;
@@ -1016,6 +1017,7 @@ namespace ft
                         tmp->parent->left = NULL;
                     tmp->parent = target->parent;
 
+
                     // std::cout << "target : " << target->parent << std::endl;
                     // std::cout << "target : " << target->parent->right << std::endl;
                     // std::cout << "target : " << target->parent->left << std::endl;
@@ -1025,11 +1027,13 @@ namespace ft
                     else if ((target->parent != NULL) && target->parent->left == target)
                         target->parent->left = tmp;
 
-                    if (target->right != NULL)
+                    if (target->right != NULL && target->right != tmp)
                     {
                         tmp->right = target->right;
                         target->right->parent = tmp;
                     }
+
+                    std::cout << "  error point1 :  " << std::endl;
 
                     //!!
                     if (nil->parent != NULL)
@@ -1043,14 +1047,17 @@ namespace ft
                                 real_root = nil->parent;
                         }
                     }
+                    real_root = getRoot(tmp);
                     delete(target);
                     tmp->color = BLACK;
                 }
             }
             // if (nil->parent || nil->parent->parent == NULL)
             //     real_root = nil->parent;
+            // real_root = getRoot(tmp);
             // new_root = getRoot(tmp);
             // real_root = new_root;
+
             delete(nil);
         }
 

@@ -291,6 +291,8 @@ namespace ft
 
                     root->deleteNode(this->root, param);
 
+                    std::cout << "after root pointer: " << root << std::endl;
+
 
                     // root = root->getRoot(root);
 
