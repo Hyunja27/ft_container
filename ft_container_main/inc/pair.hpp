@@ -203,6 +203,7 @@ namespace ft
 
         node<Key, Val, Compare>* getleftest(node<Key, Val, Compare>* base)
         {
+            // std::cout << "      get_leftest  base       : " << base->set.first << std::endl;
             if (base == NULL || base->left == NULL)
                 return (base);
             return (getleftest(base->left));
@@ -324,8 +325,8 @@ namespace ft
                tmp_root->left = target;
                target->parent = tmp_root;
 
-               std::cout << "      left_lo_target     : " << target->set.first << std::endl;
-               std::cout << "      tmp_val            : " << tmp_root->set.first << std::endl;
+            //    std::cout << "      left_lo_target     : " << target->set.first << std::endl;
+            //    std::cout << "      tmp_val            : " << tmp_root->set.first << std::endl;
 
                real_root = tmp_root;
            }
@@ -369,8 +370,8 @@ namespace ft
                tmp_root->right = target;
                target->parent = tmp_root;
 
-               std::cout << "      right_lo_target     : " << target->set.first << std::endl;
-               std::cout << "      tmp_val            : " << tmp_root->set.first << std::endl;
+            //    std::cout << "      right_lo_target     : " << target->set.first << std::endl;
+            //    std::cout << "      tmp_val            : " << tmp_root->set.first << std::endl;
 
                real_root = tmp_root;
            }
@@ -587,7 +588,7 @@ namespace ft
         }
 
 
-        void deleteRestructFivecase(node<Key, Val, Compare>* p, node<Key, Val, Compare>* c, node<Key, Val, Compare>* (&real_root))
+        void deleteRestructFivecase(node<Key, Val, Compare>* p, node<Key, Val, Compare>* c, node<Key, Val, Compare>* (&real_root), bool restrict_left = 0)
         {
             bool islefted = 0;
             node<Key, Val, Compare>* s = NULL;
@@ -596,10 +597,19 @@ namespace ft
 
             if (p == NULL)
                 return ;
-            if (p->left == c)
+            
+            std::cout << "Five_ p :  (" << p->color << ")   " << p->set.first << std::endl;
+            std::cout << "Five_ c :  (" << c->color << ")   " << c->set.first << std::endl;
+
+            if (restrict_left == 1)
                 islefted = 1;
-            else if (p->right == c)
-                islefted = 0;
+            else
+            {
+                if (p->left == c)
+                    islefted = 1;
+                else if (p->right == c)
+                    islefted = 0;
+            }
             if (islefted)
             {
                 s = p->right;
@@ -613,8 +623,8 @@ namespace ft
                 n_near = s->right;
             }
 
-            std::cout << "Five_ p :  " << p->set.first << std::endl;
-            std::cout << "Five_ c :  " << c->set.first << std::endl;
+            // std::cout << "Five_ p :  " << p->set.first << std::endl;
+            // std::cout << "Five_ c :  " << c->set.first << std::endl;
             std::cout << "Five_ s :  " << s->set.first << std::endl;
             std::cout << "Five_ n_far :  " << n_far->set.first << std::endl;
             std::cout << "Five_ n_near :  " << n_near->set.first << std::endl;
@@ -681,7 +691,8 @@ namespace ft
                 }
                 else
                 {
-                    left_lotate(p, real_root);
+                    //?위아래 둘다 left...?
+                    right_lotate(p, real_root);
                     s->color = BLACK;
                     p->color = RED;
                 }
@@ -728,6 +739,7 @@ namespace ft
             nil->left = NULL;
             nil->parent = NULL;
             // std::cout << std::endl << "deleting : " << target->key << std::endl << std::endl << std::endl;
+            std::cout << "  when start deleting, root is :  " << real_root->set.first << std::endl;
             if (target->parent == NULL && (target->right == NULL) && (target->left == NULL))
             {
                 delete(nil);
@@ -859,7 +871,14 @@ namespace ft
                         if (target->parent->right != NULL && target->parent->right->color == BLACK)
                             target->parent->right->color = RED;
                         // 이 부분에, 타겟의 페어런츠가 루트일 경우를 생각하여 조건 넣기!
-                        deleteRestructFivecase(target->parent->parent, target->parent, real_root);
+                        if (target->parent->parent != NULL)
+                            deleteRestructFivecase(target->parent->parent, target->parent, real_root);
+                        else
+                        {
+                            nil->parent = target->parent;
+                            // nil->parent->left = nil;
+                            deleteRestructFivecase(nil->parent, nil, real_root, 1);
+                        }
                     }
                     //?
                     delete(target);

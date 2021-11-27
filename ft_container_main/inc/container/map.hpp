@@ -285,7 +285,7 @@ namespace ft
                     // node<Key, T, Compare>* tmp = root->getRightest(root);
                     // if (tmp == NULL)
                     //     tmp = root->getleftest(root);
-                    std::cout << "before erase root : " << root << std::endl;
+                    std::cout << "before erase root : " << root->set.first << std::endl;
                     std::cout << "erase key : " << param << std::endl;
 
 
@@ -294,7 +294,7 @@ namespace ft
 
                     // root = root->getRoot(root);
 
-                    std::cout << "after erase root : " << root << std::endl;
+                    std::cout << "after erase root : " << root->set.first << std::endl;
                     
                     // std::cout << "root " << root << std::endl;
                     // std::cout << "tmp : " << tmp << std::endl;
