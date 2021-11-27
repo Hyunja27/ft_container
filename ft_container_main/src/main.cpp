@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spark <spark@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sunghyunpark <sunghyunpark@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 18:15:39 by sunghyunpar       #+#    #+#             */
-/*   Updated: 2021/11/26 19:29:11 by spark            ###   ########.fr       */
+/*   Updated: 2021/11/27 16:33:22 by sunghyunpar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,10 @@ void	ft_erase(MAP &mp, U param)
 template <typename MAP, typename U, typename V>
 void	ft_erase(MAP &mp, U param, V param2)
 {
+	TESTED_NAMESPACE::mapIterator<T1, T2> it = mp.begin();
 	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
 	// std::cout << "???????" << std::endl;
+	printBT(it.getSave()->root);
 
 	mp.erase(param, param2);
 	printSize(mp);
@@ -73,11 +75,11 @@ int		main(void)
 	TESTED_NAMESPACE::mapIterator<T1, T2> iter = mp.begin();
 	printSize(mp);
 
-	printBT(iter.getSave()->root);
+	// printBT(iter.getSave()->root);
 	
 	ft_erase(mp, ++mp.begin());
 
-	printBT(iter.getSave()->root);
+	// printBT(iter.getSave()->root);
 
 	ft_erase(mp, mp.begin());
 
@@ -89,14 +91,21 @@ int		main(void)
 	ft_erase(mp, --(--(--mp.end())), --mp.end());
 
 	mp[10] = "Hello";
+	printBT(iter.getSave()->root);
 	mp[11] = "Hi there";
+	printBT(iter.getSave()->root);
 	printSize(mp);
 	ft_erase(mp, --(--(--mp.end())), mp.end());
 
 	mp[12] = "ONE";
+	printBT(iter.getSave()->root);
 	mp[13] = "TWO";
+	printBT(iter.getSave()->root);
 	mp[14] = "THREE";
+	printBT(iter.getSave()->root);
 	mp[15] = "FOUR";
+	printBT(iter.getSave()->root);
+	
 	printSize(mp);
 	ft_erase(mp, mp.begin(), mp.end());
 
