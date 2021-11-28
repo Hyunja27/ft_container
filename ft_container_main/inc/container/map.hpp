@@ -296,7 +296,7 @@ namespace ft
 
                     // root = root->getRoot(root);
 
-                    // std::cout << "after erase root : " << root->set.first << std::endl;
+                    std::cout << "after erase root : " << root->set.first << std::endl;
                     
                     // std::cout << "root " << root << std::endl;
                     // std::cout << "tmp : " << tmp << std::endl;

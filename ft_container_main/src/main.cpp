@@ -6,7 +6,7 @@
 /*   By: sunghyunpark <sunghyunpark@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 18:15:39 by sunghyunpar       #+#    #+#             */
-/*   Updated: 2021/11/28 19:52:14 by sunghyunpar      ###   ########.fr       */
+/*   Updated: 2021/11/28 20:21:47 by sunghyunpar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ int		main(void)
 	printBT(iter.getSave()->root);
 
 	ft_erase(mp, 54); // right != NULL; left != NULL
-	printBT(iter.getSave()->root);
+	// printBT(iter.getSave()->root);
 
 
 	// /* After deleting 24 and 54, I would get:

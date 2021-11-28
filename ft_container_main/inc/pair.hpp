@@ -330,8 +330,8 @@ namespace ft
                tmp_root->left = target;
                target->parent = tmp_root;
 
-            //    std::cout << "      left_lo_target     : " << target->set.first << std::endl;
-            //    std::cout << "      tmp_val            : " << tmp_root->set.first << std::endl;
+               std::cout << "      left_lo_target     : " << target->set.first << std::endl;
+               std::cout << "      tmp_val            : " << tmp_root->set.first << std::endl;
 
                real_root = tmp_root;
            }
@@ -375,8 +375,8 @@ namespace ft
                tmp_root->right = target;
                target->parent = tmp_root;
 
-            //    std::cout << "      right_lo_target     : " << target->set.first << std::endl;
-            //    std::cout << "      tmp_val            : " << tmp_root->set.first << std::endl;
+               std::cout << "      right_lo_target     : " << target->set.first << std::endl;
+               std::cout << "      tmp_val            : " << tmp_root->set.first << std::endl;
 
                real_root = tmp_root;
            }
@@ -620,8 +620,8 @@ namespace ft
             if (p == NULL)
                 return ;
             
-            // std::cout << "Five_ p :  (" << p->color << ")   " << p->set.first << std::endl;
-            // std::cout << "Five_ c :  (" << c->color << ")   " << c->set.first << std::endl;
+            std::cout << "Five_ p :  (" << p->color << ")   " << p->set.first << std::endl;
+            std::cout << "Five_ c :  (" << c->color << ")   " << c->set.first << std::endl;
             // std::cout << "Five_ s :  (" << s->color << ")  " << s->set.first << std::endl;
 
 
@@ -656,15 +656,15 @@ namespace ft
                 n_far = nil3;
             }
 
-            // std::cout << "Five_ p :  " << p->set.first << std::endl;
-            // std::cout << "Five_ c :  " << c->set.first << std::endl;
-            // std::cout << "Five_ s :  (" << s->color << ")  " << s->set.first << std::endl;
-            // std::cout << "Five_ n_far :  (" << n_far->color << ")  " << n_far->set.first << std::endl;
-            // std::cout << "Five_ n_near :  (" << n_near->color << ")  " << n_near->set.first << std::endl;
+            std::cout << "Five_ p :  " << p->set.first << std::endl;
+            std::cout << "Five_ c :  " << c->set.first << std::endl;
+            std::cout << "Five_ s :  (" << s->color << ")  " << s->set.first << std::endl;
+            std::cout << "Five_ n_far :  (" << n_far->color << ")  " << n_far->set.first << std::endl;
+            std::cout << "Five_ n_near :  (" << n_near->color << ")  " << n_near->set.first << std::endl;
 
             if ((n_near != NULL) && (n_far != NULL) && (p->color == RED) && (s->color == BLACK) && (n_near->color == BLACK) && (n_far->color == BLACK))
             {
-                // std::cout << "Case 1 " << std::endl;
+                std::cout << "Case 1 " << std::endl;
                 // std::cout << "p : " << p->key << std::endl;
                 // std::cout << "c : " << c->key << std::endl;
 
@@ -676,7 +676,7 @@ namespace ft
             }
             else if ((n_far != NULL) && (s->color == BLACK) && (n_far->color == RED))
             {
-                // std::cout << "case 2 !!!!  " << std::endl;
+                std::cout << "case 2 !!!!  " << std::endl;
                 if (islefted)
                 {
                     left_lotate(p, real_root);
@@ -694,7 +694,7 @@ namespace ft
             }
             else if ((n_near != NULL) && (n_far != NULL) && (s->color == BLACK) && (n_near->color == RED) && (n_far->color == BLACK))
             {
-                // std::cout << "case 3 !!!!  " << std::endl;
+                std::cout << "case 3 !!!!  " << std::endl;
                 if (islefted)
                 {
                     right_lotate(s, real_root);
@@ -713,12 +713,12 @@ namespace ft
             else if ((n_near != NULL) && (n_far != NULL) && (p->color == BLACK) && (s->color == BLACK) && (n_near->color == BLACK) && (n_far->color == BLACK))
             {
                 s->color = RED;
-                // std::cout << "case 4 !!!!  " << std::endl;
+                std::cout << "case 4 !!!!  " << std::endl;
                 deleteRestructFivecase(p->parent, c->parent, real_root);
             }
             else if ((n_near != NULL) && (n_far != NULL) && (p->color == BLACK) && (s->color == RED) && (n_near->color == BLACK) && (n_far->color == BLACK))
             {
-                // std::cout << "case 5 !!!!  " << std::endl;
+                std::cout << "case 5 !!!!  " << std::endl;
                 if (islefted)
                 {
                     left_lotate(p, real_root);
@@ -762,8 +762,8 @@ namespace ft
             }
             if (hooim->color == BLACK)
             {
-                // std::cout << "h_jasic : " << h_jasic->key << std::endl;
-                // std::cout << "hooim : " << hooim->key << std::endl;
+                std::cout << "d_restruct h_jasic : " << h_jasic->set.first << std::endl;
+                std::cout << "d_restruct hooim : " << hooim->set.first << std::endl;
 
                 if (h_jasic->color == RED)
                     h_jasic->color = BLACK;
@@ -797,6 +797,8 @@ namespace ft
             }
             if (target->color == RED)
             {  
+                std::cout << "  delete Red node :  " << target_key << std::endl;
+
                 if ((target->right == NULL) && (target->left == NULL))
                 {
                     if (target->parent->right == target)
@@ -807,17 +809,26 @@ namespace ft
                 else if (target->left != NULL)
                 {
                     tmp = getRightest(target->left);
+
+                    std::cout << "  delete Red node has left :  " << target_key << std::endl;
+                    std::cout << "  delete Red node's hooim :  " << tmp->set.first << std::endl;
+                    //!!
                     // std::cout << std::endl << "red_del tmp : " << tmp->key << std::endl << std::endl << std::endl;
                     // std::cout << std::endl << "red_del target : " << target->key << std::endl << std::endl << std::endl;
 
                     // std::cout << std::endl << "red_del left : " << target->left->key << std::endl << std::endl << std::endl;
                     // std::cout << std::endl << "red_del right : " << target->right->key << std::endl << std::endl << std::endl;
                     // std::cout << std::endl << "red_del left->right : " << target->left->right->key << std::endl << std::endl << std::endl;
-                    //!!
+                    // !!
                     if ((tmp->left == NULL) && (tmp->right == NULL) && (tmp->color == BLACK))
                     {
-                        nil->parent = tmp->parent;
-                    
+                        std::cout << "  delete Red node's nil ready :  " << tmp->parent->set.first << std::endl;
+                        if (target != tmp->parent)
+                            nil->parent = tmp->parent;
+                        else
+                            nil->parent = tmp;
+                        std::cout << "  delete Red node's nil->parent :  " << nil->parent->set.first << std::endl;
+
                     }
                     tmp->right = target->right;
                     target->right->parent = tmp;
@@ -835,29 +846,35 @@ namespace ft
                         tmp->parent->left = NULL;
                     tmp->parent = target->parent;
 
-                    if (target->parent == NULL)
-                        ;
-                    if (target->parent->right == target)
-                        target->parent->right = tmp;
-                    else if (target->parent->left == target)
-                        target->parent->left = tmp;
+                    if (target->parent != NULL)
+                    {
+                        if (target->parent->right == target)
+                            target->parent->right = tmp;
+                        else if (target->parent->left == target)
+                            target->parent->left = tmp;
+                    }
 
-                    if (target->left != NULL)
+                    if (target->left != NULL && target->left != tmp)
                     {
                         tmp->left = target->left;
                         target->left->parent = tmp;
                     }
-                    tmp->color = RED;
-                    delete(target);
                     //!!
                     if (nil->parent != NULL)
                     {
                         if ((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK))
                         {
-                            nil->parent->left->color = RED;
-                            deleteRestructFivecase(nil->parent->parent, nil->parent, real_root);
+                            nil->parent->right->color = 0;
+                            if (nil->parent->parent != NULL)
+                                deleteRestructFivecase(nil->parent->parent, nil->parent, real_root);
+                            else
+                                real_root = nil->parent;
                         }
                     }
+                    tmp->color = RED;
+                    delete(target);
+
+                    std::cout << "  error point :  " << std::endl;
 
                 }
                 else if ((target->right != NULL))
@@ -877,29 +894,32 @@ namespace ft
                     else if (tmp->parent->left == tmp)
                         tmp->parent->left = NULL;
                     tmp->parent = target->parent;
-                    if (target->parent->right == target)
+
+                    if ((target->parent != NULL) && target->parent->right == target)
                         target->parent->right = tmp;
-                    else if (target->parent->left == target)
+                    else if ((target->parent != NULL) && target->parent->left == target)
                         target->parent->left = tmp;
 
-                    if (target->right != NULL)
+                    if (target->right != NULL && target->right != tmp)
                     {
-                    
                         tmp->right = target->right;
                         target->right->parent = tmp;
                     }
-                    tmp->color = RED;
-                    delete(target);
                     //!!
 
                     if (nil->parent != NULL)
                     {
                         if ((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK))
                         {
-                            nil->parent->left->color = 0;
-                            deleteRestructFivecase(nil->parent->parent, nil->parent, real_root);
+                            nil->parent->left->color = RED;
+                            if (nil->parent->parent != NULL)
+                                deleteRestructFivecase(nil->parent->parent, nil->parent, real_root);
+                            else
+                                real_root = nil->parent;
                         }
                     }
+                    tmp->color = RED;
+                    delete(target);
                 }
             }
             else if (target->color == BLACK)
@@ -989,7 +1009,7 @@ namespace ft
                     // std::cout << "tmp_right : " << tmp->right->key << std::endl;
 
                     // std::cout << "tmp_left : " << tmp->left->key << std::endl;
-                    if (target->left != NULL)
+                    if (target->left != NULL && target->left != tmp)
                     {
                         tmp->left = target->left;
                         target->left->parent = tmp;
