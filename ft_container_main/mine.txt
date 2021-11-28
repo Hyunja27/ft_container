@@ -1,0 +1,100 @@
+size: 5
+max_size: 2305843009213693951
+
+Content is:
+- key: a | value: 7
+- key: b | value: 14
+- key: c | value: 21
+- key: d | value: 28
+- key: e | value: 35
+###############################################
+0
+0
+key: b | value: 14
+size: 5
+max_size: 2305843009213693951
+
+Content is:
+- key: a | value: 7
+- key: b | value: 14
+- key: c | value: 21
+- key: d | value: 28
+- key: e | value: 35
+###############################################
+0
+0
+key: b | value: 14
+key: c | value: 21
+TEST OFFSET
+key: b | value: 14
+key: c | value: 21
+[rev] key: e | value: 35
+[rev] key: d | value: 28
+[rev] key: c | value: 21
+[rev] key: b | value: 14
+[rev] key: a | value: 7
+printReverse:
+-> key: e | value: 35
+-> key: d | value: 28
+-> key: c | value: 21
+-> key: b | value: 14
+-> key: a | value: 7
+_______________________________________________
+size: 5
+max_size: 2305843009213693951
+
+Content is:
+- key: a | value: 7
+- key: b | value: 14
+- key: c | value: 21
+- key: d | value: 28
+- key: e | value: 35
+###############################################
+0
+0
+key: b | value: 14
+key: c | value: 21
+TEST OFFSET
+key: b | value: 14
+key: c | value: 21
+[rev] key: e | value: 35
+[rev] key: d | value: 28
+[rev] key: c | value: 21
+[rev] key: b | value: 14
+[rev] key: a | value: 7
+printReverse:
+-> key: e | value: 35
+-> key: d | value: 28
+-> key: c | value: 21
+-> key: b | value: 14
+-> key: a | value: 7
+_______________________________________________
+size: 5
+max_size: 2305843009213693951
+
+Content is:
+- key: a | value: 7
+- key: b | value: 14
+- key: c | value: 21
+- key: d | value: 28
+- key: e | value: 35
+###############################################
+0
+0
+key: b | value: 14
+key: c | value: 21
+TEST OFFSET
+key: b | value: 14
+key: c | value: 21
+[rev] key: e | value: 35
+[rev] key: d | value: 28
+[rev] key: c | value: 21
+[rev] key: b | value: 14
+[rev] key: a | value: 7
+printReverse:
+-> key: e | value: 35
+-> key: d | value: 28
+-> key: c | value: 21
+-> key: b | value: 14
+-> key: a | value: 7
+_______________________________________________

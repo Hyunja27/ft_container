@@ -285,13 +285,13 @@ namespace ft
                     // node<Key, T, Compare>* tmp = root->getRightest(root);
                     // if (tmp == NULL)
                     //     tmp = root->getleftest(root);
-                    std::cout << "before erase root : " << root->set.first << std::endl;
-                    std::cout << "erase key : " << param << std::endl;
+                    // std::cout << "before erase root : " << root->set.first << std::endl;
+                    // std::cout << "erase key : " << param << std::endl;
 
 
                     root->deleteNode(this->root, param);
 
-                    std::cout << "after root pointer: " << root << std::endl;
+                    // std::cout << "after root pointer: " << root << std::endl;
 
 
                     // root = root->getRoot(root);

@@ -42,8 +42,8 @@ namespace ft
             //===========================operator= ======================
             mapIterator<Key, Val, Compare>& operator=(const mapIterator<Key, Val, Compare> &origin)
             {
-                ptr = origin.ptr;
-                this->save = origin.save;
+                ptr = origin.getPtr();
+                this->save = origin.getSave();
                 return (*this);
             }
 
@@ -322,22 +322,22 @@ namespace ft
 
             }
 
-            mapReverseIterator(const mapReverseConstIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(origin.getSave())
-            {
+            // mapReverseIterator(const mapReverseConstIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(origin.getSave())
+            // {
 
-            }
-
-            //@question
-            mapReverseIterator(const mapIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(origin.getSave())
-            {
-
-            }
+            // }
 
             //@question
-            mapReverseIterator(const mapConstIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(origin.getSave())
+            mapReverseIterator(const mapIterator<Key, Val, Compare> &origin) : ptr(origin.getPrev()), save(origin.getSave())
             {
 
             }
+
+            // //@question
+            // mapReverseIterator(const mapConstIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(origin.getSave())
+            // {
+
+            // }
 
             //===========================operator= ======================
             mapReverseIterator<Key, Val, Compare>& operator=(const mapReverseIterator<Key, Val, Compare> &origin)
@@ -349,7 +349,7 @@ namespace ft
 
             mapReverseIterator<Key, Val, Compare>& operator=(const mapIterator<Key, Val, Compare> &origin)
             {
-                this->ptr = origin.getPtr();
+                this->ptr = origin.getPrev();
                 this->save = origin.getSave();
                 return (*this);
             }
@@ -489,12 +489,12 @@ namespace ft
 				
 			}
 
-			mapReverseConstIterator(const mapIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(origin.getSave())
+			mapReverseConstIterator(const mapIterator<Key, Val, Compare> &origin) : ptr(origin.getPrev()), save(origin.getSave())
 			{
 				
 			}
 
-			mapReverseConstIterator(const mapConstIterator<Key, Val, Compare> &origin) : ptr(origin.getPtr()), save(origin.getSave())
+			mapReverseConstIterator(const mapConstIterator<Key, Val, Compare> &origin) : ptr(origin.getPrev()), save(origin.getSave())
 			{
 				
 			}
@@ -515,14 +515,14 @@ namespace ft
 
             mapReverseConstIterator<Key, Val, Compare>& operator=(const mapConstIterator<Key, Val, Compare> &origin)
 			{
-				this->ptr = origin.getPtr();
+				this->ptr = origin.getPrev();
                 this->save = origin.getSave();
 				return (*this);
 			}
 			
 			mapReverseConstIterator<Key, Val, Compare>& operator=(const mapIterator<Key, Val, Compare> &origin)
 			{
-				this->ptr = origin.getPtr();
+				this->ptr = origin.getPrev();
                 this->save = origin.getSave();
 				return (*this);
 			}
@@ -570,12 +570,12 @@ namespace ft
                 return (tmp);
             }
 
-			pair<const Key, Val>& operator*(void) const
+			const pair<const Key, Val>& operator*(void) const
             {
                 return (ptr->set);
             }
 
-            pair<const Key, Val>* operator->(void) const
+            const pair<const Key, Val>* operator->(void) const
             {
                 return (&(this->operator*()));
             }
@@ -627,45 +627,45 @@ namespace ft
 				return (!operator==(origin));
 			}
 
-			bool		  operator<(const mapReverseConstIterator<Key, Val, Compare> &origin) const
-			{
-				return (ptr > origin.getPtr());
-			}
+			// bool		  operator<(const mapReverseConstIterator<Key, Val, Compare> &origin) const
+			// {
+			// 	return (ptr > origin.getPtr());
+			// }
 
-			bool		  operator<(const mapReverseIterator<Key, Val, Compare> &origin) const
-			{
-				return (ptr > origin.getPtr());
-			}
+			// bool		  operator<(const mapReverseIterator<Key, Val, Compare> &origin) const
+			// {
+			// 	return (ptr > origin.getPtr());
+			// }
 
-			bool		  operator<=(const mapReverseConstIterator<Key, Val, Compare> &origin) const
-			{
-				return ( operator==(origin) || operator<(origin) );
-			}
+			// bool		  operator<=(const mapReverseConstIterator<Key, Val, Compare> &origin) const
+			// {
+			// 	return ( operator==(origin) || operator<(origin) );
+			// }
 
-			bool		  operator<=(const mapReverseIterator<Key, Val, Compare> &origin) const
-			{
-				return ( operator==(origin) || operator<(origin) );
-			}
+			// bool		  operator<=(const mapReverseIterator<Key, Val, Compare> &origin) const
+			// {
+			// 	return ( operator==(origin) || operator<(origin) );
+			// }
 
-			bool		  operator>(const mapReverseConstIterator<Key, Val, Compare> &origin) const
-			{
-				return (!operator<=(origin));
-			}
+			// bool		  operator>(const mapReverseConstIterator<Key, Val, Compare> &origin) const
+			// {
+			// 	return (!operator<=(origin));
+			// }
 
-			bool		  operator>(const mapReverseIterator<Key, Val, Compare> &origin) const
-			{
-				return (!operator<=(origin));
-			}
+			// bool		  operator>(const mapReverseIterator<Key, Val, Compare> &origin) const
+			// {
+			// 	return (!operator<=(origin));
+			// }
 
-			bool		  operator>=(const mapReverseConstIterator<Key, Val, Compare> &origin) const
-			{
-				return (operator>(origin) || operator==(origin));
-			}
+			// bool		  operator>=(const mapReverseConstIterator<Key, Val, Compare> &origin) const
+			// {
+			// 	return (operator>(origin) || operator==(origin));
+			// }
 
-			bool		  operator>=(const mapReverseIterator<Key, Val, Compare> &origin) const
-			{
-				return (operator>(origin) || operator==(origin));
-			}
+			// bool		  operator>=(const mapReverseIterator<Key, Val, Compare> &origin) const
+			// {
+			// 	return (operator>(origin) || operator==(origin));
+			// }
 
             mapConstIterator<Key, Val, Compare> base(void) const
 			{
