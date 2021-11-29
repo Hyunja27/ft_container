@@ -147,6 +147,46 @@ namespace ft
                 return (!operator==(original));
             }
 
+            bool		  operator<(const mapConstIterator<Key, Val, Compare> &origin) const
+			{
+				return (ptr < origin.getPtr());
+			}
+
+			bool		  operator<(const mapIterator<Key, Val, Compare> &origin) const
+			{
+				return (ptr < origin.getPtr());
+			}
+
+			bool		  operator<=(const mapConstIterator<Key, Val, Compare> &origin) const
+			{
+				return ( operator==(origin) || operator<(origin) );
+			}
+
+			bool		  operator<=(const mapIterator<Key, Val, Compare> &origin) const
+			{
+				return ( operator==(origin) || operator<(origin) );
+			}
+
+			bool		  operator>(const mapConstIterator<Key, Val, Compare> &origin) const
+			{
+				return (!operator<=(origin));
+			}
+
+			bool		  operator>(const mapIterator<Key, Val, Compare> &origin) const
+			{
+				return (!operator<=(origin));
+			}
+
+			bool		  operator>=(const mapConstIterator<Key, Val, Compare> &origin) const
+			{
+				return (operator>(origin) || operator==(origin));
+			}
+
+			bool		  operator>=(const mapIterator<Key, Val, Compare> &origin) const
+			{
+				return (operator>(origin) || operator==(origin));
+			}
+
 
     };
 
@@ -306,6 +346,46 @@ namespace ft
             {
                 return (!operator==(original));
             }
+
+            bool		  operator<(const mapConstIterator<Key, Val, Compare> &origin) const
+			{
+				return (ptr < origin.getPtr());
+			}
+
+			bool		  operator<(const mapIterator<Key, Val, Compare> &origin) const
+			{
+				return (ptr < origin.getPtr());
+			}
+
+			bool		  operator<=(const mapConstIterator<Key, Val, Compare> &origin) const
+			{
+				return ( operator==(origin) || operator<(origin) );
+			}
+
+			bool		  operator<=(const mapIterator<Key, Val, Compare> &origin) const
+			{
+				return ( operator==(origin) || operator<(origin) );
+			}
+
+			bool		  operator>(const mapConstIterator<Key, Val, Compare> &origin) const
+			{
+				return (!operator<=(origin));
+			}
+
+			bool		  operator>(const mapIterator<Key, Val, Compare> &origin) const
+			{
+				return (!operator<=(origin));
+			}
+
+			bool		  operator>=(const mapConstIterator<Key, Val, Compare> &origin) const
+			{
+				return (operator>(origin) || operator==(origin));
+			}
+
+			bool		  operator>=(const mapIterator<Key, Val, Compare> &origin) const
+			{
+				return (operator>(origin) || operator==(origin));
+			}
     };
     template <typename Key, typename Val, typename Compare = less<Key> >
     class mapReverseIterator
@@ -462,6 +542,26 @@ namespace ft
             {
                 return (!operator==(original));
             }
+
+			bool		  operator<(const mapReverseIterator<Key, Val, Compare> &origin) const
+			{
+				return (ptr > origin.getPtr());
+			}
+
+			bool		  operator<=(const mapReverseIterator<Key, Val, Compare> &origin) const
+			{
+				return ( operator==(origin) || operator<(origin) );
+			}
+
+			bool		  operator>(const mapReverseIterator<Key, Val, Compare> &origin) const
+			{
+				return (!operator<=(origin));
+			}
+
+			bool		  operator>=(const mapReverseIterator<Key, Val, Compare> &origin) const
+			{
+				return (operator>(origin) || operator==(origin));
+			}
 
             mapIterator<Key, Val, Compare> base(void) const
 			{
@@ -637,45 +737,45 @@ namespace ft
 				return (!operator==(origin));
 			}
 
-			// bool		  operator<(const mapReverseConstIterator<Key, Val, Compare> &origin) const
-			// {
-			// 	return (ptr > origin.getPtr());
-			// }
+			bool		  operator<(const mapReverseConstIterator<Key, Val, Compare> &origin) const
+			{
+				return (ptr > origin.getPtr());
+			}
 
-			// bool		  operator<(const mapReverseIterator<Key, Val, Compare> &origin) const
-			// {
-			// 	return (ptr > origin.getPtr());
-			// }
+			bool		  operator<(const mapReverseIterator<Key, Val, Compare> &origin) const
+			{
+				return (ptr > origin.getPtr());
+			}
 
-			// bool		  operator<=(const mapReverseConstIterator<Key, Val, Compare> &origin) const
-			// {
-			// 	return ( operator==(origin) || operator<(origin) );
-			// }
+			bool		  operator<=(const mapReverseConstIterator<Key, Val, Compare> &origin) const
+			{
+				return ( operator==(origin) || operator<(origin) );
+			}
 
-			// bool		  operator<=(const mapReverseIterator<Key, Val, Compare> &origin) const
-			// {
-			// 	return ( operator==(origin) || operator<(origin) );
-			// }
+			bool		  operator<=(const mapReverseIterator<Key, Val, Compare> &origin) const
+			{
+				return ( operator==(origin) || operator<(origin) );
+			}
 
-			// bool		  operator>(const mapReverseConstIterator<Key, Val, Compare> &origin) const
-			// {
-			// 	return (!operator<=(origin));
-			// }
+			bool		  operator>(const mapReverseConstIterator<Key, Val, Compare> &origin) const
+			{
+				return (!operator<=(origin));
+			}
 
-			// bool		  operator>(const mapReverseIterator<Key, Val, Compare> &origin) const
-			// {
-			// 	return (!operator<=(origin));
-			// }
+			bool		  operator>(const mapReverseIterator<Key, Val, Compare> &origin) const
+			{
+				return (!operator<=(origin));
+			}
 
-			// bool		  operator>=(const mapReverseConstIterator<Key, Val, Compare> &origin) const
-			// {
-			// 	return (operator>(origin) || operator==(origin));
-			// }
+			bool		  operator>=(const mapReverseConstIterator<Key, Val, Compare> &origin) const
+			{
+				return (operator>(origin) || operator==(origin));
+			}
 
-			// bool		  operator>=(const mapReverseIterator<Key, Val, Compare> &origin) const
-			// {
-			// 	return (operator>(origin) || operator==(origin));
-			// }
+			bool		  operator>=(const mapReverseIterator<Key, Val, Compare> &origin) const
+			{
+				return (operator>(origin) || operator==(origin));
+			}
 
             mapConstIterator<Key, Val, Compare> base(void) const
 			{

@@ -51,11 +51,11 @@ namespace ft
     //================================= overload ===================================
     //===============================================================================
 
-    template <class _T1, class _T2>
-    bool operator==(const pair<_T1, _T2> &lhs, const pair<_T1, _T2> &rhs)
-    {
-        return ((lhs.first == rhs.first) && (lhs.second == rhs.second));
-    }
+    // template <class _T1, class _T2>
+    // bool operator==(const pair<_T1, _T2> &lhs, const pair<_T1, _T2> &rhs)
+    // {
+    //     return ((lhs.first == rhs.first) && (lhs.second == rhs.second));
+    // }
 
     //===============================================================================
     //================================= out func ===================================
@@ -1225,6 +1225,37 @@ namespace ft
 
     };
 
+
+    template < class T1, class T2 >
+    bool operator==(const pair< T1, T2 >& lhs, const pair< T1, T2 >& rhs) {
+      return (lhs.first == rhs.first && lhs.second == rhs.second);
+    }
+
+    template < class T1, class T2 >
+    bool operator!=(const pair< T1, T2 >& lhs, const pair< T1, T2 >& rhs) {
+      return !(lhs == rhs);
+    }
+
+    template < class T1, class T2 >
+    bool operator<(const pair< T1, T2 >& lhs, const pair< T1, T2 >& rhs) {
+      return lhs.first < rhs.first ||
+             (!(rhs.first < lhs.first) && (lhs.second < rhs.second));
+    }
+
+    template < class T1, class T2 >
+    bool operator<=(const pair< T1, T2 >& lhs, const pair< T1, T2 >& rhs) {
+      return (!(rhs < lhs));
+    }
+
+    template < class T1, class T2 >
+    bool operator>(const pair< T1, T2 >& lhs, const pair< T1, T2 >& rhs) {
+      return (rhs < lhs);
+    }
+
+    template < class T1, class T2 >
+    bool operator>=(const pair< T1, T2 >& lhs, const pair< T1, T2 >& rhs) {
+      return !(lhs < rhs);
+    }
     template <typename Key, typename T, class Compare = less<Key> >
 	class saver
 	{

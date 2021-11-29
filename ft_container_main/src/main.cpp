@@ -6,7 +6,7 @@
 /*   By: sunghyunpark <sunghyunpark@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 18:15:39 by sunghyunpar       #+#    #+#             */
-/*   Updated: 2021/11/29 19:51:35 by sunghyunpar      ###   ########.fr       */
+/*   Updated: 2021/11/30 00:51:15 by sunghyunpar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,36 @@
 #include "common.hpp"
 
 
-template<class Key, class Val>
-void printBT(const std::string& prefix, const ft::node<Key, Val>* node, bool isLeft)
-{
-    if( node != nullptr )
-    {
-        std::cout << prefix;
+// template<class Key, class Val>
+// void printBT(const std::string& prefix, const ft::node<Key, Val>* node, bool isLeft)
+// {
+//     if( node != nullptr )
+//     {
+//         std::cout << prefix;
 
-        std::cout << (isLeft ? "l├──" : "r└──" );
+//         std::cout << (isLeft ? "l├──" : "r└──" );
 
-        // print the value of the node
-        std::cout << node->set.first << ":" << (node->color ? "Black":"Red") << std::endl;
+//         // print the value of the node
+//         std::cout << node->set.first << ":" << (node->color ? "Black":"Red") << std::endl;
 
-        // enter the next tree level - left and right branch
-        printBT( prefix + (isLeft ? " │   " : "    "), node->left, true);
-        printBT( prefix + (isLeft ? " │   " : "    "), node->right, false);
-    }
-}
+//         // enter the next tree level - left and right branch
+//         printBT( prefix + (isLeft ? " │   " : "    "), node->left, true);
+//         printBT( prefix + (isLeft ? " │   " : "    "), node->right, false);
+//     }
+// }
 
-template<class Key, class Val>
-void printBT(const ft::node<Key, Val>* node)
-{
-    printBT("", node, false);    
-}
-#include "common.hpp"
+// template<class Key, class Val>
+// void printBT(const ft::node<Key, Val>* node)
+// {
+//     printBT("", node, false);    
+// }
 
 #define T1 char
+#define T2 int
+typedef _pair<const T1, T2> T3;
 
-template <class SET>
-void	cst(const SET &lhs, const SET &rhs)
+template <class MAP>
+void	cmp(const MAP &lhs, const MAP &rhs)
 {
 	static int i = 0;
 
@@ -54,36 +55,33 @@ void	cst(const SET &lhs, const SET &rhs)
 
 int		main(void)
 {
-	TESTED_NAMESPACE::multiset<T1> st1;
-	TESTED_NAMESPACE::multiset<T1> st2;
+	TESTED_NAMESPACE::map<T1, T2> mp1;
+	TESTED_NAMESPACE::map<T1, T2> mp2;
 
-	st1.insert('a');
-	st1.insert('b');
-	st1.insert('c');
-	st1.insert('d');
-	st2.insert('a');
-	st2.insert('b');
-	st2.insert('c');
-	st2.insert('d');
+	mp1['a'] = 2; mp1['b'] = 3; mp1['c'] = 4; mp1['d'] = 5;
+	mp2['a'] = 2; mp2['b'] = 3; mp2['c'] = 4; mp2['d'] = 5;
 
-	cst(st1, st1); // 0
-	cst(st1, st2); // 1
+	cmp(mp1, mp1); // 0
+	cmp(mp1, mp2); // 1
 
-	st2.insert('e');
-	st2.insert('f');
-	st2.insert('h');
-	st2.insert('h');
+	mp2['e'] = 6; mp2['f'] = 7; mp2['h'] = 8; mp2['h'] = 9;
 
-	cst(st1, st2); // 2
-	cst(st2, st1); // 3
+	cmp(mp1, mp2); // 2
+	cmp(mp2, mp1); // 3
 
-	swap(st1, st2);
+	(++(++mp1.begin()))->second = 42;
 
-	cst(st1, st2); // 4
-	cst(st2, st1); // 5
+	cmp(mp1, mp2); // 4
+	cmp(mp2, mp1); // 5
+
+	swap(mp1, mp2);
+
+	cmp(mp1, mp2); // 6
+	cmp(mp2, mp1); // 7
 
 	return (0);
 }
+
 
 
 // printBT(iter.getSave()->root);
