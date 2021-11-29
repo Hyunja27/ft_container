@@ -6,7 +6,7 @@
 /*   By: sunghyunpark <sunghyunpark@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 18:15:39 by sunghyunpar       #+#    #+#             */
-/*   Updated: 2021/11/28 20:21:47 by sunghyunpar      ###   ########.fr       */
+/*   Updated: 2021/11/29 19:22:11 by sunghyunpar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	ft_erase(MAP &mp, const T1 param)
 {
 	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
 	mp.erase(param);
-	printSize(mp);
+	// printSize(mp);
 }
 
 int		main(void)
@@ -136,7 +136,7 @@ int		main(void)
 	printBT(iter.getSave()->root);
 
 	ft_erase(mp, 54); // right != NULL; left != NULL
-	// printBT(iter.getSave()->root);
+	printBT(iter.getSave()->root);
 
 
 	// /* After deleting 24 and 54, I would get:
@@ -152,11 +152,21 @@ int		main(void)
 	//  *
 	//  * */
 
-	// ft_erase(mp, 22); // right == NULL; left == NULL
-	// ft_erase(mp, 51); // right == NULL; left == NULL
+	ft_erase(mp, 22); // right == NULL; left == NULL
+	printBT(iter.getSave()->root);
+	
+	ft_erase(mp, 51); // right == NULL; left == NULL
+	printBT(iter.getSave()->root);
 
-	// ft_erase(mp, 21); // right == NULL; left != NULL
-	// ft_erase(mp, 53); // right != NULL; left == NULL
+	ft_erase(mp, 21); // right == NULL; left != NULL
+	printBT(iter.getSave()->root);
+
+	std::cout << mp.getRoot()->getRightest(mp.getRoot())->set.first << std::endl;
+	std::cout << mp.getRoot()->getRightest(mp.getRoot())->right << std::endl;
+	std::cout << mp.getRoot()->getRightest(mp.getRoot())->left << std::endl;
+
+	ft_erase(mp, 53); // right != NULL; left == NULL
+	printBT(iter.getSave()->root);
 
 	// /* After deleting 22, 51 and then 21, 53, I would get:
 	//  *                                      42
@@ -171,7 +181,8 @@ int		main(void)
 	//  *
 	//  * */
 
-	// ft_erase(mp, 20); // right == NULL; left != NULL
+	ft_erase(mp, 20); // right == NULL; left != NULL
+	printBT(iter.getSave()->root);
 
 	// /* After deleting 20, I would get:
 	//  *                                      42
@@ -186,7 +197,8 @@ int		main(void)
 	//  *
 	//  * */
 
-	// ft_erase(mp, 23); // right != NULL; left != NULL
+	ft_erase(mp, 23); // right != NULL; left != NULL
+	printBT(iter.getSave()->root);
 
 	// /* After deleting 23, I would get:
 	//  *                                      42
@@ -201,7 +213,8 @@ int		main(void)
 	//  *
 	//  * */
 
-	// ft_erase(mp, 42); // right != NULL; left != NULL; parent == NULL
+	ft_erase(mp, 42); // right != NULL; left != NULL; parent == NULL
+	printBT(iter.getSave()->root);
 
 	// /* After deleting 42, I would get:
 	//  *                                      38
@@ -216,7 +229,7 @@ int		main(void)
 	//  *
 	//  * */
 
-	// ft_erase(mp, 38); // right != NULL; left != NULL; parent == NULL
+	ft_erase(mp, 38); // right != NULL; left != NULL; parent == NULL
 
 	// /* After deleting 38, I would get:
 	//  *                                      35
@@ -231,7 +244,7 @@ int		main(void)
 	//  *
 	//  * */
 
-	// ft_erase(mp, 35); // right != NULL; left != NULL; parent == NULL
+	ft_erase(mp, 35); // right != NULL; left != NULL; parent == NULL
 
 	// /* After deleting 35, I would get:
 	//  *                                      33
@@ -246,7 +259,7 @@ int		main(void)
 	//  *
 	//  * */
 
-	// ft_erase(mp, 33); // right != NULL; left != NULL; parent == NULL
+	ft_erase(mp, 33); // right != NULL; left != NULL; parent == NULL
 
 	// /* After deleting 33, I would get:
 	//  *                                      30

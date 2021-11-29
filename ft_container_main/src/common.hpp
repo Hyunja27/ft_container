@@ -23,23 +23,22 @@ void	printSize(T_MAP const &mp, bool print_content = 1)
 {
 	std::cout << "size: " << mp.size() << std::endl;
 	std::cout << "max_size: " << mp.max_size() << std::endl;
+	print_content = (bool)print_content;
 	if (print_content)
 	{
 		typename T_MAP::const_iterator it = mp.begin(), ite = mp.end();
 
-		// std::cout << std::endl << " more_iter start begin : " << it->first << std::endl;
-
-		// std::cout << std::endl << " more_iter start end : " << ite << std::endl;
-
-
-
-
 		std::cout << std::endl << "Content is:" << std::endl;
+
+
+		// std::cout << std::endl << "iter begin is: " << it.getPtr()->set.first << std::endl;
+		// std::cout << std::endl << "iter end is: " << ite.getPtr()->set.first << std::endl;
+
 		for (; it != ite; ++it)
 		{
-			// std::cout << std::endl << " more_iter -> : " << it->first << std::endl;
+			// std::cout << std::endl << " more_iter -> : " << it.getPtr()->set.first << std::endl;
 
-			std::cout << "- " << printPair(it, false) << std::endl;
+			// std::cout << "- " << printPair(it, false) << std::endl;
 		}
 	}
 	std::cout << "###############################################" << std::endl;

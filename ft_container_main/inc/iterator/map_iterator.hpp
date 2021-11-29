@@ -229,11 +229,21 @@ namespace ft
 
             node<Key, Val, Compare>*  getNext() const
             {
+                // std::cout << std::endl << " getnext's ptr set: " << ptr->set.first << std::endl;
+
                 if (ptr == NULL)
+                {
+                    // std::cout << std::endl << " case 1" << std::endl;
                     return (ptr->getleftest(save->root));
+                }
 
                 if (ptr->getRight() != NULL)
+                {
+                    // std::cout << std::endl << " ptr->getright's val : " << ptr->getRight()->set.first << std::endl;
+
+                    // std::cout << std::endl << " case 2" << std::endl;
                     return (ptr->getleftest((ptr->getRight())));
+                }
                 node<Key, Val, Compare>* tmp = ptr->getParent();
                 while (tmp != NULL && cmp(tmp->set.first, ptr->set.first))
                     tmp = tmp->getParent();
