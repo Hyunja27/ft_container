@@ -1227,33 +1227,39 @@ namespace ft
 
 
     template < class T1, class T2 >
-    bool operator==(const pair< T1, T2 >& lhs, const pair< T1, T2 >& rhs) {
+    bool operator==(const pair< T1, T2 >& lhs, const pair< T1, T2 >& rhs) 
+    {
       return (lhs.first == rhs.first && lhs.second == rhs.second);
     }
 
     template < class T1, class T2 >
-    bool operator!=(const pair< T1, T2 >& lhs, const pair< T1, T2 >& rhs) {
+    bool operator!=(const pair< T1, T2 >& lhs, const pair< T1, T2 >& rhs) 
+    {
       return !(lhs == rhs);
     }
 
     template < class T1, class T2 >
-    bool operator<(const pair< T1, T2 >& lhs, const pair< T1, T2 >& rhs) {
+    bool operator<(const pair< T1, T2 >& lhs, const pair< T1, T2 >& rhs) 
+    {
       return lhs.first < rhs.first ||
              (!(rhs.first < lhs.first) && (lhs.second < rhs.second));
     }
 
     template < class T1, class T2 >
-    bool operator<=(const pair< T1, T2 >& lhs, const pair< T1, T2 >& rhs) {
+    bool operator<=(const pair< T1, T2 >& lhs, const pair< T1, T2 >& rhs) 
+    {
       return (!(rhs < lhs));
     }
 
     template < class T1, class T2 >
-    bool operator>(const pair< T1, T2 >& lhs, const pair< T1, T2 >& rhs) {
+    bool operator>(const pair< T1, T2 >& lhs, const pair< T1, T2 >& rhs) 
+    {
       return (rhs < lhs);
     }
 
     template < class T1, class T2 >
-    bool operator>=(const pair< T1, T2 >& lhs, const pair< T1, T2 >& rhs) {
+    bool operator>=(const pair< T1, T2 >& lhs, const pair< T1, T2 >& rhs) 
+    {
       return !(lhs < rhs);
     }
     template <typename Key, typename T, class Compare = less<Key> >
