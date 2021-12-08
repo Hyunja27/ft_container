@@ -25,8 +25,7 @@ namespace ft
 
         public:
             typedef Key                                      key_type;
-            typedef Key                                      mapped_type;
-            typedef pair<const key_type, mapped_type>        value_type;
+            typedef Key                                      value_type;
             typedef Compare                                  key_compare;
             typedef key_compare                              value_compare;
             typedef Alloc                                    allocator_type;
@@ -37,9 +36,9 @@ namespace ft
             typedef typename allocator_type::size_type       size_type;
             typedef typename allocator_type::difference_type difference_type;
 
-            typedef ft::setIterator<Key, Key, Compare>                  iterator;
+            typedef ft::setConstIterator<Key, Key, Compare>                  iterator;
             typedef ft::setConstIterator<Key, Key, Compare>             const_iterator;
-            typedef ft::setReverseIterator<Key, Key, Compare>           reverse_iterator;
+            typedef ft::setReverseConstIterator<Key, Key, Compare>           reverse_iterator;
             typedef ft::setReverseConstIterator<Key, Key, Compare>      const_reverse_iterator;
 
         
@@ -380,37 +379,86 @@ namespace ft
             return (pair<const_iterator, const_iterator>(lower_bound(param), upper_bound(param)));
         }
 
-        iterator lower_bound( const key_type& param )
-        {
-            if (elem_num == 0)
-                return (iterator(NULL, save));
-            else
-                return (iterator(root->getLowerBound(root, param), save));
-        }
 
-        const_iterator lower_bound( const key_type& param ) const
-        {
-            if (elem_num == 0)
-                return (const_iterator(NULL, save));
-            else
-                return (const_iterator(root->getLowerBound(root, param), save));
-        }
+			iterator		lower_bound(const key_type &key)
+			{
+				iterator	it = this->begin();
 
-        iterator upper_bound( const key_type& param )
-        {
-            if (elem_num == 0)
-                return (iterator(NULL, save));
-            else
-                return (iterator(root->getUpperBound(root, param), save));
-        }
+				for (; it != end(); it++)
+				{
+					if (key <= *it)
+						return (it);
+				}
+				return (it);
+			}
 
-        const_iterator upper_bound( const key_type& param ) const
-        {
-            if (elem_num == 0)
-                return (const_iterator(NULL, save));
-            else
-                return (const_iterator(root->getUpperBound(root, param), save));
-        }
+			const_iterator	lower_bound(const key_type &key) const
+			{
+				const_iterator	it = begin();
+
+				for (; it != end(); it++)
+				{
+					if (key <= *it)
+						return (it);
+				}
+				return (it);
+			}
+
+			iterator		upper_bound(const key_type &key)
+			{
+				iterator	it = this->begin();
+
+				for (; it != end(); it++)
+				{
+					if (key < *it)
+						return (it);
+				}
+				return (it);
+			}
+
+			const_iterator	upper_bound(const key_type &key) const
+			{
+				const_iterator	it = this->begin();
+
+				for (; it != end(); it++)
+				{
+					if (key < *it)
+						return (it);
+				}
+				return (it);
+			}
+
+        // iterator lower_bound( const key_type& param )
+        // {
+        //     if (elem_num == 0)
+        //         return (iterator(NULL, save));
+        //     else
+        //         return (iterator(root->getLowerBound(root, param), save));
+        // }
+
+        // const_iterator lower_bound( const key_type& param ) const
+        // {
+        //     if (elem_num == 0)
+        //         return (const_iterator(NULL, save));
+        //     else
+        //         return (const_iterator(root->getLowerBound(root, param), save));
+        // }
+
+        // iterator upper_bound( const key_type& param )
+        // {
+        //     if (elem_num == 0)
+        //         return (iterator(NULL, save));
+        //     else
+        //         return (iterator(root->getUpperBound(root, param), save));
+        // }
+
+        // const_iterator upper_bound( const key_type& param ) const
+        // {
+        //     if (elem_num == 0)
+        //         return (const_iterator(NULL, save));
+        //     else
+        //         return (const_iterator(root->getUpperBound(root, param), save));
+        // }
 
         key_compare key_comp() const
         {

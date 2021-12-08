@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: spark <spark@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/24 18:15:39 by sunghyunpar       #+#    #+#             */
-/*   Updated: 2021/12/07 17:05:57 by spark            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "common.hpp"
 #include <list>
 
@@ -17,10 +5,34 @@
 
 static int iter = 0;
 
+
+// void printBT(const std::string& prefix, const node* node, bool isLeft)
+// {
+//     if( node != nullptr )
+//     {
+//         std::cout << prefix;
+
+//         std::cout << (isLeft ? "l├──" : "r└──" );
+
+//         // print the value of the node
+//         std::cout << node->key << ":" << (node->color ? "Black":"Red") << std::endl;
+
+//         // enter the next tree level - left and right branch
+//         printBT( prefix + (isLeft ? " │   " : "    "), node->left, true);
+//         printBT( prefix + (isLeft ? " │   " : "    "), node->right, false);
+//     }
+// }
+
+// void printBT(const node* node)
+// {
+//     printBT("", node, false);    
+// }
+
 template <typename SET, typename U>
 void	ft_erase(SET &st, U param)
 {
 	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
+	(void)param;
 	st.erase(param);
 	printSize(st);
 }
@@ -44,23 +56,23 @@ int		main(void)
 
 	ft_erase(st, ++st.begin());
 
-	ft_erase(st, st.begin());
-	ft_erase(st, --st.end());
+	// ft_erase(st, st.begin());
+	// ft_erase(st, --st.end());
 
-	ft_erase(st, st.begin(), ++(++(++st.begin())));
-	ft_erase(st, --(--(--st.end())), --st.end());
+	// ft_erase(st, st.begin(), ++(++(++st.begin())));
+	// ft_erase(st, --(--(--st.end())), --st.end());
 
-	st.insert("Hello");
-	st.insert("Hi there");
-	printSize(st);
-	ft_erase(st, --(--(--st.end())), st.end());
+	// st.insert("Hello");
+	// st.insert("Hi there");
+	// printSize(st);
+	// ft_erase(st, --(--(--st.end())), st.end());
 
-	st.insert("ONE");
-	st.insert("TWO");
-	st.insert("THREE");
-	st.insert("FOUR");
-	printSize(st);
-	ft_erase(st, st.begin(), st.end());
+	// st.insert("ONE");
+	// st.insert("TWO");
+	// st.insert("THREE");
+	// st.insert("FOUR");
+	// printSize(st);
+	// ft_erase(st, st.begin(), st.end());
 
 	return (0);
 }

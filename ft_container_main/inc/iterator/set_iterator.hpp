@@ -96,7 +96,7 @@ namespace ft
                 return (ptr->set.first);
             }
 
-            Key* operator->(void) const
+            const Key* operator->(void) const
             {
                 return (&(this->operator*()));
             }
@@ -296,7 +296,7 @@ namespace ft
                 return (ptr->set.first);
             }
 
-            const pair<const Key, Val>* operator->(void) const
+            const Key* operator->(void) const
             {
                 return (&(this->operator*()));
             }
@@ -488,10 +488,10 @@ namespace ft
 
             Key& operator*(void) const
             {
-                return (ptr->set->first);
+                return (ptr->set.first);
             }
 
-            pair<const Key, Val>* operator->(void) const
+            const Key* operator->(void) const
             {
                 return (&(this->operator*()));
             }
@@ -682,10 +682,10 @@ namespace ft
 
 			const Key& operator*(void) const
             {
-                return (ptr->set->first);
+                return (ptr->set.first);
             }
 
-            const pair<const Key, Val>* operator->(void) const
+            const Key* operator->(void) const
             {
                 return (&(this->operator*()));
             }

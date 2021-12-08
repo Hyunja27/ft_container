@@ -91,7 +91,7 @@ namespace ft
         //================================= Constructer =================================
         //===============================================================================
         
-        node() : left(NULL), right(NULL), parent(NULL), color(false), set(NULL)
+        node() : left(NULL), right(NULL), parent(NULL), color(false)
         {
             
         }
@@ -211,6 +211,7 @@ namespace ft
 
         node<Key, Val, Compare>* find(node<Key, Val, Compare>* base, const Key& target_key)
         {
+            // std::cout << std::endl << "finding nimo : " << std::endl << std::endl << std::endl;
             if (base == NULL)
                 return (NULL);
             if (((base->set.first < target_key) == false) && ((target_key < base->set.first) == false))
@@ -599,9 +600,9 @@ namespace ft
             node<Key, Val, Compare>* s = NULL;
             node<Key, Val, Compare>* n_near = NULL;
             node<Key, Val, Compare>* n_far = NULL;
-            node<Key, Val, Compare>* nil = new node(0);
-            node<Key, Val, Compare>* nil2 = new node(0);
-            node<Key, Val, Compare>* nil3 = new node(0);
+            node<Key, Val, Compare>* nil = new node();
+            node<Key, Val, Compare>* nil2 = new node();
+            node<Key, Val, Compare>* nil3 = new node();
             nil->color = BLACK;
             nil->right = NULL;
             nil->left = NULL;
@@ -617,6 +618,7 @@ namespace ft
             nil3->left = NULL;
             nil3->parent = NULL;
 
+
             if (p == NULL)
                 return ;
             
@@ -624,7 +626,7 @@ namespace ft
             // std::cout << "Five_ c :  (" << c->color << ")   " << c->set.first << std::endl;
             // std::cout << "Five_ s :  (" << s->color << ")  " << s->set.first << std::endl;
 
-
+            
             if (restrict_left == 1)
                 islefted = 1;
             else
@@ -784,15 +786,19 @@ namespace ft
 
         void deleteNode(node<Key, Val, Compare> *(&real_root), const Key& target_key)
         {
+            // std::cout << std::endl << "deleting : " << target_key << std::endl << std::endl << std::endl;
             node<Key, Val, Compare>* target = find(real_root, target_key);
             node<Key, Val, Compare>* tmp = NULL;
-            node<Key, Val, Compare>* nil = new node(0);
+            node<Key, Val, Compare>* nil = new node();
+
 
             nil->color = BLACK;
             // nil->set.first = 0;
             nil->right = NULL;
             nil->left = NULL;
             nil->parent = NULL;
+
+
             // std::cout << std::endl << "deleting : " << target_key << std::endl << std::endl << std::endl;
 
             // std::cout << std::endl << "deleting : " << target->key << std::endl << std::endl << std::endl;
@@ -805,6 +811,7 @@ namespace ft
             }
             if (target->color == RED)
             {  
+
                 // std::cout << "  delete Red node :  " << target_key << std::endl;
 
                 if ((target->right == NULL) && (target->left == NULL))
@@ -1061,13 +1068,18 @@ namespace ft
                         if (((nil->parent->color == BLACK) && (nil->parent->right != NULL) && (nil->parent->right->color == BLACK)))
                         {
                             // std::cout << "  delete Black node's nil rotate' :  " << target_key << std::endl;
+
                             nil->parent->right->color = 0;
                             if (nil->parent->parent != NULL)
+                            {
                                 deleteRestructFivecase(nil->parent->parent, nil->parent, real_root);
+
+                            }
                             else
                                 real_root = nil->parent;
                         }
                     }
+
                     real_root = getRoot(tmp);
                     delete(target);
                     tmp->color = BLACK;
