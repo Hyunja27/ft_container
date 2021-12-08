@@ -274,47 +274,6 @@ namespace ft
 
         }
 
-        // node<Key, Val, Compare>* insert(node<Key, Val, Compare>* base, const Key& target_key, const Val& target_val = Val())
-        // {
-        //     node<Key, Val, Compare>* tmp;
-
-        //     if ((cmp(base->set.first, target_key) == false) && (cmp(target_key, base->set.first) == false))
-        //     {
-        //         base->set.second = target_val;
-        //         return (base);
-        //     }
-        //     if (this->cmp(target_key, base->set.first))
-        //     {
-        //         if (base->left == NULL)
-        //         {
-        //             tmp = new node<Key, Val, Compare>(target_key, target_val);
-        //             tmp->parent = base;
-        //             tmp->left = NULL;
-        //             tmp->right = NULL;
-        //             tmp->color = 0;
-        //             base->left = tmp;
-        //             // color_checker(tmp);
-        //             return (tmp);
-        //         }
-        //         return (insert(base->left, target_key, target_val));
-        //     }
-        //     else
-        //     {
-        //         if (base->right == NULL)
-        //         {
-        //             tmp = new node<Key, Val, Compare>(target_key, target_val);
-        //             tmp->parent = base;
-        //             tmp->left = NULL;
-        //             tmp->right = NULL;
-        //             tmp->color = 0;
-        //             base->right = tmp;
-        //             // color_checker(tmp);
-        //             return (tmp);
-        //         }
-        //         return (insert(base->right, target_key, target_val));
-        //     }
-        // }
-
 
         void left_lotate(node<Key, Val, Compare>* target, node<Key, Val, Compare>* (&real_root))
         {

@@ -90,42 +90,6 @@ namespace ft
             return (*this);
         }
 
-
-        //===============================================================================
-        //================================== elements ===================================
-        //===============================================================================
-
-        // mapped_type& operator[]( const key_type& key )
-        // {
-        //     if (elem_num == 0)
-        //     {
-        //         elem_num++;
-        //         this->root = new node<Key, Key, Compare>(key);
-        //         root->color = BLACK;
-        //         root = root->getRoot(root);
-        //         saveRoot();
-        //         return (this->root->set.second);
-        //     }
-        //     else
-        //     {
-        //         node<Key, Key, Compare> *tmp;
-
-        //         tmp = root->find(this->root, key);
-        //         if (tmp != NULL)
-        //             return (tmp->set.second);
-        //         else
-        //         {
-        //             node<Key, Key, Compare>* tmp;
-        //             elem_num++;
-        //             tmp = (root->insert(this->root, key));
-        //             root = root->getRoot(root);
-        //             saveRoot();
-        //             return tmp->set.second;
-        //         }
-        //     }
-        // }
-
-
         //===============================================================================
         //================================== iterator ===================================
         //===============================================================================
@@ -254,49 +218,15 @@ namespace ft
                 return (0);
             else
             {
-                // std::cout << "param : " << param << std::endl;
                 if (root->find(root, param) != NULL)
-                {
-                    // node<Key, T, Compare>* tmp = root->getRightest(root);
-                    // if (tmp == NULL)
-                    //     tmp = root->getleftest(root);
-                    // std::cout << "before erase root : " << root->set.first << std::endl;
-                    // std::cout << "erase key : " << param << std::endl;
-                    
+                {   
                     root->deleteNode(this->root, param);
-
-                    // std::cout << "after root pointer: " << root << std::endl;
-
-
-                    // root = root->getRoot(root);
-
-                    // std::cout << "after erase root : " << root->set.first << std::endl;
-                    
-                    // std::cout << "root " << root << std::endl;
-                    // std::cout << "tmp : " << tmp << std::endl;
-
                     elem_num--;
                     if (elem_num == 0)
                     {
                         root = NULL;
                         saveRoot();
                     }
-                    // else if (tmp != NULL)
-                    // {
-                    //     // /////??????????????
-                    //     // while ((tmp->getParent(tmp) && (tmp != tmp->getParent(tmp))))
-                    //     // {
-                    //     //     tmp = tmp->getParent(tmp);
-                    //     // }
-                    //     // // std::cout << "?????" << std::endl;
-                    //     // tmp = root->getRoot(tmp);
-
-                    //     // while (tmp->parent != NULL)
-                    //     //     tmp = tmp->parent;
-                    //     // root = tmp;
-
-                    //     saveRoot();
-                    // }
                     saveRoot();
                     return (1);
                 }
@@ -319,7 +249,6 @@ namespace ft
             {
                 tmp_2 = tmp_1;
                 tmp_2++;
-                // std::cout << "erase : " << tmp_1.getPtr()->set.first << std::endl;
                 erase(tmp_1);
                 tmp_1 = tmp_2;
                 if (tmp_1 == last)
@@ -380,85 +309,49 @@ namespace ft
         }
 
 
-			iterator		lower_bound(const key_type &key)
+		iterator		lower_bound(const key_type &key)
+		{
+			iterator	it = this->begin();
+			for (; it != end(); it++)
 			{
-				iterator	it = this->begin();
-
-				for (; it != end(); it++)
-				{
-					if (key <= *it)
-						return (it);
-				}
-				return (it);
+				if (key <= *it)
+					return (it);
 			}
+			return (it);
+		}
 
-			const_iterator	lower_bound(const key_type &key) const
+		const_iterator	lower_bound(const key_type &key) const
+		{
+			const_iterator	it = begin();
+			for (; it != end(); it++)
 			{
-				const_iterator	it = begin();
-
-				for (; it != end(); it++)
-				{
-					if (key <= *it)
-						return (it);
-				}
-				return (it);
+				if (key <= *it)
+					return (it);
 			}
+			return (it);
+		}
 
-			iterator		upper_bound(const key_type &key)
+		iterator		upper_bound(const key_type &key)
+		{
+			iterator	it = this->begin();
+			for (; it != end(); it++)
 			{
-				iterator	it = this->begin();
-
-				for (; it != end(); it++)
-				{
-					if (key < *it)
-						return (it);
-				}
-				return (it);
+				if (key < *it)
+					return (it);
 			}
+			return (it);
+		}
 
-			const_iterator	upper_bound(const key_type &key) const
+		const_iterator	upper_bound(const key_type &key) const
+		{
+			const_iterator	it = this->begin();
+			for (; it != end(); it++)
 			{
-				const_iterator	it = this->begin();
-
-				for (; it != end(); it++)
-				{
-					if (key < *it)
-						return (it);
-				}
-				return (it);
+				if (key < *it)
+					return (it);
 			}
-
-        // iterator lower_bound( const key_type& param )
-        // {
-        //     if (elem_num == 0)
-        //         return (iterator(NULL, save));
-        //     else
-        //         return (iterator(root->getLowerBound(root, param), save));
-        // }
-
-        // const_iterator lower_bound( const key_type& param ) const
-        // {
-        //     if (elem_num == 0)
-        //         return (const_iterator(NULL, save));
-        //     else
-        //         return (const_iterator(root->getLowerBound(root, param), save));
-        // }
-
-        // iterator upper_bound( const key_type& param )
-        // {
-        //     if (elem_num == 0)
-        //         return (iterator(NULL, save));
-        //     else
-        //         return (iterator(root->getUpperBound(root, param), save));
-        // }
-
-        // const_iterator upper_bound( const key_type& param ) const
-        // {
-        //     if (elem_num == 0)
-        //         return (const_iterator(NULL, save));
-        //     else
-        //         return (const_iterator(root->getUpperBound(root, param), save));
-        // }
+			return (it);
+		}
 
         key_compare key_comp() const
         {
