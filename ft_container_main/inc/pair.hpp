@@ -793,6 +793,8 @@ namespace ft
             nil->right = NULL;
             nil->left = NULL;
             nil->parent = NULL;
+            // std::cout << std::endl << "deleting : " << target_key << std::endl << std::endl << std::endl;
+
             // std::cout << std::endl << "deleting : " << target->key << std::endl << std::endl << std::endl;
             // std::cout << "  when start deleting, root is :  " << real_root->set.first << std::endl;
             if (target->parent == NULL && (target->right == NULL) && (target->left == NULL))

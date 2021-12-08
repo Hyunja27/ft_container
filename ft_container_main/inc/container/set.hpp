@@ -4,20 +4,32 @@
 #include <iostream>
 #include <memory>
 #include "../pair.hpp"
-#include "../iterator/map_iterator.hpp"
+#include "../iterator/set_iterator.hpp"
+
 
 namespace ft
 {
-    template <class T, class Compare = less<T>, class Alloc = std::allocator<T> >
+    template <class Key, class Compare = less<Key>, class Alloc = std::allocator<pair<const Key, Key> > >
     class set
     {
+        private:
+            unsigned int                    elem_num;
+            node<Key, Key, Compare> *         root;
+            saver<Key, Key, Compare> *        save;
+            Alloc                           allocer;
+
+            void	saveRoot()
+			{
+				save->root = this->root;
+			}
 
         public:
-            typedef T                                        key_type;
-            typedef T                                        value_type;
+            typedef Key                                      key_type;
+            typedef Key                                      mapped_type;
+            typedef pair<const key_type, mapped_type>        value_type;
             typedef Compare                                  key_compare;
+            typedef key_compare                              value_compare;
             typedef Alloc                                    allocator_type;
-            typedef size_t                                   size_type;
             typedef typename allocator_type::reference       reference;
             typedef typename allocator_type::const_reference const_reference;
             typedef typename allocator_type::pointer         pointer;
@@ -25,105 +37,155 @@ namespace ft
             typedef typename allocator_type::size_type       size_type;
             typedef typename allocator_type::difference_type difference_type;
 
-            typedef ft::mapIterator< value_type, value_type*, Compare>                 iterator;
-            typedef ft::mapIterator< value_type, value_type*, Compare>                 const_iterator;
-            typedef ft::mapReverseIterator< value_type, value_type*, Compare>          reverse_iterator;
-            typedef ft::mapReverseConstIterator< value_type, value_type*, Compare>     const_reverse_iterator;
-            typedef ft::node< value_type, value_type*, Compare>                        tree;
-    
-        private:
-            unsigned int                    elem_num;
-            node< value_type, value_type*, Compare> *         root;
-            key_compare                                       comp;
-            allocator_type                                    allocer;
+            typedef ft::setIterator<Key, Key, Compare>                  iterator;
+            typedef ft::setConstIterator<Key, Key, Compare>             const_iterator;
+            typedef ft::setReverseIterator<Key, Key, Compare>           reverse_iterator;
+            typedef ft::setReverseConstIterator<Key, Key, Compare>      const_reverse_iterator;
 
+        
         //===============================================================================
         //================================= Constructer =================================
         //===============================================================================
 
-        public:
-            explicit set(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : elem_num(0), root(), comp(comp), allocer(alloc) 
+        explicit set(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : elem_num(0), root(NULL)
+        {
+            (void)alloc;
+            (void)comp;
+            save = new saver<Key, Key, Compare>();
+        }
+
+        template <class inputIterator> 
+        set (inputIterator start, inputIterator end, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : elem_num(0), root(NULL)
+        {
+            (void)alloc;
+            (void)comp;
+            save = new saver<Key, Key, Compare>();
+            insert(start, end);
+        }
+
+        set (const set& param) : elem_num(0), root(NULL)
+        {
+            // std::cout << "Bye ! " << param.root->set.first << " : " << param.root->set.second << std::endl;
+            this->root = new node<Key, Key, Compare>(* param.root);
+            this->elem_num = param.elem_num;
+            save = new saver<Key, Key, Compare>();
+            saveRoot();
+        }
+
+        ~set()
+        {
+            if (elem_num > 0)
+                this->root->deleteTree(this->root);
+            delete(save);
+        }
+
+        set<Key, Compare, Alloc> &operator=(const set& _target)
+        {
+            if (this != &_target) 
             {
+                this->root->deleteTree(this->root);
+                this->root = new node<Key, Key, Compare>(* _target.root);
+                this->elem_num = _target.elem_num;
+                saveRoot();
             }
-
-        template < class InputIterator >
-        set(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type(), typename ft::enable_if< !ft::is_integral< InputIterator >::value, InputIterator >::type* = u_nullptr) : elem_num(0), root(), comp(comp), allocer(alloc) 
-        {
-          insert(first, last);
-        }
-
-
-        set(const set& param) : elem_num(0), root(), comp(param._comp), allocer(param.allocer) 
-        { 
-            *this = param; 
-        }
-
-        virtual ~set() 
-        {
-
-        }
-
-        set& operator=(const set& param) 
-        {
-            if (this != &param) 
-                this->root.copy(param.root);
             return (*this);
         }
+
+
+        //===============================================================================
+        //================================== elements ===================================
+        //===============================================================================
+
+        // mapped_type& operator[]( const key_type& key )
+        // {
+        //     if (elem_num == 0)
+        //     {
+        //         elem_num++;
+        //         this->root = new node<Key, Key, Compare>(key);
+        //         root->color = BLACK;
+        //         root = root->getRoot(root);
+        //         saveRoot();
+        //         return (this->root->set.second);
+        //     }
+        //     else
+        //     {
+        //         node<Key, Key, Compare> *tmp;
+
+        //         tmp = root->find(this->root, key);
+        //         if (tmp != NULL)
+        //             return (tmp->set.second);
+        //         else
+        //         {
+        //             node<Key, Key, Compare>* tmp;
+        //             elem_num++;
+        //             tmp = (root->insert(this->root, key));
+        //             root = root->getRoot(root);
+        //             saveRoot();
+        //             return tmp->set.second;
+        //         }
+        //     }
+        // }
+
 
         //===============================================================================
         //================================== iterator ===================================
         //===============================================================================
 
-        iterator begin() 
-        { 
-            return (iterator(root->getleftest(root))); 
-        }
-        const_iterator begin() const 
+        iterator begin()
         {
-          return (const_iterator(root->getleftest(root)));
+            return (iterator(root->getleftest(root), save));
         }
 
-        iterator end() 
-        { 
-            return (iterator(NULL)); 
-        }
-
-        const_iterator end() const 
-        { 
-            return (const_iterator(NULL)); 
-        }
-
-        reverse_iterator rbegin() 
-        { 
-            return (reverse_iterator(root->getRightest(root))); 
-        }
-
-        const_reverse_iterator rbegin() const 
+        const_iterator begin() const
         {
-            return (const_reverse_iterator(root->getRightest(root)));
+            return (const_iterator(root->getleftest(root), save));
         }
 
-        reverse_iterator rend() 
-        { 
-            return (reverse_iterator(NULL)); 
-        }
-
-        const_reverse_iterator rend() const 
+        iterator end()
         {
-          return (const_reverse_iterator(NULL));
+            return (iterator(NULL, save));
         }
 
-        bool empty() const 
-        { 
-            return (this->elem_num == 0); 
-        }
-        
-        size_type size() const 
-        { 
-            return (this->elem_num); 
+        const_iterator end() const
+        {
+            return (const_iterator(NULL, save));
         }
 
-        size_type max_size() const 
+        reverse_iterator rbegin()
+        {
+            return (reverse_iterator(root->getRightest(root), save));
+        }
+
+        const_reverse_iterator rbegin() const
+        {
+            return (const_reverse_iterator(root->getRightest(root), save));
+        }
+
+        reverse_iterator rend()
+        {
+            return (reverse_iterator(NULL, save));
+        }
+
+        const_reverse_iterator rend() const
+        {
+            return (const_reverse_iterator(NULL, save));
+        }
+
+        //===============================================================================
+        //================================== capacity ===================================
+        //===============================================================================
+
+        bool empty() const
+        {
+            return (this->elem_num == 0);
+        }
+
+        size_type size() const
+        {
+            return (this->elem_num);
+        }
+
+        size_type max_size() const
         {
             return (this->allocer.max_size());
         }
@@ -132,109 +194,270 @@ namespace ft
         //================================= functions ===================================
         //===============================================================================
 
-        pair< iterator, bool > insert(const value_type& val) 
+        node<Key, Key, Compare> *		getRoot()
+		{
+			return (this->root);
+		}
+
+        void clear()
         {
-            ft::pair< node_type*, bool > rt = root.insert(val);
-                return (ft::make_pair(iterator(rt.first), rt.second));
+            if (elem_num == 0)
+                return ;
+            elem_num = 0;
+            root->deleteTree(root);
+            root = NULL;
         }
 
-  /**
-   * position은 hint, 강제 아님.
-   * insert 성공시
-   * 새로운 element 가리키는 iterator 리턴.
-   * insert 실패시
-   * val과 동일한 Key값 갖고있는 iterator 리턴.
-   */
-  iterator insert(iterator position, const value_type& val) {
-    ft::pair< node_type*, bool > result = _tree.insert(val, position.base());
-    return (iterator(result.first));
-  }
+        pair<iterator, bool> insert( const key_type& value )
+        {
+            if (elem_num == 0)
+            {
+                elem_num++;
+                this->root = new node<Key, Key, Compare>(value, value);
+                root = root->getRoot(root);
+                saveRoot();
+                return(pair<iterator, bool>(iterator(root, save), true));
+            }
+            else
+            {
+                node<Key, Key, Compare> *tmp;
 
-  /**
-   * [first, last) 구간의 element를 insert.
-   * 이때, 기존 Key와 중복되는 element는 추가 X.
-   * 중복되지 않는 element만 추가한다.
-   */
-  template < class InputIterator >
-  void insert(InputIterator first, InputIterator last,
-              typename ft::enable_if< !ft::is_integral< InputIterator >::value,
-                                      InputIterator >::type* = u_nullptr) {
-    while (first != last) {
-      _tree.insert(*first);
-      first++;
-    }
-  }
+                tmp = root->find(this->root, value);
+                if (tmp != NULL)
+                    return(pair<iterator, bool>(iterator(tmp, save), false));
+                else
+                {
+                    elem_num++;
+                    tmp = root->insert(root, value, value);
+                    root = root->getRoot(root);
+                    saveRoot();
+                    return(pair<iterator, bool>(iterator(tmp, save), true));
+                }
+            }
+        }
 
-  void erase(iterator position) { _tree.erase(position.base()); }
+        iterator insert( iterator hint, const value_type& value )
+        {
+            (void)hint;
+            return (insert(value).first);
+        }
 
-  size_type erase(const key_type& k) {
-    return (_tree.erase(_tree.search(value_type(k))));
-  }
+        template< class Inputiterator >
+        void insert( Inputiterator first, Inputiterator last )
+        {
+            for (Inputiterator it = first; it != last; it++)
+                insert(*it);
+        }
 
-  void erase(iterator first, iterator last) {
-    while (first != last) {
-      iterator tmp = first;
-      ++first;
-      erase(tmp);
-    }
-  }
+        size_type erase(const key_type& param)
+        {
+            if (elem_num == 0)
+                return (0);
+            else
+            {
+                // std::cout << "param : " << param << std::endl;
+                if (root->find(root, param) != NULL)
+                {
+                    // node<Key, T, Compare>* tmp = root->getRightest(root);
+                    // if (tmp == NULL)
+                    //     tmp = root->getleftest(root);
+                    // std::cout << "before erase root : " << root->set.first << std::endl;
+                    // std::cout << "erase key : " << param << std::endl;
+                    
+                    root->deleteNode(this->root, param);
 
-  void swap(set& x) {
-    if (*this == x) {
-      return ;
-    }
+                    // std::cout << "after root pointer: " << root << std::endl;
 
-    unsigned char buf[sizeof(set)];
-    memcpy(buf, reinterpret_cast< void* >(&x), sizeof(set));
-    memcpy(reinterpret_cast< unsigned char* >(&x),
-           reinterpret_cast< void* >(this), sizeof(set));
-    memcpy(reinterpret_cast< unsigned char* >(this),
-           reinterpret_cast< void* >(buf), sizeof(set));
-  }
 
-  void clear() { _tree.clear(); }
+                    // root = root->getRoot(root);
 
-  key_compare key_comp() const { return (key_compare()); }
-  value_compare value_comp() const { return (value_compare()); }
+                    // std::cout << "after erase root : " << root->set.first << std::endl;
+                    
+                    // std::cout << "root " << root << std::endl;
+                    // std::cout << "tmp : " << tmp << std::endl;
 
-  iterator find(const key_type& k) {
-    return (iterator(_tree.search(value_type(k))));
-  }
+                    elem_num--;
+                    if (elem_num == 0)
+                    {
+                        root = NULL;
+                        saveRoot();
+                    }
+                    // else if (tmp != NULL)
+                    // {
+                    //     // /////??????????????
+                    //     // while ((tmp->getParent(tmp) && (tmp != tmp->getParent(tmp))))
+                    //     // {
+                    //     //     tmp = tmp->getParent(tmp);
+                    //     // }
+                    //     // // std::cout << "?????" << std::endl;
+                    //     // tmp = root->getRoot(tmp);
 
-  const_iterator find(const key_type& k) const {
-    return (const_iterator(_tree.search(value_type(k))));
-  }
+                    //     // while (tmp->parent != NULL)
+                    //     //     tmp = tmp->parent;
+                    //     // root = tmp;
 
-  /* k Key 있으면 1, 없으면 0.
-  map은 Key가 unique하기떄문에, 1 또는 0이다. */
-  size_type count(const key_type& k) const {
-    if (_tree.search(value_type(k))->is_nil()) {
-      return 0;
-    }
-    return 1;
-  }
+                    //     saveRoot();
+                    // }
+                    saveRoot();
+                    return (1);
+                }
+                else
+                    return (0);
+            }
+        }
 
-  iterator lower_bound(const key_type& k) {
-    return (iterator(_tree.lower_bound(value_type(k))));
-  }
-  const_iterator lower_bound(const key_type& k) const {
-    return (const_iterator(_tree.lower_bound(value_type(k))));
-  }
-  iterator upper_bound(const key_type& k) {
-    return (iterator(_tree.upper_bound(value_type(k))));
-  }
-  const_iterator upper_bound(const key_type& k) const {
-    return (const_iterator(_tree.upper_bound(value_type(k))));
-  }
+        void erase(iterator pos)
+        {
+            erase(*pos);
+        }
 
-  pair< const_iterator, const_iterator > equal_range(const key_type& k) const {
-    return (ft::make_pair(lower_bound(k), upper_bound(k)));
-  }
-  pair< iterator, iterator > equal_range(const key_type& k) {
-    return (ft::make_pair(lower_bound(k), upper_bound(k)));
-  }
+        void erase( iterator first, iterator last )
+        {
 
-  allocator_type get_allocator() const { return (allocator_type()); }
+            iterator tmp_1 = first;
+            iterator tmp_2;
+            while(tmp_1 != last)
+            {
+                tmp_2 = tmp_1;
+                tmp_2++;
+                // std::cout << "erase : " << tmp_1.getPtr()->set.first << std::endl;
+                erase(tmp_1);
+                tmp_1 = tmp_2;
+                if (tmp_1 == last)
+                    break ;
+            }
+        }
+
+        void swap( set& other )
+        {
+            node<Key, Key, Compare> *tmp = root;
+            size_t tmp_int = this->elem_num;
+
+            root = other.root;
+            other.root = tmp;
+
+            elem_num = other.elem_num;
+            other.elem_num = tmp_int;
+
+        }
+
+        size_type count( const key_type& param ) const
+        {
+            if (elem_num == 0)
+                return (0);
+            else
+            {
+                if (root->find(root, param) != NULL)
+                    return (1);
+                else
+                    return (0);
+            }
+        }
+
+        iterator find( const key_type& param )
+        {
+            if (elem_num == 0)
+                return (iterator(NULL, save));
+            else
+                return (iterator(root->find(root, param), save));
+        }
+
+        const_iterator find( const key_type& param ) const
+        {
+            if (elem_num == 0)
+                return (const_iterator(NULL, save));
+            else
+                return (const_iterator(root->find(root, param), save));
+        }
+
+        pair<iterator,iterator> equal_range( const key_type& param )
+        {
+            return (pair<iterator, iterator>(lower_bound(param), upper_bound(param)));
+        }
+
+        pair<const_iterator,const_iterator> equal_range( const key_type& param ) const
+        {
+            return (pair<const_iterator, const_iterator>(lower_bound(param), upper_bound(param)));
+        }
+
+        iterator lower_bound( const key_type& param )
+        {
+            if (elem_num == 0)
+                return (iterator(NULL, save));
+            else
+                return (iterator(root->getLowerBound(root, param), save));
+        }
+
+        const_iterator lower_bound( const key_type& param ) const
+        {
+            if (elem_num == 0)
+                return (const_iterator(NULL, save));
+            else
+                return (const_iterator(root->getLowerBound(root, param), save));
+        }
+
+        iterator upper_bound( const key_type& param )
+        {
+            if (elem_num == 0)
+                return (iterator(NULL, save));
+            else
+                return (iterator(root->getUpperBound(root, param), save));
+        }
+
+        const_iterator upper_bound( const key_type& param ) const
+        {
+            if (elem_num == 0)
+                return (const_iterator(NULL, save));
+            else
+                return (const_iterator(root->getUpperBound(root, param), save));
+        }
+
+        key_compare key_comp() const
+        {
+            return (Compare());
+        }
+        
+        value_compare value_comp() const
+        {
+            return (value_compare());
+        }
     };
 
-};
+    template <class Key, class Compare, class Alloc>
+    bool operator==(const set< Key, Compare, Alloc>& lhs, const set< Key, Compare, Alloc>& rhs) 
+    {
+      return (lhs.size() == rhs.size() && ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+    }
+
+    template < class Key, class Compare, class Alloc >
+    bool operator!=(const set< Key, Compare, Alloc>& lhs, const set< Key, Compare, Alloc>& rhs) 
+    {
+      return (!(lhs == rhs));
+    }
+
+    template < class Key, class Compare, class Alloc >
+    bool operator<(const set< Key, Compare, Alloc>& lhs, const set< Key, Compare, Alloc>& rhs) 
+    {
+      return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+    }
+
+    template < class Key, class Compare, class Alloc >
+    bool operator<=(const set< Key, Compare, Alloc>& lhs, const set< Key, Compare, Alloc>& rhs) 
+    {
+      return (!(rhs < lhs));
+    }
+
+    template < class Key, class Compare, class Alloc >
+    bool operator>(const set< Key, Compare, Alloc>& lhs, const set< Key, Compare, Alloc>& rhs) 
+    {
+      return (rhs < lhs);
+    }
+
+    template < class Key, class Compare, class Alloc >
+    bool operator>=(const set< Key, Compare, Alloc>& lhs, const set< Key, Compare, Alloc>& rhs) 
+    {
+      return (!(lhs < rhs));
+    }
+}
+
+#endif

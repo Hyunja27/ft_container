@@ -3,87 +3,64 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sunghyunpark <sunghyunpark@student.42.f    +#+  +:+       +#+        */
+/*   By: spark <spark@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 18:15:39 by sunghyunpar       #+#    #+#             */
-/*   Updated: 2021/11/30 00:51:15 by sunghyunpar      ###   ########.fr       */
+/*   Updated: 2021/12/07 17:05:57 by spark            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <list>
 #include "common.hpp"
+#include <list>
 
+#define T1 std::string
 
-// template<class Key, class Val>
-// void printBT(const std::string& prefix, const ft::node<Key, Val>* node, bool isLeft)
-// {
-//     if( node != nullptr )
-//     {
-//         std::cout << prefix;
+static int iter = 0;
 
-//         std::cout << (isLeft ? "l├──" : "r└──" );
-
-//         // print the value of the node
-//         std::cout << node->set.first << ":" << (node->color ? "Black":"Red") << std::endl;
-
-//         // enter the next tree level - left and right branch
-//         printBT( prefix + (isLeft ? " │   " : "    "), node->left, true);
-//         printBT( prefix + (isLeft ? " │   " : "    "), node->right, false);
-//     }
-// }
-
-// template<class Key, class Val>
-// void printBT(const ft::node<Key, Val>* node)
-// {
-//     printBT("", node, false);    
-// }
-
-#define T1 char
-#define T2 int
-typedef _pair<const T1, T2> T3;
-
-template <class MAP>
-void	cmp(const MAP &lhs, const MAP &rhs)
+template <typename SET, typename U>
+void	ft_erase(SET &st, U param)
 {
-	static int i = 0;
+	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
+	st.erase(param);
+	printSize(st);
+}
 
-	std::cout << "############### [" << i++ << "] ###############"  << std::endl;
-	std::cout << "eq: " << (lhs == rhs) << " | ne: " << (lhs != rhs) << std::endl;
-	std::cout << "lt: " << (lhs <  rhs) << " | le: " << (lhs <= rhs) << std::endl;
-	std::cout << "gt: " << (lhs >  rhs) << " | ge: " << (lhs >= rhs) << std::endl;
+template <typename SET, typename U, typename V>
+void	ft_erase(SET &st, U param, V param2)
+{
+	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
+	st.erase(param, param2);
+	printSize(st);
 }
 
 int		main(void)
 {
-	TESTED_NAMESPACE::map<T1, T2> mp1;
-	TESTED_NAMESPACE::map<T1, T2> mp2;
+	std::list<T1> lst;
+	unsigned int lst_size = 10;
+	for (unsigned int i = 0; i < lst_size; ++i)
+		lst.push_back(std::string((lst_size - i), i + 65));
+	TESTED_NAMESPACE::set<T1> st(lst.begin(), lst.end());
+	printSize(st);
 
-	mp1['a'] = 2; mp1['b'] = 3; mp1['c'] = 4; mp1['d'] = 5;
-	mp2['a'] = 2; mp2['b'] = 3; mp2['c'] = 4; mp2['d'] = 5;
+	ft_erase(st, ++st.begin());
 
-	cmp(mp1, mp1); // 0
-	cmp(mp1, mp2); // 1
+	ft_erase(st, st.begin());
+	ft_erase(st, --st.end());
 
-	mp2['e'] = 6; mp2['f'] = 7; mp2['h'] = 8; mp2['h'] = 9;
+	ft_erase(st, st.begin(), ++(++(++st.begin())));
+	ft_erase(st, --(--(--st.end())), --st.end());
 
-	cmp(mp1, mp2); // 2
-	cmp(mp2, mp1); // 3
+	st.insert("Hello");
+	st.insert("Hi there");
+	printSize(st);
+	ft_erase(st, --(--(--st.end())), st.end());
 
-	(++(++mp1.begin()))->second = 42;
-
-	cmp(mp1, mp2); // 4
-	cmp(mp2, mp1); // 5
-
-	swap(mp1, mp2);
-
-	cmp(mp1, mp2); // 6
-	cmp(mp2, mp1); // 7
+	st.insert("ONE");
+	st.insert("TWO");
+	st.insert("THREE");
+	st.insert("FOUR");
+	printSize(st);
+	ft_erase(st, st.begin(), st.end());
 
 	return (0);
 }
-
-
-
-// printBT(iter.getSave()->root);
-	
-	
