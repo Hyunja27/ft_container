@@ -211,7 +211,6 @@ namespace ft
 
         node<Key, Val, Compare>* find(node<Key, Val, Compare>* base, const Key& target_key)
         {
-            // std::cout << std::endl << "finding nimo : " << std::endl << std::endl << std::endl;
             if (base == NULL)
                 return (NULL);
             if (((base->set.first < target_key) == false) && ((target_key < base->set.first) == false))
@@ -693,7 +692,6 @@ namespace ft
                 }
                 else
                 {
-                    //?위아래 둘다 left...?
                     right_lotate(p, real_root);
                     s->color = BLACK;
                     p->color = RED;
@@ -835,15 +833,12 @@ namespace ft
 
                     if (target->left != NULL && target->left != tmp)
                     {
-                        // std::cout << "  error/? " << std::endl;
                         tmp->left = target->left;
                         target->left->parent = tmp;
                     }
-                    //!!
+
                     if (nil->parent != NULL)
                     {
-                        // std::cout << "  error/? " << std::endl;
-
                         if ((nil->parent->color == BLACK) && (nil->parent->left != NULL) && (nil->parent->left->color == BLACK))
                         {
                             nil->parent->right->color = 0;
@@ -857,13 +852,10 @@ namespace ft
                     tmp->color = RED;
                     delete(target);
 
-                    // std::cout << "  error point :  " << std::endl;
-
                 }
                 else if ((target->right != NULL))
                 {
                     tmp = getleftest(target->right);
-                    //!!
                     if ((tmp->left == NULL) && (tmp->right == NULL) && (tmp->color == BLACK))
                     {
                         // std::cout << "  delete Red node's nil ready :  " << tmp->parent->set.first << std::endl;
@@ -908,7 +900,6 @@ namespace ft
                         tmp->right = target->right;
                         target->right->parent = tmp;
                     }
-                    //!!
 
                     if (nil->parent != NULL)
                     {
