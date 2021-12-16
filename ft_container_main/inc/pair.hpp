@@ -968,6 +968,7 @@ namespace ft
                     tmp = getRightest(target->left);
                     // std::cout << "  delete Black node's hooim :  " << tmp->set.first << std::endl;
                     //!!
+
                     if ((tmp->left == NULL) && (tmp->right == NULL) && (tmp->color == BLACK))
                     {
                         // std::cout << "  delete Black node's nil ready :  " << tmp->parent->set.first << std::endl;
@@ -978,8 +979,14 @@ namespace ft
                         // std::cout << "  delete Black node's nil->parent :  " << nil->parent->set.first << std::endl;
 
                     }
+
+                    // std::cout << "error" << std::endl;
+                    // std::cout << "tmp->right" << tmp->right << std::endl;
+                    // std::cout << "target->right" << target->right << std::endl;
+
                     tmp->right = target->right;
-                    target->right->parent = tmp;
+                    if (target->right != NULL)
+                        target->right->parent = tmp;
 
                     // tmp->left = target->left;
                     // target->left->parent = tmp;
@@ -989,6 +996,7 @@ namespace ft
                         // std::cout << "  error1 !  :  " << std::endl;
                         deleteRestruct(target, tmp, tmp->left, 1, real_root);
                     }
+
                     if (tmp->parent->right == tmp)
                         tmp->parent->right = NULL;
                     else if (tmp->parent->left == tmp)
