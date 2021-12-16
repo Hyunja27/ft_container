@@ -28,7 +28,8 @@ namespace ft
 
             }
 
-            pair(const pair<T1, T2>& original) : first(original.first), second(original.second) 
+            template<typename a, typename b>
+            pair(const pair<a, b>& original) : first(original.first), second(original.second) 
             {
 
             }
@@ -451,12 +452,12 @@ namespace ft
             return (!cmp(k_1, k_2) && !cmp(k_2, k_1));
         }
 
-        bool isFirstSmall(const Key& t1, const Val& t2)
+        bool isFirstSmall(const Key& t1, const Key& t2)
 			{
 				return (cmp(t1, t2));
 			}
 
-		bool isFirstEqualOrSmall(const Key& t1, const Val& t2)
+		bool isFirstEqualOrSmall(const Key& t1, const Key& t2)
 		{
 			return (!cmp(t2, t1));
 		}

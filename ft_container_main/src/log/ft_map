@@ -1,0 +1,98 @@
+////////// TEST MAP //////////
+  == default / range / copy constructor test ==
+default constructor
+size: 0
+Content is:
+###############################################
+range constructor
+size: 10
+Content is:
+- KEY: 1	|	 VALUE: A
+- KEY: 2	|	 VALUE: BB
+- KEY: 3	|	 VALUE: CCC
+- KEY: 4	|	 VALUE: DDDD
+- KEY: 5	|	 VALUE: EEEEE
+- KEY: 6	|	 VALUE: FFFFFF
+- KEY: 7	|	 VALUE: GGGGGGG
+- KEY: 8	|	 VALUE: HHHHHHHH
+- KEY: 9	|	 VALUE: IIIIIIIII
+- KEY: 10	|	 VALUE: JJJJJJJJJJ
+###############################################
+copy constructor
+size: 10
+Content is:
+- KEY: 1	|	 VALUE: A
+- KEY: 2	|	 VALUE: BB
+- KEY: 3	|	 VALUE: CCC
+- KEY: 4	|	 VALUE: DDDD
+- KEY: 5	|	 VALUE: EEEEE
+- KEY: 6	|	 VALUE: FFFFFF
+- KEY: 7	|	 VALUE: GGGGGGG
+- KEY: 8	|	 VALUE: HHHHHHHH
+- KEY: 9	|	 VALUE: IIIIIIIII
+- KEY: 10	|	 VALUE: JJJJJJJJJJ
+###############################################
+assign operator
+size: 5
+Content is:
+- KEY: 1	|	 VALUE: CCCCC
+- KEY: 2	|	 VALUE: DDDD
+- KEY: 3	|	 VALUE: EEE
+- KEY: 4	|	 VALUE: FF
+- KEY: 5	|	 VALUE: G
+###############################################
+  == size / clear / empty test ==
+before clear
+size: 5
+Content is:
+- KEY: 1	|	 VALUE: CCCCC
+- KEY: 2	|	 VALUE: DDDD
+- KEY: 3	|	 VALUE: EEE
+- KEY: 4	|	 VALUE: FF
+- KEY: 5	|	 VALUE: G
+###############################################
+after clear
+size: 0
+Content is:
+###############################################
+Is empty: OK
+  == insert / erase / [] test ==
+size: 3
+Content is:
+- KEY: 3	|	 VALUE: EEE
+- KEY: 4	|	 VALUE: FF
+- KEY: 5	|	 VALUE: G
+###############################################
+size: 4
+Content is:
+- KEY: 3	|	 VALUE: EEE
+- KEY: 4	|	 VALUE: FF
+- KEY: 5	|	 VALUE: G
+- KEY: 42	|	 VALUE: Seoul
+###############################################
+size: 5
+Content is:
+- KEY: 3	|	 VALUE: EEE
+- KEY: 4	|	 VALUE: FF
+- KEY: 5	|	 VALUE: G
+- KEY: 21	|	 VALUE: Hello
+- KEY: 42	|	 VALUE: Seoul
+###############################################
+size: 6
+Content is:
+- KEY: 2	|	 VALUE: New
+- KEY: 3	|	 VALUE: EEE
+- KEY: 4	|	 VALUE: FF
+- KEY: 5	|	 VALUE: G
+- KEY: 21	|	 VALUE: Hello
+- KEY: 42	|	 VALUE: Seoul
+###############################################
+size: 6
+Content is:
+- KEY: 2	|	 VALUE: New
+- KEY: 3	|	 VALUE: EEE
+- KEY: 4	|	 VALUE: Change
+- KEY: 5	|	 VALUE: G
+- KEY: 21	|	 VALUE: Hello
+- KEY: 42	|	 VALUE: Seoul
+###############################################
