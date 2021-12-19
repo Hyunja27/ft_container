@@ -49,7 +49,7 @@ $(NAME) :
 
 mil_test :
 	@echo "${PURPLE}[${RED} Makefile${PURPLE} :starting.. ]"
-	@bash ./inc/container/containers_test/do.sh
+	@cd inc/container/containers_test && bash do.sh
 
 vector :
 	@echo "${PURPLE}[${RED} Makefile${PURPLE} :starting.. ]"
