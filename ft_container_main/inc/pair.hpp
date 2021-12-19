@@ -875,6 +875,8 @@ namespace ft
                             target->parent->left = tmp;
                         tmp->color = RED;
                         delete(target);
+                        //!!!!!!!
+                        delete(nil);
                         return ;
                     }
 

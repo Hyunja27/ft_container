@@ -227,3 +227,26 @@ operator >
 KO
 operator >=
 KO
+Process:         map [27896]
+Path:            /Volumes/VOLUME/*/map
+Load Address:    0x10b4d8000
+Identifier:      map
+Version:         ???
+Code Type:       X86-64
+Parent Process:  bash [27895]
+
+Date/Time:       2021-12-19 15:45:46.288 +0900
+Launch Time:     2021-12-19 15:45:45.905 +0900
+OS Version:      Mac OS X 10.15.7 (19H1615)
+Report Version:  7
+Analysis Tool:   /Applications/Xcode.app/Contents/Developer/usr/bin/leaks
+Analysis Tool Version:  Xcode 12.3 (12C33)
+
+Physical footprint:         312K
+Physical footprint (peak):  312K
+----
+
+leaks Report Version: 4.0
+Process 27896: 202 nodes malloced for 15 KB
+Process 27896: 0 leaks for 0 total leaked bytes.
+

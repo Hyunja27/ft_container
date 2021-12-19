@@ -242,5 +242,5 @@ int main() {
   std::cout << "operator >=" << std::endl;
   std::cout << ((v_lhs >= v_rhs) ? "OK" : "KO") << std::endl;
 
-  // system("leaks vector");
+  system("leaks vector");
 }

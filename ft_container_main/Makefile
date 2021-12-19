@@ -47,6 +47,10 @@ $(NAME) :
 	@echo "${PURPLE}->resting.. drinking some coffee..."
 	@echo "${MINT}making Done."
 
+mil_test :
+	@echo "${PURPLE}[${RED} Makefile${PURPLE} :starting.. ]"
+	@bash ./inc/container/containers_test/do.sh
+
 vector :
 	@echo "${PURPLE}[${RED} Makefile${PURPLE} :starting.. ]"
 	@echo "${PURPLE}->making $(NAME).."
@@ -81,9 +85,7 @@ own_test :
 	@./$(CONT) > $(SRC_DIR_LOG)/$(FT_NAMESPACE)_$(CONT)
 	@$(CC) $(CFLAGS) $(SRC_DIR)/$(CONT).cpp -o $(CONT) -I$(INC_DIR) -DTESTED_NAMESPACE=$(STD_NAMESPACE)
 	@./$(CONT) > $(SRC_DIR_LOG)/$(STD_NAMESPACE)_$(CONT)
-	# @diff $(SRC_DIR_LOG)/$(STD_NAMESPACE)_$(CONT) $(SRC_DIR_LOG)/$(FT_NAMESPACE)_$(CONT)
 	@rm $(CONT)
-	# @$(SRC_DIR)/compare.sh $(CONT)
 
 time :
 	@make time_unit CONT=vector

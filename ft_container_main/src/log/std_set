@@ -174,3 +174,26 @@ operator >
 KO
 operator >=
 OK
+Process:         set [27953]
+Path:            /Volumes/VOLUME/*/set
+Load Address:    0x10a69a000
+Identifier:      set
+Version:         ???
+Code Type:       X86-64
+Parent Process:  bash [27952]
+
+Date/Time:       2021-12-19 15:45:48.991 +0900
+Launch Time:     2021-12-19 15:45:48.618 +0900
+OS Version:      Mac OS X 10.15.7 (19H1615)
+Report Version:  7
+Analysis Tool:   /Applications/Xcode.app/Contents/Developer/usr/bin/leaks
+Analysis Tool Version:  Xcode 12.3 (12C33)
+
+Physical footprint:         308K
+Physical footprint (peak):  308K
+----
+
+leaks Report Version: 4.0
+Process 27953: 195 nodes malloced for 13 KB
+Process 27953: 0 leaks for 0 total leaked bytes.
+

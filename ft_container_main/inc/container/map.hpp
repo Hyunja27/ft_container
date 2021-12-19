@@ -105,6 +105,7 @@ namespace ft
         {
             if (elem_num > 0)
                 this->root->deleteTree(this->root);
+            // delete(root);
             delete(save);
         }
 

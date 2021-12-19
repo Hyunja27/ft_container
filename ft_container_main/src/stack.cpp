@@ -131,5 +131,5 @@ int main() {
   std::cout << "operator >=" << std::endl;
   std::cout << ((lhs >= rhs) ? "OK" : "KO") << std::endl;
 
-  // system("leaks stack");
+  system("leaks stack");
 }
