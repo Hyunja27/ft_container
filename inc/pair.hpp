@@ -108,12 +108,12 @@ namespace ft
         }
 
         node(const node<Key, Val, Compare>& origin, node<Key, Val, Compare>* parent = NULL) : left(NULL), right(NULL), parent(parent), set(origin.set)
-			{
-				if (origin.left != NULL)
-					left = new node<Key, Val, Compare>(*origin.left, this);
-				if (origin.right != NULL)
-					right = new node<Key, Val, Compare>(*origin.right, this);				
-			}
+		{
+			if (origin.left != NULL)
+				left = new node<Key, Val, Compare>(*origin.left, this);
+			if (origin.right != NULL)
+				right = new node<Key, Val, Compare>(*origin.right, this);				
+		}
 
         ~node()
         {
@@ -137,7 +137,26 @@ namespace ft
         //===============================================================================
         //================================= functions ===================================
         //===============================================================================
- 
+
+        node<Key, Val, Compare>* makeNewNode(node<Key, Val, Compare>* base)
+        {
+            node<Key, Val, Compare>* tmp = new node<Key, Val, Compare>(*base);
+            return tmp;
+        }
+
+        node<Key, Val, Compare>* makeNewNode(Key key_val)
+        {
+            node<Key, Val, Compare>* tmp = new node<Key, Val, Compare>(key_val);
+            return tmp;
+        }
+
+        node<Key, Val, Compare>* makeNewNode(Key first, Val second)
+        {
+            node<Key, Val, Compare>* tmp = new node<Key, Val, Compare>(first, second);
+            return tmp;
+        }
+
+
         void childChange(node *from, node *to)
 		{
 			if (left == from)
@@ -551,6 +570,17 @@ namespace ft
                 deleteTree(root->right);
             delete(root);
         }
+
+        // void deleteTree(node<Key, Val, Compare>* root)
+        // {
+        //     if (root == NULL)
+        //         return ;
+        //     if (root->left != NULL)
+        //         deleteTree(root->left);
+        //     if (root->right != NULL)
+        //         deleteTree(root->right);
+        //     delete(root);
+        // }
 
 
         void deleteRestructFivecase(node<Key, Val, Compare>* p, node<Key, Val, Compare>* c, node<Key, Val, Compare>* (&real_root), bool restrict_left = 0)
@@ -1251,6 +1281,11 @@ namespace ft
 				this->root = origin.root;
 				return (*this);
 			}
+
+            saver<Key, T, Compare>* makeNewSaver()
+            {
+                return (new saver<Key, T, Compare>());
+            }
 	};
 
 }

@@ -1,78 +1,41 @@
 #include "common.hpp"
 #include <list>
 
-#define T1 std::string
-
-static int iter = 0;
-
-
-// void printBT(const std::string& prefix, const node* node, bool isLeft)
-// {
-//     if( node != nullptr )
-//     {
-//         std::cout << prefix;
-
-//         std::cout << (isLeft ? "l├──" : "r└──" );
-
-//         // print the value of the node
-//         std::cout << node->key << ":" << (node->color ? "Black":"Red") << std::endl;
-
-//         // enter the next tree level - left and right branch
-//         printBT( prefix + (isLeft ? " │   " : "    "), node->left, true);
-//         printBT( prefix + (isLeft ? " │   " : "    "), node->right, false);
-//     }
-// }
-
-// void printBT(const node* node)
-// {
-//     printBT("", node, false);    
-// }
-
-template <typename SET, typename U>
-void	ft_erase(SET &st, U param)
-{
-	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
-	(void)param;
-	st.erase(param);
-	printSize(st);
-}
-
-template <typename SET, typename U, typename V>
-void	ft_erase(SET &st, U param, V param2)
-{
-	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
-	st.erase(param, param2);
-	printSize(st);
-}
+#define T1 int
+#define T2 int
+typedef _pair<const T1, T2> T3;
 
 int		main(void)
 {
-	std::list<T1> lst;
-	unsigned int lst_size = 10;
+	std::list<T3> lst;
+	unsigned int lst_size = 7;
 	for (unsigned int i = 0; i < lst_size; ++i)
-		lst.push_back(std::string((lst_size - i), i + 65));
-	TESTED_NAMESPACE::set<T1> st(lst.begin(), lst.end());
-	printSize(st);
+		lst.push_back(T3(lst_size - i, i));
 
-	ft_erase(st, ++st.begin());
+	TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
+	TESTED_NAMESPACE::map<T1, T2>::iterator it = mp.begin(), ite = mp.end();
 
-	// ft_erase(st, st.begin());
-	// ft_erase(st, --st.end());
+	TESTED_NAMESPACE::map<T1, T2> mp_range(it, --(--ite));
+	for (int i = 0; it != ite; ++it)
+		it->second = ++i * 5;
 
-	// ft_erase(st, st.begin(), ++(++(++st.begin())));
-	// ft_erase(st, --(--(--st.end())), --st.end());
+	it = mp.begin(); ite = --(--mp.end());
+	TESTED_NAMESPACE::map<T1, T2> mp_copy(mp);
+	for (int i = 0; it != ite; ++it)
+		it->second = ++i * 7;
 
-	// st.insert("Hello");
-	// st.insert("Hi there");
-	// printSize(st);
-	// ft_erase(st, --(--(--st.end())), st.end());
+	std::cout << "\t-- PART ONE --" << std::endl;
+	printSize(mp);
+	printSize(mp_range);
+	printSize(mp_copy);
 
-	// st.insert("ONE");
-	// st.insert("TWO");
-	// st.insert("THREE");
-	// st.insert("FOUR");
-	// printSize(st);
-	// ft_erase(st, st.begin(), st.end());
+	mp = mp_copy;
+	mp_copy = mp_range;
+	mp_range.clear();
 
+	std::cout << "\t-- PART TWO --" << std::endl;
+	printSize(mp);
+	printSize(mp_range);
+	printSize(mp_copy);
 	return (0);
 }

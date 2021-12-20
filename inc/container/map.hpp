@@ -28,6 +28,10 @@ namespace ft
             typedef pair<const key_type, mapped_type>        value_type;
             typedef Compare                                  key_compare;
             typedef Alloc                                    allocator_type;
+            typedef ft::node<Key, T, Compare>                node_type;
+            typedef ft::saver<Key, T, Compare>               saver_type;
+            typedef typename Alloc::template rebind< node_type >::other node_alloc_type;
+            typedef typename Alloc::template rebind< saver_type >::other saver_alloc_type;
             typedef typename allocator_type::reference       reference;
             typedef typename allocator_type::const_reference const_reference;
             typedef typename allocator_type::pointer         pointer;
@@ -39,8 +43,15 @@ namespace ft
             typedef ft::mapConstIterator<Key, T, Compare>             const_iterator;
             typedef ft::mapReverseIterator<Key, T, Compare>           reverse_iterator;
             typedef ft::mapReverseConstIterator<Key, T, Compare>      const_reverse_iterator;
+        
+        private:
+            node_alloc_type                 node_allocer;
+            saver_alloc_type                saver_allocer;
+            node<Key, T, Compare>           node_caller;
+            saver<Key, T, Compare>          save_caller;
 
 
+        public:
 
         //From c plusplus Refer.  pair를 직접비교
 			class value_compare
@@ -80,7 +91,7 @@ namespace ft
         {
             (void)alloc;
             (void)comp;
-            save = new saver<Key, T, Compare>();
+            save = save_caller.makeNewSaver();
         }
 
         template <class inputIterator> 
@@ -88,16 +99,15 @@ namespace ft
         {
             (void)alloc;
             (void)comp;
-            save = new saver<Key, T, Compare>();
+            save = save_caller.makeNewSaver();
             insert(start, end);
         }
 
         map (const map& param) : elem_num(0), root(NULL)
         {
-            // std::cout << "Bye ! " << param.root->set.first << " : " << param.root->set.second << std::endl;
-            this->root = new node<Key, T, Compare>(* param.root);
+            this->root = node_caller.makeNewNode(param.root);
             this->elem_num = param.elem_num;
-            save = new saver<Key, T, Compare>();
+            save = save_caller.makeNewSaver();
             saveRoot();
         }
 
@@ -105,7 +115,6 @@ namespace ft
         {
             if (elem_num > 0)
                 this->root->deleteTree(this->root);
-            // delete(root);
             delete(save);
         }
 
@@ -114,7 +123,7 @@ namespace ft
             if (this != &_target) 
             {
                 this->root->deleteTree(this->root);
-                this->root = new node<Key, T, Compare>(* _target.root);
+                this->root = node_caller.makeNewNode(_target.root);
                 this->elem_num = _target.elem_num;
                 saveRoot();
             }
@@ -131,7 +140,7 @@ namespace ft
             if (elem_num == 0)
             {
                 elem_num++;
-                this->root = new node<Key, T, Compare>(key);
+                this->root = node_caller.makeNewNode(key);
                 root->color = BLACK;
                 root = root->getRoot(root);
                 saveRoot();
@@ -243,7 +252,7 @@ namespace ft
             if (elem_num == 0)
             {
                 elem_num++;
-                this->root = new node<Key, T, Compare>(value.first, value.second);
+                this->root = node_caller.makeNewNode(value.first, value.second);
                 root = root->getRoot(root);
                 saveRoot();
                 return(pair<iterator, bool>(iterator(root, save), true));
@@ -285,10 +294,8 @@ namespace ft
                 return (0);
             else
             {
-                // std::cout << "param : " << param << std::endl;
                 if (root->find(root, param) != NULL)
                 {
-                    // node<Key, T, Compare>* tmp = root->getRightest(root);
                     // if (tmp == NULL)
                     //     tmp = root->getleftest(root);
                     // std::cout << "before erase root : " << root->set.first << std::endl;
@@ -315,12 +322,10 @@ namespace ft
                     }
                     // else if (tmp != NULL)
                     // {
-                    //     // /////??????????????
                     //     // while ((tmp->getParent(tmp) && (tmp != tmp->getParent(tmp))))
                     //     // {
                     //     //     tmp = tmp->getParent(tmp);
                     //     // }
-                    //     // // std::cout << "?????" << std::endl;
                     //     // tmp = root->getRoot(tmp);
 
                     //     // while (tmp->parent != NULL)
